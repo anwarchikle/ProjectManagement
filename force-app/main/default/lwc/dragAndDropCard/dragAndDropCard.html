@@ -1,0 +1,30 @@
+<template>
+    <template if:true={isSameStage}>
+        <li class="task-card" draggable="true" ondragstart={itemDragStart}>
+            <div class="card-content">
+                <div class="card-header">
+                    <h3 class="task-title" title={record.Name}>
+                        <a href="#" data-id={record.Id} onclick={navigateTaskHandler} onkeydown={handleLinkKeyDown}>
+                            {record.Name}
+                        </a>
+                    </h3>
+                    <div class="card-actions">
+                        <div class="task-priority priority-{record.Priority__c}">
+                            {record.Priority__c}
+                        </div>
+                        <lightning-button-icon class="next-stage" icon-name="utility:chevronright" variant="bare" alternative-text="Move to next stage" title="Move to next stage" onclick={handleMoveNext}></lightning-button-icon>
+                    </div>
+                </div>
+                <div class="card-details">
+                    <p class="task-status">Status: {record.Status__c}</p>
+                    <template if:true={record.Start_Date__c}>
+                        <p class="task-date">Start: {startDateLabel}</p>
+                    </template>
+                    <template if:true={record.End_Date__c}>
+                        <p class="task-date">End: {endDateLabel}</p>
+                    </template>
+                </div>
+            </div>
+        </li>
+    </template>
+</template>

@@ -1,0 +1,43 @@
+<template>
+    <!-- FILTER BAR -->
+    <div class="filter-bar">
+        <lightning-combobox
+            label="Status"
+            value={selectedStatus}
+            options={statusOptions}
+            onchange={handleStatusFilter}>
+        </lightning-combobox>
+    </div>
+
+    <!-- KANBAN BOARD -->
+    <div class="kanban-board">
+
+        <template for:each={columns} for:item="col">
+            <div key={col.status} class="kanban-column"
+                 data-status={col.status}
+                 ondrop={handleDrop}
+                 ondragover={allowDrop}>
+
+                <div class="kanban-header">
+                    {col.label} ({col.tasks.length})
+                </div>
+
+                <template for:each={col.tasks} for:item="task">
+                    <div key={task.Id}
+                         class="kanban-card"
+                         draggable="true"
+                         data-id={task.Id}
+                         ondragstart={handleDragStart}>
+
+                        <p class="task-title">{task.Name}</p>
+                        <p class="task-project">{task.Project__r.Name}</p>
+                        <p class="task-date">{task.Due_Date__c}</p>
+
+                    </div>
+                </template>
+
+            </div>
+        </template>
+
+    </div>
+</template>

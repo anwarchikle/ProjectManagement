@@ -1,0 +1,86 @@
+<template>
+    <div class="pm-app">
+
+        <!-- LEFT SIDEBAR -->
+        <aside class="sidebar">
+            <div class="logo">Projects</div>
+
+            <ul class="nav">
+                <li class={homeClass} onclick={openHome}>Home</li>
+                <li class={taskClass} onclick={openTasks}>Tasks</li>
+                <li class={issueClass} onclick={openIssues}>Issues</li>
+                <li class={milestoneClass} onclick={openMilestones}>Milestones</li>
+                <li class={timelogClass} onclick={openTimeLogs}>Time Logs</li>
+                <li class={reportClass} onclick={openReports}>Reports</li>
+            </ul>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main">
+
+            <!-- TOP KPI CARDS -->
+            <section class="kpi-section">
+                <div class="kpi-card" onclick={openTasks}>
+                    <p>Open Tasks</p>
+                    <h2>12</h2>
+                </div>
+
+                <div class="kpi-card">
+                    <p>Closed Tasks</p>
+                    <h2>45</h2>
+                </div>
+
+                <div class="kpi-card" onclick={openIssues}>
+                    <p>Open Issues</p>
+                    <h2>5</h2>
+                </div>
+
+                <div class="kpi-card">
+                    <p>Closed Issues</p>
+                    <h2>18</h2>
+                </div>
+
+                <div class="kpi-card" onclick={openMilestones}>
+                    <p>Milestones</p>
+                    <h2>3</h2>
+                </div>
+            </section>
+
+            <!-- DYNAMIC CONTENT AREA -->
+            <section class="content">
+
+    <template if:true={showHome}>
+        <h2 class="page-title">Welcome to Project Management</h2>
+        <p>Select a module from the left menu.</p>
+    </template>
+
+    <template if:true={showTasks}>
+    <c-pm-task-kanban></c-pm-task-kanban>
+    </template>
+
+
+    <template if:true={showIssues}>
+        <h2 class="page-title">Issues</h2>
+        <p>Issue module will be added later.</p>
+    </template>
+
+    <template if:true={showMilestones}>
+        <h2 class="page-title">Milestones</h2>
+        <p>Milestone module will be added later.</p>
+    </template>
+
+    <template if:true={showTimeLogs}>
+        <h2 class="page-title">Time Logs</h2>
+        <p>Time log module will be added later.</p>
+    </template>
+
+    <template if:true={showReports}>
+        <h2 class="page-title">Reports</h2>
+        <p>Reports module will be added later.</p>
+    </template>
+
+</section>
+
+        </main>
+    </div>
+</template>

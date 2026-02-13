@@ -1,0 +1,154 @@
+.team-card {
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+}
+
+/* Header */
+.header {
+    background: linear-gradient(180deg, #1e5bd8, #1546b8);
+    color: white;
+    padding: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.header-icon {
+    background: rgba(255,255,255,0.2);
+    padding: 0.6rem;
+    border-radius: 10px;
+}
+
+.header h2 {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+/* Body */
+.body {
+    padding: 1.25rem;
+}
+
+/* Label */
+.section-label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+/* Search */
+.search-box {
+    display: flex;
+    align-items: center;
+    background: #f6f7f9;
+    border-radius: 14px;
+    padding: 0.65rem 0.75rem;
+    border: 2px solid transparent;
+}
+
+.search-box:focus-within {
+    border-color: #2563eb;
+}
+
+.search-icon {
+    margin-right: 0.5rem;
+    color: #6b7280;
+}
+
+.search-input {
+    border: none;
+    outline: none;
+    width: 100%;
+    background: transparent;
+    font-size: 0.95rem;
+}
+
+/* Results */
+.results-box {
+    background: #fff6e5;
+    border-radius: 14px;
+    margin-top: 0.75rem;
+    padding: 0.5rem;
+}
+
+.result-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.6rem;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.result-item:hover {
+    background: #ffe9c7;
+}
+
+/* Avatar */
+.avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #f97316;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+}
+
+/* User Info */
+.user-info .name {
+    font-weight: 600;
+}
+
+.user-info .email {
+    font-size: 0.75rem;
+    color: #6b7280;
+}
+
+/* Selected Pills */
+.pill-container {
+    margin-top: 0.75rem;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.selected-pill {
+    background: #e8f0ff;
+    color: #1d4ed8;
+    padding: 0.4rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.pill-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    color: #1d4ed8;
+}
+
+/* Assign Button */
+.assign-btn {
+    margin-top: 1.25rem;
+    width: 100%;
+    padding: 0.8rem;
+    border-radius: 14px;
+    border: none;
+    font-weight: 600;
+    font-size: 1rem;
+    background: linear-gradient(180deg, #1e5bd8, #1546b8);
+    color: white;
+}
+
+.assign-btn:disabled {
+    background: #bdbfc5;
+    cursor: not-allowed;
+}

@@ -1,0 +1,327 @@
+.common-icon {
+    margin-right: 6px;
+    --slds-c-icon-color-foreground-default: #2563eb; /* blue */
+}
+
+.name-blue {
+    color: #2563eb !important;   /* blue */
+    font-weight: 600;
+}
+
+.name-blue:hover {
+    color: #1d4ed8 !important;   /* darker blue on hover */
+    cursor: pointer;
+}
+
+.name-blue:active {
+    color: #1e40af !important;
+}
+/* =============================
+   FILTER BAR
+============================= */
+.planner-filters {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 12px 16px;
+    background: #f8fafc;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    margin-bottom: 16px;
+}
+
+.planner-filters > .slds-grid {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 12px;
+}
+
+.date-field {
+    width: 180px;
+}
+
+.date-field .slds-input {
+    height: 32px;
+    font-size: 12px;
+}
+
+/* Align button with date inputs */
+.slds-grid .slds-m-right_medium:last-child {
+    margin-top: 6px; /* Adjust to align button with input bottoms */
+}
+
+/* Search field styling */
+.search-field {
+    width: 250px;
+}
+
+.search-field .slds-input {
+    height: 32px;
+    font-size: 12px;
+}
+
+/* Button styling */
+lightning-button {
+    --sds-c-button-neutral-spacing-block-end: 0.5rem;
+    --sds-c-button-neutral-spacing-block-start: 0.5rem;
+}
+
+/* =============================
+   WRAPPER (SCROLL CONTAINER)
+============================= */
+.planner-wrapper {
+    position: relative;
+    overflow: auto;
+    max-height: 80vh;
+    background: #ffffff;
+    padding: 0px 0 12px 0;
+    border-radius: 12px;
+    border: 1px solid #4e5054;
+}
+
+/* =============================
+   HEADER ROW (TOP FROZEN)
+============================= */
+.planner-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    background: #1f2937;
+    border-bottom: 3px solid #1e40af;
+    min-width: max-content;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+
+/* =============================
+   ROWS
+============================= */
+.row {
+    display: flex;
+    min-width: max-content;
+}
+
+/* =============================
+   FIRST COLUMN (FULLY FROZEN)
+============================= */
+.name-col {
+    position: sticky;
+    left: 0;
+    min-width: 260px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    background: #fbfafa;
+    z-index: 60;
+}
+
+/* Header + first column intersection */
+.planner-header .name-col {
+    background: #1f2937;
+    color: #e5e7eb;
+    font-weight: 700;
+    z-index: 120;
+}
+
+/* =============================
+   DAY HEADER CELLS
+============================= */
+.day-col {
+    min-width: 110px;
+    padding: 10px 6px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 12px;
+    background: #ffffff;
+    border-left: 1px solid #0b3a97;
+}
+
+.day-col.capsule {
+    margin: 6px;
+    border-radius: 999px;
+}
+
+.weekend-indicator {
+    color: #dc2626;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+/* =============================
+   DATA CELLS (ALL CAPSULES)
+============================= */
+.cell {
+    min-width: 110px;
+    margin: 6px;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+    border: 1px solid #e5e7eb;
+    transition: all 0.2s ease;
+}
+
+/* ✅ USER HOURS ALSO CAPSULED */
+.user-row .cell {
+    background: #ffffff;
+    color: #2e54d1;
+    font-weight: 700;
+}
+
+/* =============================
+   CAPSULE COLOR STATES
+============================= */
+.util-full {
+    background: #16a34a !important;   /* change green */
+    color: #ffffff !important;
+}
+
+.util-partial-high {
+    background: #3b82f6 !important;   /* blue instead of yellow */
+    color: #ffffff !important;
+}
+
+.util-partial-low {
+    background: #a855f7 !important;   /* purple */
+    color: #ffffff !important;
+}
+
+.util-zero {
+    background: #e2e8f0 !important;
+    color: #334155 !important;
+}
+
+.util-over {
+    background: #dc2626 !important;
+    color: #ffffff !important;
+}
+
+
+/* =============================
+   WEEKENDS - CHARCOAL GRAY THEME
+============================= */
+.day-col[data-weekend="true"],
+.day-col[data-weekend="true"].capsule {
+    background: #2d3748 !important;
+    color: #e2e8f0 !important;
+    border-color: #4a5568 !important;
+    font-weight: 600;
+}
+
+.cell[data-weekend="true"]:not(.util-full):not(.util-partial-high):not(.util-partial-low):not(.util-over) {
+    background: linear-gradient(135deg, #4a5568 85%, #2d3748 100%) !important;
+    color: #cbd5e0 !important;
+    border-color: #718096 !important;
+}
+
+/* Weekend handling - charcoal gray blend */
+.cell[data-weekend="true"].util-full {
+    background: linear-gradient(135deg, #22c55e 80%, #4a5568 100%) !important;
+    border-color: #16a34a !important;
+}
+
+.cell[data-weekend="true"].util-partial-high {
+    background: linear-gradient(135deg, #fbbf24 80%, #4a5568 100%) !important;
+    border-color: #d97706 !important;
+}
+
+.cell[data-weekend="true"].util-partial-low {
+    background: linear-gradient(135deg, #fde68a 80%, #4a5568 100%) !important;
+    border-color: #f59e0b !important;
+}
+
+.cell[data-weekend="true"].util-over {
+    background: linear-gradient(135deg, #ef4444 80%, #4a5568 100%) !important;
+    border-color: #dc2626 !important;
+}
+
+/* Weekend indicator dot */
+.cell[data-weekend="true"]:not(.util-zero)::before {
+    content: 'WK';
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: #2d3748;
+    color: #e2e8f0;
+    font-size: 7px;
+    font-weight: bold;
+    padding: 1px 2px;
+    border-radius: 2px;
+    border: 1px solid #4a5568;
+}
+
+/* =============================
+   TOTAL COLUMN
+============================= */
+.total {
+    font-weight: 800;
+    background: transparent;
+}
+
+/* =============================
+   INDENTATION
+============================= */
+.indent-1 { padding-left: 20px; }
+.indent-2 { padding-left: 40px; }
+
+/* =============================
+   AVATAR
+============================= */
+.avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #2563eb; /* blue */
+    color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+
+/* =============================
+   CARET
+============================= */
+.caret {
+    margin-right: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* =============================
+   CLICKABLE
+============================= */
+.clickable {
+    cursor: pointer;
+}
+
+.underline-hover:hover {
+    text-decoration: underline;
+    
+}
+
+/* =============================
+   NO RESULTS
+============================= */
+.no-results {
+    padding: 20px;
+    text-align: center;
+    color: #6b7280;
+    font-style: italic;
+    
+}
+.cell.capsule.util-full {
+    background: #0f766e !important;
+    color: #ffffff !important;
+}

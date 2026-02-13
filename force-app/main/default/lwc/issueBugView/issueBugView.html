@@ -1,0 +1,50 @@
+<template>
+    <lightning-card icon-name="action:bug" variant="base">
+
+        <!-- Title -->
+        <div slot="title">
+            Issues
+        </div>
+
+        <!-- Actions Slot -->
+        <div slot="actions" class="slds-m-around_medium">
+            <lightning-button-group>
+
+                <lightning-button label="My Bugs" value="My_Bugs" icon-name="standard:lead_list"
+                    onclick={handleButtonClick}>
+                </lightning-button>
+
+                <lightning-button label="UAT Issues" value="UAT_Issues" icon-name="standard:catalog"
+                    onclick={handleButtonClick}>
+                </lightning-button>
+
+                <lightning-button label="Triage" value="Triage" icon-name="utility:edit" onclick={handleButtonClick}>
+                </lightning-button>
+
+                <lightning-button label="QA Validation" value="QA_Validation" icon-name="utility:edit"
+                    onclick={handleButtonClick}>
+                </lightning-button>
+
+                <lightning-button label="Retest" value="Retesting" icon-name="utility:delete"
+                    onclick={handleButtonClick}>
+                </lightning-button>
+
+            </lightning-button-group>
+        </div>
+
+        <div class="slds-p-around_medium">
+            <template if:true={showMyBugs}>
+                <c-my-bugs list-view-api-name={selectedListView}></c-my-bugs>
+            </template>
+
+            <template if:true={showUATIssues}>
+                <c-uat-issues selected-list-view={selectedListView}></c-uat-issues>
+            </template>
+
+            <template if:true={showRetestAndVerificationComponent}>
+                <c-retest-and-verification-compo selected-list-view={selectedListView}></c-retest-and-verification-compo>
+            </template>
+        </div>
+
+    </lightning-card>
+</template>

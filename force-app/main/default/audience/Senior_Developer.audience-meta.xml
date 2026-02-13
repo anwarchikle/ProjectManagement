@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Audience xmlns="http://soap.sforce.com/2006/04/metadata">
+    <audienceName>Senior Developer</audienceName>
+    <container>UTIL Project Management Tool</container>
+    <criteria>
+        <criterion>
+            <criteriaNumber>1</criteriaNumber>
+            <criterionValue>
+                <profile>util senior developer</profile>
+            </criterionValue>
+            <operator>Equal</operator>
+            <type>Profile</type>
+        </criterion>
+        <criterion>
+            <criteriaNumber>1</criteriaNumber>
+            <criterionValue>
+                <profile>pmt senior developer</profile>
+            </criterionValue>
+            <operator>Equal</operator>
+            <type>Profile</type>
+        </criterion>
+    </criteria>
+    <formulaFilterType>AllCriteriaMatch</formulaFilterType>
+    <isDefaultAudience>false</isDefaultAudience>
+    <targets>
+        <target>
+            <groupName>07778f24-0ef4-4234-b553-b117d04200b2$#$7c13b07d-970e-40b5-b3dd-0eb93c7d3e3d</groupName>
+            <priority>5</priority>
+            <targetType>ExperienceVariation</targetType>
+            <targetValue>Default_Navigation_Menu_3_Component_Properties</targetValue>
+        </target>
+        <target>
+            <groupName>da3ed92a-843f-4ae0-be5f-c7627e60cea0$#$e90ebe5e-5af1-445f-acdc-b98ab989461f</groupName>
+            <priority>3</priority>
+            <targetType>ExperienceVariation</targetType>
+            <targetValue>Default_Theme_Navigation_Menu_2_Component_Properties</targetValue>
+        </target>
+    </targets>
+</Audience>

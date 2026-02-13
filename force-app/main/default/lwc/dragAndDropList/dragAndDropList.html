@@ -1,0 +1,16 @@
+<template>
+    <div class="drop-zone" ondrop={handleDrop} ondragover={handleDragOver} ondragenter={handleDragEnter} ondragleave={handleDragLeave}>
+        <template for:each={records} for:item="recordItem">
+            <c-drag-and-drop-card stage={stage} record={recordItem} key={recordItem.Id}
+                onitemdrag={handleItemDrag} onmovenext={handleMoveNext}></c-drag-and-drop-card>
+        </template>
+        <div class="empty-state" if:false={records}>
+            <div class="empty-icon">📋</div>
+            <p class="empty-text">Loading tasks...</p>
+        </div>
+        <div class="empty-state" if:true={isEmpty}>
+            <div class="empty-icon">📋</div>
+            <p class="empty-text">No tasks in this status</p>
+        </div>
+    </div>
+</template>

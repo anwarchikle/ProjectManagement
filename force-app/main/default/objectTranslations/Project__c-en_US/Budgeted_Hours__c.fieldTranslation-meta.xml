@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label><!-- Budgeted Hours --></label>
+    <name>Budgeted_Hours__c</name>
+    <picklistValues>
+        <masterLabel>At Risk</masterLabel>
+        <translation><!-- At Risk --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Overrun</masterLabel>
+        <translation><!-- Overrun --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Surplus</masterLabel>
+        <translation><!-- Surplus --></translation>
+    </picklistValues>
+</CustomFieldTranslation>

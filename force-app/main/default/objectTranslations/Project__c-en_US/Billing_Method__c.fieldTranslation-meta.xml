@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label><!-- Billing Method --></label>
+    <name>Billing_Method__c</name>
+    <picklistValues>
+        <masterLabel>Based on Project Hours</masterLabel>
+        <translation><!-- Based on Project Hours --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Fixed Price</masterLabel>
+        <translation><!-- Fixed Price --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Staff Hours</masterLabel>
+        <translation><!-- Staff Hours --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Task/Issue Hours</masterLabel>
+        <translation><!-- Task/Issue Hours --></translation>
+    </picklistValues>
+</CustomFieldTranslation>

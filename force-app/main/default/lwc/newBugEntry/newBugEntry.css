@@ -1,0 +1,622 @@
+/* ========================================
+   FILTERS BAR - COMPACT & ELEGANT
+   ======================================== */
+
+.filters-bar {
+    background: linear-gradient(135deg, #0d91e2 0%, #0e64d0 100%);
+    padding: 1.25rem 1.5rem;
+    border-bottom: none;
+    box-shadow: 0 2px 8px rgba(30, 64, 175, 0.3);
+}
+
+.filters-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    align-items: end;
+}
+
+.filter-item {
+    min-width: 0;
+}
+
+/* ========================================
+   ADD BUG SECTION
+   ======================================== */
+
+.add-bug-section {
+    padding: 1rem 1.5rem;
+    background: #f8fafc;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.add-bug-btn {
+    font-weight: 600;
+    min-width: 120px;
+}
+
+/* ========================================
+   TABLE CONTAINER
+   ======================================== */
+
+.table-container {
+    margin-bottom: 90px;
+    border: 1px solid #e2e8f0;
+    border-top: none;
+    background: white;
+}
+
+.table-wrapper {
+    overflow-x: visible;
+    overflow-y: visible;
+}
+
+/* ========================================
+   ELEGANT TABLE STYLING
+   ======================================== */
+
+.elegant-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-family: 'Salesforce Sans', Arial, sans-serif;
+}
+
+/* Table Header */
+.elegant-table thead {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+}
+
+.elegant-table th {
+    padding: 0.875rem 0.75rem;
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.8125rem;
+    color: #1e3a8a;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid #93c5fd;
+    border-right: 1px solid #bfdbfe;
+    white-space: nowrap;
+}
+
+.elegant-table th:last-child {
+    border-right: none;
+}
+
+.required {
+    color: #ef4444;
+    font-weight: 700;
+    margin-left: 2px;
+}
+
+/* Column Widths - Optimized for compact view */
+.col-number { width: 60px; text-align: center; }
+.col-title { width: 220px; min-width: 200px; }
+.col-description { width: 240px; min-width: 220px; }
+.col-severity { width: 130px; min-width: 120px; }
+.col-type { width: 130px; min-width: 120px; }
+.col-files { width: 100px; text-align: center; }
+.col-expand { width: 70px; text-align: center; }
+.col-actions { width: 70px; text-align: center; }
+
+/* ========================================
+   TABLE ROWS
+   ======================================== */
+
+.bug-row {
+    background: white;
+    transition: all 0.2s ease;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.bug-row:hover {
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.12);
+}
+
+.bug-row:hover .bug-badge {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    transform: scale(1.05);
+}
+
+/* Table Cells */
+.elegant-table td {
+    padding: 0.625rem 0.75rem;
+    border-right: 1px solid #f1f5f9;
+    vertical-align: middle;
+}
+
+.elegant-table td:last-child {
+    border-right: none;
+}
+
+/* ========================================
+   CELL TYPES
+   ======================================== */
+
+/* Number Cell */
+.cell-number {
+    text-align: center;
+    background: #f8fafc;
+}
+
+.bug-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+    color: white;
+    padding: 0.375rem 0.75rem;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 0.8125rem;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Input Cells */
+.cell-input {
+    padding: 0.375rem 0.5rem;
+}
+
+.table-input,
+.table-textarea,
+.table-select {
+    width: 100%;
+}
+
+.table-input input,
+.table-textarea textarea,
+.table-select select {
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 0.5rem;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+}
+
+.table-input input:focus,
+.table-textarea textarea:focus,
+.table-select select:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
+    outline: none;
+}
+
+.table-textarea textarea {
+    min-height: 60px;
+    max-height: 100px;
+    resize: vertical;
+}
+
+/* Select Cells */
+.cell-select {
+    padding: 0.375rem 0.5rem;
+}
+
+/* ========================================
+   FILES CELL
+   ======================================== */
+
+.cell-files {
+    text-align: center;
+}
+
+.files-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.375rem;
+}
+
+.file-btn {
+    background: white;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.file-btn:hover {
+    background: #3b82f6;
+    border-color: #3b82f6;
+    transform: translateY(-1px);
+}
+
+.file-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    min-width: 24px;
+    box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3);
+}
+
+.toggle-btn {
+    transition: transform 0.2s ease;
+}
+
+.toggle-btn:hover {
+    transform: scale(1.15);
+}
+
+.file-input-hidden {
+    display: none;
+}
+
+/* Files Row */
+.files-row {
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    animation: slideDown 0.25s ease-out;
+}
+
+.files-cell {
+    padding: 0.75rem 1.5rem;
+}
+
+.files-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.file-chip {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    background: white;
+    border: 1px solid #cbd5e1;
+    border-radius: 20px;
+    padding: 0.375rem 0.75rem;
+    font-size: 0.8125rem;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.file-chip:hover {
+    border-color: #3b82f6;
+    box-shadow: 0 2px 6px rgba(59, 130, 246, 0.2);
+    transform: translateY(-1px);
+}
+
+.file-name {
+    color: #334155;
+    font-weight: 500;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.file-size {
+    color: #64748b;
+    font-size: 0.75rem;
+}
+
+.file-actions {
+    display: flex;
+    gap: 0.125rem;
+    margin-left: 0.25rem;
+}
+
+/* ========================================
+   EXPAND & ACTIONS CELLS
+   ======================================== */
+
+.cell-expand,
+.cell-actions {
+    text-align: center;
+}
+
+.expand-btn,
+.delete-btn {
+    transition: all 0.2s ease;
+}
+
+.expand-btn:hover {
+    transform: scale(1.15);
+    color: #3b82f6;
+}
+
+.delete-btn:hover {
+    transform: scale(1.15);
+    color: #ef4444;
+}
+
+/* Details Row */
+.details-row {
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    animation: slideDown 0.3s ease-out;
+}
+
+.details-cell {
+    padding: 1rem 1.5rem;
+    border-left: 4px solid #3b82f6;
+}
+
+.details-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.detail-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+}
+
+.detail-label {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #1e40af;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.detail-textarea textarea {
+    border: 1px solid #93c5fd;
+    border-radius: 6px;
+    background: white;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+}
+
+.detail-textarea textarea:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
+    outline: none;
+}
+
+/* ========================================
+   ACTION FOOTER
+   ======================================== */
+
+.action-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    border-top: 2px solid #cbd5e1;
+    padding: 0.875rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.footer-left {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.footer-text {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #475569;
+}
+
+.footer-right {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.footer-btn {
+    /* min-width: 110px; */
+    font-weight: 600;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+/* .footer-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+} */
+
+/* .submit-btn {
+    background: linear-gradient(135deg, #0176d0 0%, #0157a0 100%);
+    box-shadow: 0 2px 6px rgba(1, 118, 208, 0.3);
+} */
+
+/* .submit-btn:hover {
+    box-shadow: 0 4px 10px rgba(1, 118, 208, 0.4);
+} */
+
+/* ========================================
+   ANIMATIONS
+   ======================================== */
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        max-height: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        max-height: 500px;
+        transform: translateY(0);
+    }
+}
+
+/* ========================================
+   SCROLLBAR STYLING
+   ======================================== */
+
+.table-wrapper::-webkit-scrollbar {
+    height: 8px;
+    width: 8px;
+}
+
+.table-wrapper::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 4px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #cbd5e1 0%, #94a3b8 100%);
+    border-radius: 4px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #94a3b8 0%, #64748b 100%);
+}
+
+
+.custom-white-label {
+    color: white;
+    display: block;
+    margin-bottom: 0.125rem; /* Matches standard SLDS spacing */
+}
+
+
+/* .environment-label .label {
+    color: white;
+} */
+
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
+
+@media (max-width: 1400px) {
+    .col-description { width: 200px; min-width: 180px; }
+    .details-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 1200px) {
+    .filters-row { grid-template-columns: repeat(2, 1fr); }
+    .col-title { width: 180px; min-width: 160px; }
+    .col-description { width: 180px; min-width: 160px; }
+}
+
+@media (max-width: 768px) {
+    .filters-bar { padding: 1rem; }
+    .filters-row { 
+        grid-template-columns: 1fr; 
+        gap: 0.75rem;
+    }
+    
+    .add-bug-section {
+        padding: 0.75rem 1rem;
+    }
+    
+    .add-bug-btn { width: 100%; }
+    
+    .elegant-table th,
+    .elegant-table td {
+        padding: 0.5rem 0.375rem;
+        font-size: 0.75rem;
+    }
+    
+    .col-title,
+    .col-description { min-width: 140px; }
+    
+    .details-grid { 
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+    
+    .action-footer {
+        flex-direction: column;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+    }
+    
+    .footer-right {
+        width: 100%;
+        justify-content: stretch;
+    }
+    
+    .footer-btn {
+        flex: 1;
+    }
+}
+
+@media (max-width: 480px) {
+    .bug-badge {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+    }
+    
+    .file-chip {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+    }
+    
+    .file-name {
+        max-width: 120px;
+    }
+}
+
+/* ========================================
+   ACCESSIBILITY
+   ======================================== */
+
+.table-input:focus-within,
+.table-textarea:focus-within,
+.table-select:focus-within {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+    border-radius: 6px;
+}
+
+.expand-btn:focus,
+.delete-btn:focus,
+.file-btn:focus {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+/* ========================================
+   UTILITY STATES
+   ======================================== */
+
+.loading-overlay {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.error-row {
+    background: #fef2f2 !important;
+    border-left: 3px solid #ef4444;
+}
+
+.success-row {
+    background: #f0fdf4 !important;
+    border-left: 3px solid #10b981;
+}
+
+/* ========================================
+   PRINT STYLES
+   ======================================== */
+
+@media print {
+    .action-footer,
+    .add-bug-section,
+    .filters-bar,
+    .cell-actions,
+    .col-actions {
+        display: none !important;
+    }
+    
+    .table-wrapper {
+        overflow: visible;
+    }
+    
+    .bug-row {
+        page-break-inside: avoid;
+    }
+}

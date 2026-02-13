@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Network xmlns="http://soap.sforce.com/2006/04/metadata">
+    <allowInternalUserLogin>false</allowInternalUserLogin>
+    <allowMembersToFlag>false</allowMembersToFlag>
+    <changePasswordTemplate>unfiled$public/CommunityChangePasswordEmailTemplate</changePasswordTemplate>
+    <communityRoles/>
+    <disableReputationRecordConversations>true</disableReputationRecordConversations>
+    <emailSenderAddress>harshgupta.1182@gmail.com</emailSenderAddress>
+    <emailSenderName>UTIL Project Management Tool</emailSenderName>
+    <embeddedLoginEnabled>false</embeddedLoginEnabled>
+    <enableApexCDNCaching>true</enableApexCDNCaching>
+    <enableCustomVFErrorPageOverrides>false</enableCustomVFErrorPageOverrides>
+    <enableDirectMessages>true</enableDirectMessages>
+    <enableExpFriendlyUrlsAsDefault>false</enableExpFriendlyUrlsAsDefault>
+    <enableExperienceBundleBasedSnaOverrideEnabled>true</enableExperienceBundleBasedSnaOverrideEnabled>
+    <enableGuestChatter>false</enableGuestChatter>
+    <enableGuestFileAccess>true</enableGuestFileAccess>
+    <enableGuestMemberVisibility>false</enableGuestMemberVisibility>
+    <enableImageOptimizationCDN>false</enableImageOptimizationCDN>
+    <enableInvitation>false</enableInvitation>
+    <enableKnowledgeable>false</enableKnowledgeable>
+    <enableLWRExperienceConnectedApp>false</enableLWRExperienceConnectedApp>
+    <enableMemberVisibility>false</enableMemberVisibility>
+    <enableNicknameDisplay>true</enableNicknameDisplay>
+    <enablePrivateMessages>false</enablePrivateMessages>
+    <enableReputation>false</enableReputation>
+    <enableShowAllNetworkSettings>false</enableShowAllNetworkSettings>
+    <enableSiteAsContainer>true</enableSiteAsContainer>
+    <enableTalkingAboutStats>true</enableTalkingAboutStats>
+    <enableTopicAssignmentRules>true</enableTopicAssignmentRules>
+    <enableTopicSuggestions>false</enableTopicSuggestions>
+    <enableUpDownVote>false</enableUpDownVote>
+    <forgotPasswordTemplate>unfiled$public/CommunityForgotPasswordEmailTemplate</forgotPasswordTemplate>
+    <gatherCustomerSentimentData>false</gatherCustomerSentimentData>
+    <headlessForgotPasswordTemplate>unfiled$public/CommunityHeadlessForgotPasswordTemplate</headlessForgotPasswordTemplate>
+    <headlessRegistrationTemplate>unfiled$public/CommunityHeadlessRegistrationTemplate</headlessRegistrationTemplate>
+    <networkAuthApiSettings>
+        <doesForgotPasswordRequireAuth>false</doesForgotPasswordRequireAuth>
+        <doesPasswordLoginRequireAuth>true</doesPasswordLoginRequireAuth>
+        <doesPwdlessLoginRequireAuth>false</doesPwdlessLoginRequireAuth>
+        <doesRegistrationRequireAuth>false</doesRegistrationRequireAuth>
+        <isFirstPartyAppsAllowed>false</isFirstPartyAppsAllowed>
+        <isForgotPwdAllowed>false</isForgotPwdAllowed>
+        <isForgotPwdEmailTemplateAllowlistingEnabled>false</isForgotPwdEmailTemplateAllowlistingEnabled>
+        <isHeadlessUserRegistrationAllowed>false</isHeadlessUserRegistrationAllowed>
+        <isPwdlessLoginAllowed>true</isPwdlessLoginAllowed>
+        <isRecaptchaRequiredForgotPwd>false</isRecaptchaRequiredForgotPwd>
+        <isRecaptchaRequiredPwdlessLogin>true</isRecaptchaRequiredPwdlessLogin>
+        <isRecaptchaRequiredRgstr>false</isRecaptchaRequiredRgstr>
+        <isUniversalClientRgstrAllowed>false</isUniversalClientRgstrAllowed>
+        <isUserDisambiguationAllowedForgotPwd>false</isUserDisambiguationAllowedForgotPwd>
+        <isUserDisambiguationAllowedUsernamePwd>false</isUserDisambiguationAllowedUsernamePwd>
+        <maxPasswordResetAttempts>5</maxPasswordResetAttempts>
+        <recaptchaScoreThreshold>0.0</recaptchaScoreThreshold>
+    </networkAuthApiSettings>
+    <networkMemberGroups>
+        <permissionSet>Util_QA_Access</permissionSet>
+        <permissionSet>Util_Admin_Access</permissionSet>
+        <permissionSet>Util_Project_Manager_Access</permissionSet>
+        <permissionSet>Util_Developer_Access</permissionSet>
+        <permissionSet>Util_Senior_Developer_Access</permissionSet>
+        <permissionSet>CCP_Admin_Access</permissionSet>
+        <permissionSet>CCP_Project_Manager_Access</permissionSet>
+        <permissionSet>CCP_Developer_Access</permissionSet>
+        <permissionSet>CCP_Senior_Developer_Access</permissionSet>
+        <permissionSet>CCP_QA_Access</permissionSet>
+        <permissionSet>sfdcInternalInt__sfdc_scrt2</permissionSet>
+        <permissionSet>Experience_Profile_Manager</permissionSet>
+        <permissionSet>devedapp__Developer_Edition</permissionSet>
+        <permissionSet>Util_System_Admin_Access</permissionSet>
+        <permissionSet>sfdc_aiplanner_service_permset</permissionSet>
+        <permissionSet>sfdcInternalInt__sfdc_chatbot</permissionSet>
+        <permissionSet>CCP_Consultant_Access</permissionSet>
+        <profile>Admin</profile>
+        <profile>UTIL Senior Developer</profile>
+        <profile>UTIL Developer</profile>
+        <profile>Customer Community User</profile>
+        <profile>UTIL Admin</profile>
+        <profile>UTIL Project Manager</profile>
+        <profile>UTIL QA</profile>
+        <profile>Customer Community Plus User</profile>
+        <profile>PMT Project Manager</profile>
+        <profile>PMT Admin</profile>
+        <profile>PMT Senior Developer</profile>
+        <profile>PMT Developer</profile>
+        <profile>PMT QA</profile>
+        <profile>Partner Community User</profile>
+        <profile>Partner Community Login User</profile>
+        <profile>Force%2Ecom - Free User</profile>
+        <profile>Chatter Moderator User</profile>
+        <profile>High Volume Customer Portal User</profile>
+        <profile>Authenticated Website</profile>
+        <profile>SolutionManager</profile>
+        <profile>Read Only</profile>
+        <profile>Custom%3A Sales Profile</profile>
+        <profile>Custom%3A Marketing Profile</profile>
+        <profile>Custom%3A Support Profile</profile>
+        <profile>MarketingProfile</profile>
+        <profile>ContractManager</profile>
+        <profile>Standard</profile>
+        <profile>Minimum Access - API Only Integrations</profile>
+        <profile>Einstein Agent User</profile>
+        <profile>Anypoint Integration</profile>
+        <profile>Analytics Cloud Integration User</profile>
+        <profile>Chatter Free User</profile>
+        <profile>Analytics Cloud Security User</profile>
+        <profile>External Apps Login User</profile>
+        <profile>Minimum Access - Salesforce</profile>
+        <profile>B2B Reordering Portal Buyer Profile</profile>
+        <profile>Salesforce API Only System Integrations</profile>
+        <profile>StandardAul</profile>
+        <profile>Customer Community Login User</profile>
+        <profile>Cross Org Data Proxy User</profile>
+        <profile>PlatformPortal</profile>
+        <profile>Work%2Ecom Only User</profile>
+        <profile>Customer Portal Manager Custom</profile>
+        <profile>Identity User</profile>
+        <profile>Silver Partner User</profile>
+        <profile>HighVolumePortal</profile>
+        <profile>Gold Partner User</profile>
+        <profile>Customer Portal Manager Standard</profile>
+        <profile>Force%2Ecom - App Subscription User</profile>
+        <profile>Customer Community Plus Login User</profile>
+        <profile>Partner App Subscription User</profile>
+        <profile>External Identity User</profile>
+    </networkMemberGroups>
+    <networkPageOverrides>
+        <changePasswordPageOverrideSetting>Standard</changePasswordPageOverrideSetting>
+        <forgotPasswordPageOverrideSetting>Standard</forgotPasswordPageOverrideSetting>
+        <homePageOverrideSetting>Designer</homePageOverrideSetting>
+        <loginPageOverrideSetting>Standard</loginPageOverrideSetting>
+        <selfRegProfilePageOverrideSetting>Designer</selfRegProfilePageOverrideSetting>
+    </networkPageOverrides>
+    <picassoSite>UTIL_Project_Management_Tool1</picassoSite>
+    <selfRegistration>false</selfRegistration>
+    <sendWelcomeEmail>true</sendWelcomeEmail>
+    <site>UTIL_Project_Management_Tool</site>
+    <siteArchiveStatus>NotArchived</siteArchiveStatus>
+    <status>Live</status>
+    <tabs>
+        <defaultTab>home</defaultTab>
+        <standardTab>Chatter</standardTab>
+    </tabs>
+    <urlPathPrefix>UtilPM</urlPathPrefix>
+    <welcomeTemplate>unfiled$public/CommunityWelcomeEmailTemplate</welcomeTemplate>
+</Network>

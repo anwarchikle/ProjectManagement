@@ -1,0 +1,174 @@
+.card-body {
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    margin: 1rem 0;
+}
+
+.action-icons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* Header Section Styling */
+lightning-card {
+    margin-bottom: 1.5rem;
+}
+
+/* Progress Section */
+lightning-layout-item strong {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #3e3e3c;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+lightning-layout-item {
+    margin-bottom: 1rem;
+}
+
+/* Custom Box for Accordion Content */
+.custom-box {
+    background: #fafaf9;
+    border-radius: 6px;
+    padding: 1.25rem;
+    border: 1px solid #e5e5e5;
+}
+
+/* Table Headers */
+.bolder {
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+    color: #3e3e3c;
+    border-bottom: 2px solid #dddbda;
+    padding-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Links */
+a {
+    color: #0070d2;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: #005fb2;
+    text-decoration: underline;
+}
+
+/* Accordion Sections */
+lightning-accordion-section {
+    margin-bottom: 0.5rem;
+}
+
+/* Progress Bar Styling */
+lightning-progress-bar {
+    margin-top: 0.5rem;
+}
+
+/* Task List Rows */
+lightning-layout.slds-p-vertical_x-small {
+    border-bottom: 1px solid #e5e5e5;
+    padding: 0.75rem 0;
+    transition: background-color 0.2s ease;
+}
+
+lightning-layout.slds-p-vertical_x-small:hover {
+    background-color: #f3f2f2;
+    border-radius: 4px;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+lightning-layout.slds-p-vertical_x-small:last-child {
+    border-bottom: none;
+}
+
+/* Empty State */
+.slds-text-color_weak {
+    font-style: italic;
+    text-align: center;
+    padding: 2rem;
+    color: #706e6b;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .card-body {
+        padding: 1rem;
+    }
+    
+    .custom-box {
+        padding: 1rem;
+    }
+    
+    lightning-layout-item {
+        margin-bottom: 1.5rem;
+    }
+}
+
+/* Status Badge Styling (optional enhancement) */
+lightning-layout-item:nth-child(2) {
+    font-weight: 600;
+}
+
+/* Add subtle animation to accordion */
+lightning-accordion {
+    margin-top: 1.5rem;
+}
+
+/* Improve spacing consistency */
+.slds-p-bottom_small {
+    padding-bottom: 0.75rem;
+}
+
+.slds-p-vertical_x-small {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
+/* Card title enhancement */
+lightning-card::part(title) {
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+/* Truncate task name only */
+.task-name {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 200px;
+}
+
+
+.toolbar {
+    text-align: right;
+    margin-bottom: 10px;
+}
+
+@media print {
+    .no-print {
+        /* display: none !important; */
+    }
+
+    .no-print {
+       display : block !important;
+    }
+
+    body {
+        background: #ffffff;
+    }
+
+    .sheet {
+        border: none;
+        box-shadow: none;
+    }
+}

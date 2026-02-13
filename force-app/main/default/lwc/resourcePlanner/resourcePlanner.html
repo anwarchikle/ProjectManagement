@@ -1,0 +1,214 @@
+<template>
+    <!-- FILTER BAR -->
+    <div class="planner-filters slds-grid slds-grid_align-spread slds-wrap slds-grid_vertical-align-center">
+        <div class="slds-grid slds-wrap slds-grid_vertical-align-center">
+            <div class="date-field slds-m-right_medium">
+                <lightning-input type="date"
+                                 label="Start Date"
+                                 value={startDate}
+                                 onchange={handleStartDateChange}>
+                </lightning-input>
+            </div>
+
+            <div class="date-field slds-m-right_medium">
+                <lightning-input type="date"
+                                 label="End Date"
+                                 value={endDate}
+                                 onchange={handleEndDateChange}>
+                </lightning-input>
+            </div>
+
+            <div class="slds-m-right_medium slds-grid slds-grid_vertical-align-center">
+                <lightning-button label="Current Month"
+                                  onclick={showCurrentMonth}>
+                </lightning-button>
+            </div>
+        </div>
+
+        <div class="search-field">
+            <lightning-input type="search"
+                             placeholder="Search Resource"
+                             value={searchKey}
+                             onchange={handleSearch}>
+            </lightning-input>
+        </div>
+    </div>
+
+    <!-- PLANNER -->
+    <div class="planner-wrapper">
+
+        <!-- HEADER -->
+        <div class="planner-header sticky-header">
+            <div class="name-col sticky-col header-cell">
+                Resource Name
+            </div>
+
+            <template for:each={visibleDays} for:item="d">
+                <div key={d.key}
+                     class="day-col header-cell capsule"
+                     title={d.fullLabel}>
+                    {d.label}
+                    <template if:true={d.isWeekend}>
+                        <span class="weekend-indicator"> (W)</span>
+                    </template>
+                </div>
+            </template>
+        </div>
+
+        <!-- USERS -->
+        <template if:true={hasUsers}>
+            <template for:each={filteredUsers} for:item="user">
+
+                <!-- USER ROW -->
+                <div key={user.userId} class="row user-row">
+                    <div class="name-col sticky-col user-cell clickable truncate name-blue"
+                         data-id={user.userId}
+                         onclick={toggleUser}>
+                        <span class="caret">
+                            <template if:true={user.isOpen}>▼</template>
+                            <template if:false={user.isOpen}>▶</template>
+                        </span>
+                        <span class="avatar">
+                            {user.initials}
+                        </span>
+                        {user.fullName}
+                    </div>
+
+                    <!-- USER TOTALS -->
+                    <template for:each={user.dayTotals} for:item="c">
+                        <div key={c.key}
+                             class="cell total capsule {c.cssClass}"
+                             data-weekend={c.isWeekend}
+                             title={c.title}>
+                            <template if:true={c.value}>{c.value}h</template>
+                            <template if:false={c.value}>0h</template>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- PROJECTS -->
+                <template if:true={user.isOpen}>
+                    <template if:true={user.hasProjects}>
+                        <template for:each={user.projects} for:item="project">
+
+                            <div key={project.projectId} class="row project-row">
+                                <div class="name-col sticky-col project-cell indent-1 name-blue">
+                                    <span class="caret clickable"
+                                          data-user={user.userId}
+                                          data-project={project.projectId}
+                                          onclick={toggleProject}>
+                                        <template if:true={project.isOpen}>▼</template>
+                                        <template if:false={project.isOpen}>▶</template>
+                                    </span>
+
+                                    <lightning-icon
+                                            icon-name="utility:briefcase"
+                                            size="x-small"
+                                            class="common-icon">
+                                        </lightning-icon>
+
+                                        <b class="underline-hover truncate clickable name-blue"
+                                        data-project={project.projectId}
+                                        onclick={handleProjectNavigate}>
+                                            {project.name}
+                                        </b>
+                                </div>
+
+                                <!-- PROJECT TOTALS -->
+                                <template for:each={project.dayTotals} for:item="c">
+                                    <div key={c.key}
+                                         class="cell capsule {c.cssClass}"
+                                         data-weekend={c.isWeekend}
+                                         title={c.title}>
+                                        <template if:true={c.value}>{c.value}h</template>
+                                        <template if:false={c.value}>0h</template>
+                                    </div>
+                                </template>
+                            </div>
+
+                            <!-- TASKS -->
+                            <template if:true={project.isOpen}>
+                                <template if:true={project.hasTasks}>
+                                    <template for:each={project.tasks} for:item="task">
+
+                                        <div key={task.taskId} class="row task-row">
+                                            <div class="name-col sticky-col task-cell indent-2 truncate clickable"
+                                                data-task={task.taskId}
+                                                onclick={handleTaskNavigate}>
+
+                                                <lightning-icon
+                                                    icon-name="utility:task"
+                                                    size="x-small"
+                                                    class="common-icon">
+                                                </lightning-icon>
+
+                                                {task.name}
+                                            </div>
+
+                                            <!-- ✅ TASK HOURS (FIXED) -->
+                                            <template for:each={task.days} for:item="d">
+                                                <div key={d.key}
+                                                     class="cell capsule {d.cssClass}"
+                                                     data-weekend={d.isWeekend}
+                                                     title={d.title}>
+                                                    <template if:true={d.hours}>
+                                                        {d.hours}h
+                                                    </template>
+                                                    <template if:false={d.hours}>
+                                                        0h
+                                                    </template>
+                                                </div>
+                                            </template>
+                                        </div>
+
+                                    </template>
+                                </template>
+
+                                <template if:false={project.hasTasks}>
+                                    <div class="row task-row" key={project.projectId}>
+                                        <div class="name-col sticky-col task-cell indent-2 truncate">
+                                            No tasks found
+                                        </div>
+                                        <template for:each={visibleDays} for:item="day">
+                                            <div key={day.key}
+                                                 class="cell capsule"
+                                                 data-weekend={day.isWeekend}>
+                                                0h
+                                            </div>
+                                        </template>
+                                    </div>
+                                </template>
+                            </template>
+
+                        </template>
+                    </template>
+
+                    <template if:false={user.hasProjects}>
+                        <div class="row project-row" key={user.userId}>
+                            <div class="name-col sticky-col project-cell indent-1">
+                                No projects found
+                            </div>
+                            <template for:each={visibleDays} for:item="day">
+                                <div key={day.key}
+                                     class="cell capsule"
+                                     data-weekend={day.isWeekend}>
+                                    0h
+                                </div>
+                            </template>
+                        </div>
+                    </template>
+                </template>
+
+            </template>
+        </template>
+
+        <template if:false={hasUsers}>
+            <div class="no-results">No users found</div>
+        </template>
+
+        <template if:true={showNoResultsMessage}>
+            <div class="no-results">No users found matching your search</div>
+        </template>
+
+    </div>
+</template>

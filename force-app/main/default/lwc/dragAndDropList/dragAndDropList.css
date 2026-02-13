@@ -1,0 +1,211 @@
+/* ========================================
+   CSS VARIABLES - INHERITED FROM PARENT
+   ======================================== */
+:host {
+    display: block;
+    width: 100%;
+    overflow-x: hidden;
+    
+    /* PMS Project Theme Colors */
+    --pms-primary: #1890ff;
+    --pms-primary-dark: #0050b3;
+    --pms-primary-light: #40a9ff;
+    
+    /* Backgrounds */
+    --pms-bg-primary: #ffffff;
+    --pms-bg-secondary: #f5f7fa;
+    --pms-bg-tertiary: #e8ecf1;
+    --pms-border: #d9dfe6;
+    --pms-border-light: #e8ecf1;
+    
+    /* Text Colors */
+    --pms-text-primary: #262626;
+    --pms-text-secondary: #595959;
+    --pms-text-tertiary: #8c8c8c;
+    
+    /* Shadow System */
+    --pms-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+    --pms-shadow-md: 0 2px 8px rgba(0, 0, 0, 0.08);
+    
+    /* Border Radius */
+    --pms-radius-sm: 4px;
+    --pms-radius-md: 8px;
+    --pms-radius-lg: 12px;
+    
+    /* Spacing */
+    --pms-space-xs: 4px;
+    --pms-space-sm: 8px;
+    --pms-space-md: 12px;
+    --pms-space-lg: 16px;
+}
+
+/* ========================================
+   DROP ZONE (COLUMN CONTENT AREA) - COMPACT
+   ======================================== */
+.drop-zone {
+    width: 100%;
+    min-height: 550px;
+    max-height: 64vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: var(--pms-space-md);
+    /* background: var(--pms-bg-secondary); */
+    border-radius: 0 0 var(--pms-radius-lg) var(--pms-radius-lg);
+    border: 2px dashed transparent;
+    transition: all 0.25s ease;
+    position: relative;
+    box-sizing: border-box;
+}
+
+/* Hover State */
+.drop-zone:hover {
+    background: rgba(0, 0, 0, 0.01);
+}
+
+/* Active Drag State */
+.drop-zone.drag-over {
+    background: rgba(24, 144, 255, 0.05);
+    border-color: var(--pms-primary-light);
+    border-style: dashed;
+}
+
+/* ========================================
+   CUSTOM SCROLLBAR - MINIMAL
+   ======================================== */
+.drop-zone::-webkit-scrollbar {
+    width: 5px;
+}
+
+.drop-zone::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: var(--pms-radius-sm);
+}
+
+.drop-zone::-webkit-scrollbar-thumb {
+    background: var(--pms-border);
+    border-radius: var(--pms-radius-sm);
+    transition: background 0.2s ease;
+}
+
+/* ========================================
+   EMPTY STATE - COMPACT
+   ======================================== */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px var(--pms-space-md);
+    text-align: center;
+    color: var(--pms-text-tertiary);
+    min-height: 150px;
+}
+
+.empty-icon {
+    font-size: 36px;
+    margin-bottom: var(--pms-space-sm);
+    opacity: 0.3;
+    filter: grayscale(1);
+}
+
+.empty-text {
+    font-size: 12px;
+    font-weight: 500;
+    margin: 0;
+    color: var(--pms-text-tertiary);
+    line-height: 1.5;
+}
+
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
+
+/* Tablet (768px - 1024px) */
+@media (max-width: 1024px) {
+    .drop-zone {
+        min-height: 180px;
+        max-height: calc(100vh - 220px);
+        padding: 8px 6px 6px 6px;
+    }
+    
+    .empty-state {
+        padding: 30px var(--pms-space-md);
+        min-height: 120px;
+    }
+    
+    .empty-icon {
+        font-size: 32px;
+    }
+}
+
+/* Mobile (max-width: 767px) */
+@media (max-width: 767px) {
+    .drop-zone {
+        min-height: 150px;
+        max-height: auto;
+        padding: 8px 6px 6px 6px;
+    }
+    
+    .empty-state {
+        padding: var(--pms-space-lg) var(--pms-space-sm);
+        min-height: 100px;
+    }
+    
+    .empty-icon {
+        font-size: 28px;
+    }
+    
+    .empty-text {
+        font-size: 11px;
+    }
+}
+
+/* Small Mobile (max-width: 480px) */
+@media (max-width: 480px) {
+    .drop-zone {
+        min-height: 120px;
+        padding: 6px var(--pms-space-xs) var(--pms-space-xs) var(--pms-space-xs);
+    }
+    
+    .empty-icon {
+        font-size: 24px;
+    }
+}
+
+/* ========================================
+   ACCESSIBILITY
+   ======================================== */
+.drop-zone:focus-within {
+    outline: 2px solid var(--pms-primary);
+    outline-offset: -2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .drop-zone {
+        border-width: 2px;
+    }
+    
+    .empty-state {
+        color: var(--pms-text-secondary);
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .drop-zone,
+    .drop-zone.drag-over {
+        transition: none;
+    }
+}
+
+/* ========================================
+   PRINT STYLES
+   ======================================== */
+@media print {
+    .drop-zone {
+        overflow: visible;
+        max-height: none;
+        page-break-inside: avoid;
+    }
+}

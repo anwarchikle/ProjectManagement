@@ -1,0 +1,6 @@
+<aura:component implements="lightning:isUrlAddressable,force:hasRecordId,lightning:actionOverride,force:lightningQuickAction" access="global">
+    <aura:attribute name="recordId" type="String" />
+    
+    <!-- Call the Edit Task LWC and pass the record ID -->
+    <c:editTask recordId="{!v.recordId}"/>
+</aura:component>

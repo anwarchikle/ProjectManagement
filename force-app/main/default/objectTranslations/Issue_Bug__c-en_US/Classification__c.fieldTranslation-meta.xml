@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label><!-- Classification --></label>
+    <name>Classification__c</name>
+    <picklistValues>
+        <masterLabel>Crash/Hang</masterLabel>
+        <translation><!-- Crash/Hang --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Data Loss</masterLabel>
+        <translation><!-- Data Loss --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Enhancement</masterLabel>
+        <translation><!-- Enhancement --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Feature(New)</masterLabel>
+        <translation><!-- Feature(New) --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>None</masterLabel>
+        <translation><!-- None --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Other bug</masterLabel>
+        <translation><!-- Other bug --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Performance</masterLabel>
+        <translation><!-- Performance --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Security</masterLabel>
+        <translation><!-- Security --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>UI/Usablity</masterLabel>
+        <translation><!-- UI/Usablity --></translation>
+    </picklistValues>
+</CustomFieldTranslation>

@@ -1,0 +1,581 @@
+/* ================================
+   MODAL BACKDROP
+=================================*/
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    /* background-color: rgba(0, 0, 0, 0.55); */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    width: 100vw;
+    height: 100vh;
+}
+
+.modal-container {
+    background: var(--bg-primary, #ffffff);
+    border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    width: 95%;
+    max-width: 1600px;
+    max-height: 90vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    animation: slideIn 0.25s ease;
+    
+    /* Responsive width based on screen size */
+    @media (min-width: 1920px) {
+        max-width: 1800px;
+    }
+    
+    @media (min-width: 2560px) {
+        max-width: 2200px;
+    }
+}
+
+.page-container {
+    background: var(--bg-primary, #ffffff);
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: none;
+    width: 100%;
+}
+
+/* ================================
+   HEADER
+=================================*/
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    background: var(--bg-secondary, #f9fafb);
+    border-bottom: 1px solid var(--border-light, #e5e7eb);
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.header-left h2 {
+    margin: 0;
+    font-weight: 600;
+    font-size: 1.125rem;
+    color: var(--color-gray-800, #1f2937);
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Week Navigation - Moved to Middle */
+.week-navigation {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--bg-primary, #ffffff);
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    border: 1px solid var(--border-medium, #d1d5db);
+    margin: 0 auto;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.week-display {
+    font-weight: 500;
+    min-width: 220px;
+    text-align: center;
+    font-size: 0.9375rem;
+    color: var(--color-gray-700, #374151);
+}
+
+/* Style for Single Time Log button */
+.header-actions lightning-button-icon[icon-name="utility:time"] {
+    --slds-c-icon-color-foreground: var(--color-primary, #2563eb);
+    --slds-c-icon-color-foreground-hover: var(--color-primary-dark, #1e40af);
+}
+
+/* Style for Back button */
+.header-actions lightning-button-icon[icon-name="utility:back"] {
+    --slds-c-icon-color-foreground: var(--color-gray-600, #4b5563);
+    --slds-c-icon-color-foreground-hover: var(--color-gray-800, #1f2937);
+}
+
+/* Style for Previous/Next Week buttons */
+.week-navigation lightning-button-icon[icon-name="utility:left"],
+.week-navigation lightning-button-icon[icon-name="utility:right"] {
+    --slds-c-icon-color-foreground: var(--color-gray-600, #4b5563);
+    --slds-c-icon-color-foreground-hover: var(--color-primary, #2563eb);
+}
+
+/* Style for Close button */
+.header-actions lightning-button-icon[icon-name="utility:close"] {
+    --slds-c-icon-color-foreground: var(--color-gray-500, #6b7280);
+    --slds-c-icon-color-foreground-hover: var(--color-gray-700, #374151);
+}
+
+/* ================================
+   BODY
+=================================*/
+.modal-body {
+    padding: 1.5rem;
+    overflow-y: auto;
+    flex: 1;
+    background: var(--bg-primary, #ffffff);
+}
+
+/* ================================
+   TABLE STYLES
+=================================*/
+.time-logs-table {
+    overflow-x: auto;
+    border: 1px solid var(--border-light, #e5e7eb);
+    border-radius: 8px;
+}
+
+.slds-table {
+    min-width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.slds-table thead th {
+    background: var(--bg-tertiary, #f3f4f6);
+    padding: 0.75rem 0.5rem;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: var(--color-gray-700, #374151);
+    border-bottom: 2px solid var(--border-medium, #d1d5db);
+    white-space: nowrap;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.slds-table tbody td {
+    padding: 0.5rem;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--border-light, #e5e7eb);
+    background: var(--bg-primary, #ffffff);
+}
+
+.slds-table tfoot td {
+    background: var(--bg-tertiary, #f3f4f6);
+    padding: 0.75rem 0.5rem;
+    border-top: 2px solid var(--border-medium, #d1d5db);
+    font-weight: 600;
+    color: var(--color-gray-700, #374151);
+}
+
+/* Column widths - Responsive */
+.slds-table th:nth-child(1) { min-width: 160px; width: 12%; } /* Project */
+.slds-table th:nth-child(2) { min-width: 160px; width: 12%; } /* Task */
+.slds-table th:nth-child(3) { min-width: 120px; width: 10%; } /* User */
+.slds-table th:nth-child(4) { min-width: 110px; width: 8%; } /* Billable Type */
+.slds-table th:nth-child(5),
+.slds-table th:nth-child(6),
+.slds-table th:nth-child(7),
+.slds-table th:nth-child(8),
+.slds-table th:nth-child(9),
+.slds-table th:nth-child(10),
+.slds-table th:nth-child(11) { min-width: 70px; width: 5%; } /* Days */
+.slds-table th:nth-child(12) { min-width: 80px; width: 6%; } /* Total */
+.slds-table th:nth-child(13) { min-width: 50px; width: 4%; } /* Delete */
+
+/* Large screens */
+@media (min-width: 1920px) {
+    .slds-table th:nth-child(1) { min-width: 200px; }
+    .slds-table th:nth-child(2) { min-width: 200px; }
+    .slds-table th:nth-child(3) { min-width: 150px; }
+    .slds-table th:nth-child(4) { min-width: 130px; }
+    .slds-table th:nth-child(5),
+    .slds-table th:nth-child(6),
+    .slds-table th:nth-child(7),
+    .slds-table th:nth-child(8),
+    .slds-table th:nth-child(9),
+    .slds-table th:nth-child(10),
+    .slds-table th:nth-child(11) { min-width: 90px; }
+}
+
+/* Input styling */
+.slds-table lightning-combobox,
+.slds-table lightning-input,
+.slds-table lightning-input-field {
+    --slds-c-input-spacing-horizontal-start: 0.5rem;
+    --slds-c-input-spacing-horizontal-end: 0.5rem;
+    --slds-c-input-radius-border: 4px;
+    --slds-c-input-color-border: var(--border-light, #e5e7eb);
+    --slds-c-input-color-border-hover: var(--color-primary, #2563eb);
+    --slds-c-input-color-border-focus: var(--color-primary, #2563eb);
+    --slds-c-input-shadow-focus: 0 0 4px rgba(37, 99, 235, 0.3);
+    width: 100%;
+}
+
+/* Right align hours */
+.slds-table td:nth-child(5) lightning-input,
+.slds-table td:nth-child(6) lightning-input,
+.slds-table td:nth-child(7) lightning-input,
+.slds-table td:nth-child(8) lightning-input,
+.slds-table td:nth-child(9) lightning-input,
+.slds-table td:nth-child(10) lightning-input,
+.slds-table td:nth-child(11) lightning-input {
+    --slds-c-input-text-align: right;
+}
+
+/* Total column */
+.total-cell {
+    font-weight: 700;
+    color: var(--color-primary, #2563eb);
+    text-align: right;
+    padding-right: 1rem !important;
+    background-color: var(--bg-tertiary, #f3f4f6); /* Changed from bg-hover to bg-tertiary */
+}
+
+.footer-label {
+    text-align: right;
+    padding-right: 1rem !important;
+    color: var(--color-gray-700, #374151);
+}
+
+/* Empty state */
+.empty-state {
+    text-align: center;
+    padding: 3rem !important;
+    color: var(--color-gray-500, #6b7280);
+}
+
+.empty-state lightning-icon {
+    margin-bottom: 0.5rem;
+    --slds-c-icon-color-foreground: var(--color-gray-400, #9ca3af);
+}
+
+.empty-state p {
+    margin: 0;
+    font-size: 0.9375rem;
+}
+
+/* Add row button */
+.add-row-btn {
+    --slds-c-button-neutral-color-border: var(--border-medium, #d1d5db);
+    --slds-c-button-neutral-color-background: var(--bg-primary, #ffffff);
+    --slds-c-button-text-color: var(--color-primary, #2563eb);
+    --slds-c-button-neutral-color-background-hover: var(--bg-hover, #f0f7ff);
+    --slds-c-button-neutral-color-border-hover: var(--color-primary, #2563eb);
+}
+
+/* Delete button */
+.slds-table lightning-button-icon[icon-name="utility:delete"] {
+    --slds-c-icon-color-foreground: var(--color-gray-500, #6b7280);
+    --slds-c-icon-color-foreground-hover: var(--color-danger, #ef4444);
+}
+
+/* ================================
+   USER DISPLAY - FIXED BACKGROUND ISSUE
+=================================*/
+.user-display {
+    display: flex;
+    align-items: center;
+    color: var(--color-gray-700, #374151);
+    background: transparent; /* Ensure no background color */
+}
+
+.user-display lightning-icon {
+    --slds-c-icon-color-foreground: var(--color-gray-500, #6b7280); /* Changed from primary to gray */
+    flex-shrink: 0;
+}
+
+.user-display span {
+    background: transparent;
+    color: var(--color-gray-700, #374151);
+}
+
+.user-id-hidden {
+    display: none;
+}
+
+/* Ensure table cells have clean background */
+.slds-table tbody td {
+    background: var(--bg-primary, #ffffff);
+}
+
+.slds-table tbody tr:hover td {
+    background: var(--bg-hover, #f0f7ff);
+}
+
+.slds-table tbody tr:hover .user-display {
+    background: transparent; /* Keep transparent on hover */
+}
+
+/* ================================
+   FOOTER
+=================================*/
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    background: var(--bg-secondary, #f9fafb);
+    border-top: 1px solid var(--border-light, #e5e7eb);
+    gap: 0.75rem;
+}
+
+/* Footer button styling */
+.modal-footer lightning-button {
+    --slds-c-button-neutral-color-background: var(--bg-primary, #ffffff);
+    --slds-c-button-neutral-color-border: var(--border-medium, #d1d5db);
+    --slds-c-button-neutral-color-background-hover: var(--bg-hover, #f0f7ff);
+    --slds-c-button-neutral-color-border-hover: var(--color-primary, #2563eb);
+    
+    --slds-c-button-brand-color-background: var(--color-primary, #2563eb);
+    --slds-c-button-brand-color-border: var(--color-primary, #2563eb);
+    --slds-c-button-brand-color-background-hover: var(--color-primary-dark, #1e40af);
+    --slds-c-button-brand-color-border-hover: var(--color-primary-dark, #1e40af);
+}
+
+/* Cancel button */
+.modal-footer lightning-button[label="Cancel"] {
+    margin-right: auto;
+}
+
+/* ================================
+   SCROLLBAR
+=================================*/
+.modal-body::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.modal-body::-webkit-scrollbar-track {
+    background: var(--bg-secondary, #f9fafb);
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+    background: var(--color-gray-400, #9ca3af);
+    border-radius: 4px;
+}
+
+.modal-body::-webkit-scrollbar-thumb:hover {
+    background: var(--color-gray-500, #6b7280);
+}
+
+/* ================================
+   ANIMATIONS
+=================================*/
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ================================
+   RESPONSIVE - COMPLETE BREAKPOINTS
+=================================*/
+/* Ultra-wide screens (2560px and above) */
+@media (min-width: 2560px) {
+    .modal-container {
+        max-width: 2200px;
+        width: 85%;
+    }
+    
+    .slds-table {
+        font-size: 1rem;
+    }
+    
+    .slds-table thead th {
+        font-size: 0.9375rem;
+        padding: 1rem 0.75rem;
+    }
+    
+    .slds-table tbody td {
+        padding: 0.75rem 0.5rem;
+    }
+    
+    .week-display {
+        min-width: 280px;
+        font-size: 1rem;
+    }
+}
+
+/* Large desktop (1920px - 2559px) */
+@media (min-width: 1920px) and (max-width: 2559px) {
+    .modal-container {
+        max-width: 1800px;
+        width: 90%;
+    }
+    
+    .slds-table thead th {
+        font-size: 0.875rem;
+    }
+    
+    .week-display {
+        min-width: 250px;
+    }
+}
+
+/* Standard desktop (1366px - 1919px) */
+@media (min-width: 1366px) and (max-width: 1919px) {
+    .modal-container {
+        max-width: 1300px;
+    }
+    
+    .slds-table th:nth-child(1) { min-width: 150px; }
+    .slds-table th:nth-child(2) { min-width: 150px; }
+    .slds-table th:nth-child(3) { min-width: 120px; }
+}
+
+/* Small desktop / Large laptop (1024px - 1365px) */
+@media (min-width: 1024px) and (max-width: 1365px) {
+    .modal-container {
+        max-width: 95%;
+        width: 95%;
+    }
+    
+    .slds-table th:nth-child(1) { min-width: 140px; }
+    .slds-table th:nth-child(2) { min-width: 140px; }
+    .slds-table th:nth-child(3) { min-width: 110px; }
+    .slds-table th:nth-child(4) { min-width: 100px; }
+    
+    .week-display {
+        min-width: 180px;
+    }
+}
+
+/* Tablet landscape (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .modal-container {
+        width: 98%;
+        max-height: 95vh;
+    }
+    
+    .modal-header {
+        padding: 0.75rem 1rem;
+    }
+    
+    .week-navigation {
+        position: static;
+        left: auto;
+        transform: none;
+        margin: 0 0.5rem;
+    }
+    
+    .week-display {
+        min-width: 160px;
+        font-size: 0.875rem;
+    }
+    
+    .slds-table th:nth-child(1) { min-width: 130px; }
+    .slds-table th:nth-child(2) { min-width: 130px; }
+    .slds-table th:nth-child(3) { min-width: 100px; }
+    
+    .header-actions {
+        gap: 0.5rem;
+    }
+}
+
+/* Tablet portrait / Mobile (below 768px) */
+@media (max-width: 767px) {
+    .modal-container {
+        width: 100%;
+        max-height: 100vh;
+        border-radius: 0;
+    }
+    
+    .modal-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+    }
+    
+    .header-left {
+        justify-content: space-between;
+    }
+    
+    .header-actions {
+        width: 100%;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    
+    .week-navigation {
+        position: static;
+        left: auto;
+        transform: none;
+        margin: 0;
+        flex: 1;
+        min-width: auto;
+    }
+    
+    .week-display {
+        min-width: auto;
+        font-size: 0.8125rem;
+    }
+    
+    .modal-body {
+        padding: 1rem;
+    }
+    
+    .time-logs-table {
+        border-radius: 4px;
+    }
+    
+    .slds-table thead th {
+        padding: 0.5rem 0.25rem;
+        font-size: 0.75rem;
+    }
+    
+    .slds-table tbody td {
+        padding: 0.375rem 0.25rem;
+    }
+    
+    .modal-footer {
+        flex-direction: column;
+        padding: 1rem;
+    }
+    
+    .modal-footer lightning-button {
+        width: 100%;
+        margin: 0 !important;
+    }
+    
+    .modal-footer lightning-button[label="Cancel"] {
+        margin-right: 0 !important;
+    }
+}
+
+/* Small mobile (below 480px) */
+@media (max-width: 480px) {
+    .header-actions {
+        flex-direction: column;
+    }
+    
+    .week-navigation {
+        width: 100%;
+    }
+    
+    .week-display {
+        min-width: auto;
+        font-size: 0.75rem;
+    }
+    
+    .slds-table th:nth-child(1),
+    .slds-table th:nth-child(2),
+    .slds-table th:nth-child(3),
+    .slds-table th:nth-child(4) {
+        min-width: 100px;
+    }
+}

@@ -1,0 +1,141 @@
+<template>
+    <section class={containerClass}>
+        <div class="modal-container">
+            
+            <!-- ========== ADD TIME LOG COMPONENT (DEFAULT VIEW) ========== -->
+            <template if:true={showAddTimeLog}>
+                <!-- HEADER -->
+                <header class="modal-header">
+                    <div class="header-left">
+                        <lightning-icon icon-name="action:log_event" size="small"
+                            class="slds-m-right_small"></lightning-icon>
+                        <h2 class="slds-text-heading_medium">Add Time Log</h2>
+                    </div>
+
+                    <div class="header-actions">
+                        <!-- Week Logs Button - Switches to Weekly View -->
+                        <lightning-button-icon
+                            icon-name="utility:event"
+                            alternative-text="Weekly time Log"
+                            title="Add Week Logs"
+                            onclick={handleAddWeek}>
+                        </lightning-button-icon>
+
+                        <lightning-button-icon
+                            icon-name="utility:close"
+                            variant="bare"
+                            onclick={handleCancel}
+                            alternative-text="Close">
+                        </lightning-button-icon>
+                    </div>
+                </header>
+
+                <!-- Add Time Log Form -->
+                <lightning-record-edit-form
+                    object-api-name="Time_Log__c"
+                    record-type-id={recordTypeId}
+                    onsubmit={handleSubmit}
+                    onsuccess={handleSuccess}
+                    onerror={handleError}>
+
+                    <div class="modal-body">
+                        <!-- TIME LOG INFO -->
+                        <div class="section">
+                            <div class="section-title">TIME LOG INFORMATION</div>
+
+                            <div class="grid two-col">
+                                <!-- Project (Auto filled & disabled) -->
+                                <div class="field-group">
+                                    <lightning-input-field 
+                                        field-name="Projects__c"
+                                        value={parentProjectId}
+                                        required>
+                                    </lightning-input-field>
+                                </div>
+
+                                <!-- Task (Auto filled & disabled) -->
+                                <div class="field-group">
+                                    <lightning-input-field 
+                                        field-name="Tasks__c"
+                                        value={parentTaskId}
+                                        required>
+                                    </lightning-input-field>
+                                </div>
+
+                                <!-- Current Date Auto Filled -->
+                                <div class="field-group">
+                                    <lightning-input-field 
+                                        field-name="Date__c"
+                                        value={todayDate}
+                                        required>
+                                    </lightning-input-field>
+                                </div>
+
+                                <div class="field-group">
+                                    <lightning-input-field field-name="Daily_Logs__c" required>
+                                    </lightning-input-field>
+                                </div>
+
+                                <div class="field-group">
+                                    <lightning-input-field field-name="Issue_Bug__c">
+                                    </lightning-input-field>
+                                </div>
+
+                                <div class="field-group">
+                                    <lightning-input-field 
+                                        field-name="User__c"
+                                        value={loggedInUserId}>
+                                    </lightning-input-field>
+                                </div>
+                                
+                                <div class="field-group">
+                                    <lightning-input-field field-name="General_Log__c">
+                                    </lightning-input-field>
+                                </div>
+                                
+                                <div class="field-group">
+                                    <lightning-input-field field-name="Billable_Type__c">
+                                    </lightning-input-field>
+                                </div>
+
+                                <div></div>
+                            </div>
+                        </div>
+
+                        <!-- OTHER INFO -->
+                        <div class="section">
+                            <div class="section-title">OTHER INFORMATION</div>
+
+                            <div class="field-group full-width">
+                                <lightning-input-field field-name="Notes__c">
+                                </lightning-input-field>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FOOTER -->
+                    <footer class="modal-footer">
+                        <lightning-button label="Cancel" onclick={handleCancel}></lightning-button>
+                        <lightning-button type="submit" name="saveAndNew" variant="neutral" label="Save & New"></lightning-button>
+                        <lightning-button type="submit" variant="brand" label="Save"></lightning-button>
+                    </footer>
+                </lightning-record-edit-form>
+            </template>
+
+            <!-- ========== WEEKLY TIME LOG COMPONENT (SECONDARY VIEW) ========== -->
+            <template if:true={showWeeklyLog}>
+                <!-- Weekly Log Header with Back button -->
+                               <!-- Your Weekly Time Log Component -->
+                <c-weekly-time-log-compo
+                    parent-task-id={parentTaskId}
+                    parent-project-id={parentProjectId}
+                    logged-in-user-id={loggedInUserId}
+                    onback={handleBackToAddTimeLog}
+                    onclose={handleCancel}
+                    onswitchtosingle={handleSwitchToSingle}>
+                   </c-weekly-time-log-compo>
+            </template>
+            
+        </div>
+    </section>
+</template>

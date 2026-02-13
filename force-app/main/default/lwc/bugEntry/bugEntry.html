@@ -1,0 +1,146 @@
+<template>
+    <lightning-card>
+        <h3 slot="title">
+            <lightning-icon icon-name="action:bug" alternative-text="Event" size="small"></lightning-icon>
+            &nbsp; QA BugTrack
+        </h3>
+
+
+        <!-- <lightning-layout multiple-rows>
+            <lightning-layout-item size="2" small-device-size="12" medium-device-size="6" large-device-size="2"
+                padding="around-small">
+
+                <div style="overflow:visible; position:relative;">
+                    <c-lwc-custom-lookup unique-name="Project" object-a-p-i-name="Project__c"
+                        icon-name="standard:asset_object" onprogressvaluechange={handleLookupSelection}
+                        oncustomlookupupdateevent={handleLookupUpdate} label-for-component="Project"
+                        place-holder="Enter Account">
+                    </c-lwc-custom-lookup>
+                </div>
+
+            </lightning-layout-item>
+
+            <lightning-layout-item size="1" small-device-size="2" medium-device-size="3" large-device-size="2"
+                padding="around-small">
+                <div class="custom-box">
+                    <template if:true={mileStoneCondition}>
+                        <div style="overflow:visible; position:relative;">
+                            <c-lwc-custom-lookup unique-name="Milestone" object-a-p-i-name="Milestone__c"
+                                icon-name="standard:entity_milestone" onprogressvaluechange={handleLookupSelection}
+                                where={mileStoneCondition} oncustomlookupupdateevent={handleLookupUpdate}
+                                label-for-component="Milestone" place-holder="Enter Milestone">
+                            </c-lwc-custom-lookup>
+                        </div>
+                    </template>
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item size="1" small-device-size="2" medium-device-size="3" large-device-size="2"
+                padding="around-small">
+                <div class="custom-box">
+                    <template if:true={taskListCondition}>
+                        <div style="overflow:visible; position:relative;">
+                            <c-lwc-custom-lookup unique-name="TaskList" object-a-p-i-name="Task_List__c"
+                                icon-name="standard:action_list_component" onprogressvaluechange={handleLookupSelection}
+                                where={taskListCondition} oncustomlookupupdateevent={handleLookupUpdate}
+                                label-for-component="TaskList" place-holder="Enter TaskList">
+                            </c-lwc-custom-lookup>
+                        </div>
+                    </template>
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item size="1" small-device-size="2" medium-device-size="3" large-device-size="2"
+                padding="around-small">
+                <div class="custom-box">
+                    <div style="overflow:visible; position:relative;">
+                        <c-lwc-custom-lookup unique-name="User" object-a-p-i-name="User" icon-name="standard:user"
+                            onprogressvaluechange={handleLookupSelection} oncustomlookupupdateevent={handleLookupUpdate}
+                            label-for-component="Team Lead" place-holder="Enter Team Lead">
+                        </c-lwc-custom-lookup>
+                    </div>
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item size="1" small-device-size="2" medium-device-size="3" large-device-size="2"
+                padding="around-small">
+                <div class="custom-box">
+                    <lightning-combobox name="environment" label="Environment" value={selectedIndustry}
+                        placeholder="Select an Environment" options={picklistValues} onchange={handleChange}>
+                    </lightning-combobox>
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item size="1" small-device-size="2" medium-device-size="3" large-device-size="2"
+                padding="around-small">
+                <div class="custom-box">
+                    <lightning-file-upload label="Attach receipt" name="fileUploader" accept={acceptedFormats}
+                        record-id={userId} onuploadfinished={handleUploadFinished} multiple>
+                    </lightning-file-upload>
+                </div>
+            </lightning-layout-item>
+        </lightning-layout> -->
+
+        <template for:each={itemList} for:item="item" for:index="index">
+            <lightning-record-edit-form key={item.id} object-api-name="Issue_Bug__c">
+                <lightning-messages></lightning-messages>
+
+                <lightning-layout multiple-rows>
+
+                    <!-- Row 1 -->
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="4" large-device-size="4"
+                        padding="around-small">
+                        <lightning-input-field field-name="Assignee__c" variant="label-stacked" required>
+                        </lightning-input-field>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="4" large-device-size="4"
+                        padding="around-small">
+                        <lightning-input-field field-name="Classification__c" variant="label-stacked" required>
+                        </lightning-input-field>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="4" large-device-size="4"
+                        padding="around-small">
+                        <lightning-input-field field-name="Environment__c" variant="label-stacked">
+                        </lightning-input-field>
+                    </lightning-layout-item>
+
+                    <!-- Row 2 -->
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="4" large-device-size="4"
+                        padding="around-small">
+                        <lightning-input-field field-name="Description__c" variant="label-stacked" required>
+                        </lightning-input-field>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="4" large-device-size="4"
+                        padding="around-small">
+                        <lightning-input-field field-name="Commnets__c" variant="label-stacked" required>
+                        </lightning-input-field>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="4" large-device-size="4"
+                        padding="around-small">
+                        <div class="slds-p-top_medium slds-text-align_center">
+                            <lightning-icon icon-name="action:new" access-key={item.id} id={index}
+                                alternative-text="Add Row" size="small" title="Add Row" onclick={addRow}>
+                            </lightning-icon>
+                            &nbsp;&nbsp;
+                            <lightning-icon icon-name="action:delete" access-key={item.id} id={index}
+                                alternative-text="Delete Row" size="small" title="Delete Row" onclick={removeRow}>
+                            </lightning-icon>
+                        </div>
+                    </lightning-layout-item>
+
+                </lightning-layout>
+            </lightning-record-edit-form>
+        </template>
+
+        </br>
+        <lightning-layout>
+            <div class="slds-align_absolute-center">
+                <lightning-button variant="success" onclick={handleSubmit} name="submit" label="Submit">
+                </lightning-button>
+                &nbsp;&nbsp;
+                <lightning-button variant="destruction" onclick={handleCancel} name="submit" label="Cancel">
+                </lightning-button>
+            </div>
+        </lightning-layout>
+    </lightning-card>
+</template>

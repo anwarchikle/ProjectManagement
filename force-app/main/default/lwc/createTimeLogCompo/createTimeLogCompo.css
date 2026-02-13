@@ -1,0 +1,279 @@
+/* ================================
+   MODAL BACKDROP (List View Mode)
+=================================*/
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.55);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    width: 100vw;
+    height: 100vh;
+}
+
+/* ================================
+   MODAL CONTAINER
+=================================*/
+.modal-container {
+    background: #fbfafa;
+    border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    width: 90%;
+    max-width: 1100px;
+    max-height: 90vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    position: relative;
+    animation: slideIn 0.25s ease;
+    transform-style: preserve-3d;
+    animation: flipOpen 0.45s ease-out;
+}
+
+/* ================================
+   NORMAL PAGE CONTAINER (Record Page)
+=================================*/
+.normal-container {
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: none;
+    width: 100%;
+}
+
+/* ================================
+   HEADER - Clean white background
+=================================*/
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    background: #ffffff;  /* Changed from #f3f3f3 to white */
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.header-left h2 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+    /* font-size: 1.25rem;  Increased font size */
+    color: #1e40af;
+    line-height: 1.2;
+}
+
+/* Header action buttons styling */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+/* Style for Add Week Logs button */
+.header-actions lightning-button-icon[icon-name="utility:event"] {
+    --slds-c-icon-color-foreground: #25683e;  /* Dark green color */
+    --slds-c-icon-color-foreground-hover: #1a4f2e;
+    --slds-c-icon-color-background-hover: rgba(37, 104, 62, 0.1);
+}
+
+.header-actions lightning-button-icon[icon-name="utility:event"] lightning-primitive-icon {
+    transform: scale(1.2);  /* Increase icon size */
+}
+
+/* Style for Close button */
+.header-actions lightning-button-icon[icon-name="utility:close"] {
+    --slds-c-icon-color-foreground: #6b6b6b;
+    --slds-c-icon-color-foreground-hover: #2e2e2e;
+}
+
+.header-actions lightning-button-icon[icon-name="utility:close"] lightning-primitive-icon {
+    transform: scale(1.1);  /* Slightly increase close icon */
+}
+
+/* ================================
+   BODY
+=================================*/
+.modal-body {
+    padding: 1.5rem;
+    overflow-y: auto;
+    flex: 1;
+}
+
+/* Section title - Dark blue tone */
+.section-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #1e40af;;  /* Dark blue tone */
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #e5e5e5;
+    padding-bottom: 0.5rem;
+}
+
+/* ================================
+   GRID LAYOUT - Keep exact spacing
+=================================*/
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.2rem;
+}
+
+.field-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.field-group.full-width {
+    grid-column: span 2;
+}
+
+/* Notes field styling - Text next to field */
+.field-group.full-width .slds-form-element__label {
+    display: inline-block;
+    width: auto;
+    margin-right: 1rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #3e3e3c;
+}
+
+.field-group.full-width lightning-input-field {
+    display: flex;
+    align-items: center;
+}
+
+.field-group.full-width .slds-form-element__control {
+    flex: 1;
+}
+
+/* ================================
+   LABEL STYLING - Keep existing
+=================================*/
+.field-group label {
+    font-size: 0.75rem;
+    color: #444;
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+/* ================================
+   INPUT CUSTOMIZATION - Keep existing
+=================================*/
+.field-group lightning-input-field {
+    --slds-c-input-radius-border: 6px;
+    --slds-c-input-color-border: #dddbda;
+    --slds-c-input-color-border-hover: #1589ee;
+    --slds-c-input-color-border-focus: #1589ee;
+    --slds-c-input-shadow-focus: 0 0 4px #0176d3;
+}
+
+/* Required Indicator */
+.field-group lightning-input-field[required] {
+    border-left: 3px solid #1589ee;
+    padding-left: 0.5rem;
+}
+
+/* Error Styling */
+.field-group lightning-input-field[aria-invalid="true"] {
+    --slds-c-input-color-border: #ea001e;
+}
+
+/* ================================
+   FOOTER - Match container background
+=================================*/
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    background: #ffffff;  /* Changed from #fafafa to white */
+    border-top: 1px solid #e5e5e5;
+    gap: 0.75rem;
+}
+
+/* Footer button styling */
+.modal-footer lightning-button {
+    --slds-c-button-neutral-color-background: white;
+    --slds-c-button-neutral-color-border: #dddbda;
+    --slds-c-button-brand-color-background: #25683e;
+    --slds-c-button-brand-color-border: #25683e;
+    --slds-c-button-brand-color-background-hover: #1a4f2e;
+    --slds-c-button-brand-color-border-hover: #1a4f2e;
+}
+
+/* Cancel button - move slightly left */
+.modal-footer lightning-button[label="Cancel"] {
+    margin-right: auto;  /* Pushes other buttons to the right */
+}
+
+/* ================================
+   SCROLLBAR - Keep existing
+=================================*/
+.modal-body::-webkit-scrollbar {
+    width: 8px;
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+    background: #c9c9c9;
+    border-radius: 4px;
+}
+
+/* ================================
+   ANIMATIONS - Keep existing
+=================================*/
+@keyframes flipOpen {
+    0% {
+        opacity: 0;
+        transform: perspective(1000px) rotateX(-15deg) scale(0.95);
+    }
+    60% {
+        opacity: 1;
+        transform: perspective(1000px) rotateX(3deg) scale(1.02);
+    }
+    100% {
+        transform: perspective(1000px) rotateX(0deg) scale(1);
+    }
+}
+
+/* ================================
+   RESPONSIVE - Keep existing
+=================================*/
+@media (max-width: 768px) {
+    .modal-container {
+        width: 96%;
+        max-height: 95vh;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .field-group.full-width {
+        grid-column: span 1;
+    }
+
+    .modal-footer {
+        flex-direction: column;
+    }
+
+    .modal-footer lightning-button {
+        width: 100%;
+    }
+    
+    .modal-footer lightning-button[label="Cancel"] {
+        margin-right: 0;  /* Reset for mobile */
+    }
+    
+}

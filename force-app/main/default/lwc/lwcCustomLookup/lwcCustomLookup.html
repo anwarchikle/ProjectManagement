@@ -1,0 +1,111 @@
+<template>
+    <div class="c-container">
+        <div class="custom-lookup slds-form-element">
+
+            <template if:false={labelHidden}>
+                <label class="slds-form-element__label">{labelForComponent}</label>
+            </template>
+
+            <div class="slds-form-element__control">
+                <div class="slds-combobox_container">
+                    <div
+                        class="custom-lookup-container slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click">
+                        <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_left-right "
+                            role="none">
+
+                            <div class="search-input-container slds-show">
+                                <lightning-input type="text" onclick={handleClickOnInputBox} onchange={handleKeyChange}
+                                    is-loading={isSearchLoading} value={searchKeyWord} variant="label-hidden"
+                                    placeholder={placeholder} onfocusout={handleFocusOut}></lightning-input>
+                                <span
+                                    class="slds-icon_container slds-icon-utility-search slds-input__icon slds-input__icon_right">
+                                    <lightning-icon class="slds-icon slds-icon slds-icon_x-small slds-icon-text-default"
+                                        icon-name="utility:search" size="x-small" alternative-text="icon">
+                                    </lightning-icon>
+                                </span>
+                            </div>
+
+                            <div class="custom-lookup-pill slds-pill-container slds-hide" role="none">
+                                <span
+                                    class="slds-icon_container slds-icon-standard-contact slds-combobox__input-entity-icon"
+                                    title="Contact">
+                                    <lightning-icon class="slds-icon slds-icon slds-icon_small" icon-name={iconName}
+                                        size="small" alternative-text="icon"> </lightning-icon>
+                                    <span class="slds-assistive-text">Contact</span>
+                                </span>
+
+                                <button type="button"
+                                    class="slds-input_faux slds-combobox__input slds-combobox__input-value"
+                                    aria-labelledby="combobox-label-id-33 combobox-id-5-selected-value"
+                                    id="combobox-id-5-selected-value" aria-controls="listbox-id-5" aria-expanded="false"
+                                    aria-haspopup="listbox">
+                                    <span class="slds-truncate" id="combobox-value-id-20">{selectedRecordLabel}</span>
+                                </button>
+
+                                <button class="slds-button slds-button_icon slds-input__icon slds-input__icon_right"
+                                    title="Remove selected option" onclick={clearSelection}>
+                                    <lightning-icon class="slds-icon slds-icon slds-icon_x-small slds-icon-text-default"
+                                        icon-name="utility:close" size="x-small" alternative-text="icon">
+                                    </lightning-icon>
+                                    <span class="slds-assistive-text">Remove selected option</span>
+                                </button>
+                            </div>
+
+                            <!-- <!–This part is for Display typehead lookup result List–> -->
+                            <div class="slds-dropdown slds-dropdown_length-with-icon-7 slds-dropdown_fluid"
+                                role="listbox">
+                                <template if:true={spinnerShow}>
+                                    <div class="spinner-holder">
+                                        <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+                                    </div>
+                                </template>
+
+                                <ul style="min-height:40px;margin-top:0px !important"
+                                    class="slds-listbox slds-listbox_vertical" role="presentation">
+                                    <template for:each={searchRecordList} for:item="rec">
+                                        <li key={rec.Id} role="presentation" class="slds-listbox__item">
+                                            <div id={rec.Id} data-recid={rec.Id} onclick={handleSelectionRecord}
+                                                class="slds-media slds-listbox__option slds-listbox__option_entity"
+                                                role="option" style="align-items: center;">
+                                                <span style="pointer-events: none;"
+                                                    class="slds-media__figure slds-listbox__option-icon">
+                                                    <lightning-icon class="slds-icon slds-icon slds-icon_small "
+                                                        icon-name={iconName} size="small" alternative-text="icon">
+                                                    </lightning-icon>
+                                                </span>
+                                                <span style="pointer-events: none;" class="slds-media__body">
+                                                    <span class="slds-listbox__option-text_entity">{rec.Name}  
+                                                        <!-- <br/> Phone: {rec.Phone}  -->
+                                                    </span>
+                                                </span>
+                                            </div>
+                                        </li>
+                                    </template>
+
+                                    <template if:true={noRecordFound}>
+                                        <li role="presentation" class="slds-listbox__item">
+                                            <div class="slds-media slds-listbox__option slds-listbox__option_entity"
+                                                role="option" style="align-items: center;">
+                                                <span style="pointer-events: none;" class="slds-media__body">
+                                                    <span class="slds-listbox__option-text_entity">No Records
+                                                        Found….</span>
+                                                </span>
+                                            </div>
+                                        </li>
+                                    </template>
+                                </ul>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</template>

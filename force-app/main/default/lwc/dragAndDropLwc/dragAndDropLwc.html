@@ -1,0 +1,79 @@
+<template>
+    <lightning-card title="Kanban Board" icon-name="standard:task">
+        <div slot="actions" class="view-toggle">
+            <lightning-button-group>
+               
+                <lightning-button label="Kanban" variant={kanbanVariant} onclick={showKanban}></lightning-button>
+                <lightning-button label="List" variant={listVariant} onclick={showList}></lightning-button>
+            </lightning-button-group>
+        </div>
+        <div class="toolbar">
+            <lightning-combobox name="listview" label="List View" value={selectedListView} placeholder="All"
+                options={listViewOptions} onchange={handleListViewChange}></lightning-combobox>
+            <lightning-input type="search" variant="label-hidden" label="Search" placeholder="Search tasks..."
+                value={searchKey} onchange={handleSearchChange}></lightning-input>
+            <div class="toolbar-meta">
+                <span class="meta-text">{visibleCount} tasks</span>
+                <lightning-button class="export-btn" label="Export PDF" icon-name="utility:download" variant="neutral"
+                    onclick={exportToPdf}></lightning-button>
+            </div>
+        </div>
+        <!-- ================== -->
+        <!-- KANBAN VIEW -->
+        <!-- ================== -->
+        <template if:true={isKanbanView}>
+            <div class="card_wrapper" role="region" aria-label="Kanban columns">
+                <template for:each={stagesWithCounts} for:item="col">
+                    <div class="stageContainer calcWidth" key={col.value}>
+                        <div class="column_heading" title={col.value}>
+                            <span class="column_headingText">{col.value}</span>
+                            <span class="countPill" aria-label="Task count">{col.count}</span>
+                        </div>
+                        <c-drag-and-drop-list records={visibleRecords} stage={col.value}
+                            onlistitemdrag={handleListItemDrag} onitemdrop={handleItemDrop} onmovenext={handleMoveNext}>
+                        </c-drag-and-drop-list>
+                    </div>
+                </template>
+            </div>
+        </template>
+        <!-- ================== -->
+        <!-- LIST VIEW -->
+        <!-- ================== -->
+        <template if:true={isListView}>
+            <lightning-datatable key-field="Id" data={visibleRecords} columns={columns} hide-checkbox-column>
+            </lightning-datatable>
+        </template>
+
+        <!-- ================== -->
+        <!-- EXPORT PDF DIALOG -->
+        <!-- ================== -->
+        <template if:true={showExportDialog}>
+            <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="export-dialog-heading" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <h2 id="export-dialog-heading" class="slds-modal__title slds-hyphenate">Export PDF Options</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" id="export-dialog-body">
+                        <div class="slds-form-element">
+                            <lightning-combobox
+                                name="exportStatus"
+                                label="Select Status to Export"
+                                value={selectedExportStatus}
+                                placeholder="Choose status"
+                                options={exportStatusOptions}
+                                onchange={handleExportStatusChange}
+                                required>
+                            </lightning-combobox>
+                        </div>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning-button variant="neutral" label="Cancel" onclick={handleCancelExport}></lightning-button>
+                        <lightning-button variant="brand" label="Export" onclick={handleConfirmExport}></lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+    </lightning-card>
+
+</template>

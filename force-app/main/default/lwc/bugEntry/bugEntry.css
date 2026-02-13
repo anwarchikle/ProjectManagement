@@ -1,0 +1,7 @@
+.slds-hide {
+    display: none;
+}
+
+.slds-show {
+    display: inline-block;
+}

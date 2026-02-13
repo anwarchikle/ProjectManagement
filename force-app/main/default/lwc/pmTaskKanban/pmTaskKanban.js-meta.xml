@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+	<isExposed>true</isExposed>
+	<apiVersion>65.0</apiVersion>
+	<masterLabel>pmTaskKanban</masterLabel>
+	<description>This is child Kanban task component.</description>
+	<targets>
+		<target>lightning__AppPage</target>
+		<target>lightning__HomePage</target>
+		<target>lightning__RecordPage</target>
+		<target>lightning__Tab</target>
+		<target>lightning__Inbox</target>
+		<target>lightning__UtilityBar</target>
+		<target>lightning__FlowScreen</target>
+		<target>lightning__RecordAction</target>
+		<target>lightning__GlobalAction</target>
+		<target>lightningCommunity__Page_Layout</target>
+		<target>lightningCommunity__Theme_Layout</target>
+		<target>lightningCommunity__Page</target>
+	</targets>
+</LightningComponentBundle>

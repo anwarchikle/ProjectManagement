@@ -1,0 +1,230 @@
+<template>
+    <br/>
+    <template if:true={data}>
+        <div class="card-body">
+
+            <lightning-card title="Project Status Report" icon-name="standard:account">
+                <div slot="actions" class="action-icons">
+                    <lightning-button-icon icon-name="action:email" variant="border-filled"></lightning-button-icon>
+                    <lightning-button-icon icon-name="utility:save" variant="border-filled"></lightning-button-icon>
+                    <lightning-button-icon icon-name="action:preview" variant="border-filled" onclick={handlePreview} class="toolbar no-print"></lightning-button-icon>
+                </div>
+            </lightning-card>
+            <lightning-layout multiple-rows>
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="3"
+                    padding="horizontal-small">
+                    <strong>PERCENT COMPLETE</strong>
+                </lightning-layout-item>
+
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="3"
+                    padding="horizontal-small">
+                    <strong>PROJECT STATUS</strong>
+                </lightning-layout-item>
+
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="3"
+                    padding="horizontal-small">
+                    <strong>PROJECT START DATE</strong>
+                </lightning-layout-item>
+
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="3"
+                    padding="horizontal-small">
+                    <strong>PROJECT END DATE</strong>
+                </lightning-layout-item>
+            </lightning-layout>
+            <lightning-layout multiple-rows>
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="3"
+                    padding="horizontal-small">
+                    <div>
+                        <lightning-progress-bar value="30" size="large" variant="circular"></lightning-progress-bar>
+                    </div>
+                </lightning-layout-item>
+
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="3"
+                    padding="horizontal-small">
+                    {data.Status__c}
+                </lightning-layout-item>
+
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="3"
+                    padding="horizontal-small">
+                    {data.Start_Date__c}
+                </lightning-layout-item>
+
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="3"
+                    padding="horizontal-small">
+                    {data.End_Date__c}
+                </lightning-layout-item>
+            </lightning-layout>
+
+
+            <lightning-accordion allow-multiple-sections-open active-section-name="A">
+
+                <lightning-accordion-section name="A" label="Project Summary">
+                    <div class="custom-box">
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <strong>ACCOUNT</strong>
+                            </lightning-layout-item>
+
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <strong>PROJECT MANAGER</strong>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <a href="javascript:void(0);" data-id={data.Customer__c} onclick={handleNavigate}>
+                                    {data.Customer__r.Name}
+                                </a>
+
+                            </lightning-layout-item>
+
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                {data.Customer__r.Name}
+                            </lightning-layout-item>
+                        </lightning-layout>
+
+                        <br/>
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <strong>PROJECT NAME</strong>
+                            </lightning-layout-item>
+
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <strong>ESTIMATED HOURS</strong>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                <a href="javascript:void(0);" data-id={data.Id} onclick={handleNavigate}>
+                                    {data.Name}
+                                </a>
+                            </lightning-layout-item>
+
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                large-device-size="6" padding="horizontal-small">
+                                {data.Planned_Hours__c}
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </div>
+                </lightning-accordion-section>
+
+                <lightning-accordion-section name="B" label="This Week's Tasks">
+    <div class="custom-box">
+
+        <lightning-layout multiple-rows class="slds-p-bottom_small bolder">
+            <lightning-layout-item size="2">NAME</lightning-layout-item>
+            <lightning-layout-item size="2">STATUS</lightning-layout-item>
+            <lightning-layout-item size="2">PRIORITY</lightning-layout-item>
+            <lightning-layout-item size="2">DUE DATE</lightning-layout-item>
+            <lightning-layout-item size="2">% COMPLETE</lightning-layout-item>
+            <lightning-layout-item size="2">ASSIGNEES</lightning-layout-item>
+        </lightning-layout>
+
+        <template if:true={allTasks.length}>
+            <template for:each={allTasks} for:item="task">
+                <lightning-layout key={task.Id} multiple-rows class="slds-p-vertical_x-small">
+                    <lightning-layout-item size="2">
+                        <a href="javascript:void(0);" data-id={task.Id} onclick={handleNavigate}
+                           class="task-name" title={task.Name}>
+                            {task.Name}
+                        </a>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="2">
+                        <div class="slds-truncate" title={task.Status__c}>
+                            {task.Status__c}
+                        </div>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="2">
+                        <div class="slds-truncate" title={task.Priority__c}>
+                            {task.Priority__c}
+                        </div>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="2">
+                        <div class="slds-truncate" title={task.End_Date__c}>
+                            {task.End_Date__c}
+                        </div>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="2">
+                        <div class="slds-truncate" title={task.Completion_Percentage__c}>
+                            {task.Completion_Percentage__c}%
+                        </div>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="2">
+                        <div class="slds-truncate" title={task.assigneeNames}>
+                            {task.assigneeNames}
+                        </div>
+                    </lightning-layout-item>
+
+                </lightning-layout>
+            </template>
+        </template>
+
+        <template if:false={allTasks.length}>
+            <div class="slds-p-around_small slds-text-color_weak">
+                No Tasks Found
+            </div>
+        </template>
+
+    </div>
+</lightning-accordion-section>
+
+                <lightning-accordion-section name="C" label="Milestone Task">
+                    <div class="custom-box">
+
+                        <lightning-layout multiple-rows class="slds-p-bottom_small bolder">
+                            <lightning-layout-item size="4">MILESTONE</lightning-layout-item>
+                            <lightning-layout-item size="2">STATUS</lightning-layout-item>
+                            <lightning-layout-item size="3">DUE DATE</lightning-layout-item>
+                            <lightning-layout-item size="3">% COMPLETE</lightning-layout-item>
+                        </lightning-layout>
+
+                        <template if:true={hasMilestones}>
+                            <template for:each={data.Milestones__r} for:item="ms">
+                                <lightning-layout key={ms.Id} multiple-rows class="slds-p-vertical_x-small">
+
+                                    <lightning-layout-item size="4">
+                                        <a href="javascript:void(0);" data-id={ms.Id} onclick={handleNavigate}>
+                                            {ms.Name}
+                                        </a>
+                                    </lightning-layout-item>
+
+                                    <lightning-layout-item size="2">
+                                        {ms.Status__c}
+                                    </lightning-layout-item>
+
+                                    <lightning-layout-item size="3">
+                                        {ms.End_Date__c}
+                                    </lightning-layout-item>
+
+                                    <lightning-layout-item size="3">
+                                        0%
+                                    </lightning-layout-item>
+
+                                </lightning-layout>
+                            </template>
+                        </template>
+
+                        <template if:false={hasMilestones}>
+                            <div class="slds-text-color_weak slds-p-top_small">
+                                No milestones available
+                            </div>
+                        </template>
+                    </div>
+                </lightning-accordion-section>
+
+            </lightning-accordion>
+        </div>
+    </template>
+
+</template>

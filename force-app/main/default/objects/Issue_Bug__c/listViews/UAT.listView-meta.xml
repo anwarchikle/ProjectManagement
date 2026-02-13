@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>UAT</fullName>
+    <columns>NAME</columns>
+    <columns>Affected_Milestone__c</columns>
+    <columns>Environment__c</columns>
+    <columns>Status__c</columns>
+    <columns>Issue_Id__c</columns>
+    <columns>Project__c</columns>
+    <columns>Severity__c</columns>
+    <columns>Tasks__c</columns>
+    <columns>Retest_Result__c</columns>
+    <filterScope>Mine</filterScope>
+    <filters>
+        <field>Environment__c</field>
+        <operation>equals</operation>
+        <value>UAT</value>
+    </filters>
+    <label>UAT</label>
+</ListView>

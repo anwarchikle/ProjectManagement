@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Reproducible__c</fullName>
+    <label>Reproducible</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>None</fullName>
+                <default>false</default>
+                <label>None</label>
+            </value>
+            <value>
+                <fullName>Always</fullName>
+                <default>false</default>
+                <label>Always</label>
+            </value>
+            <value>
+                <fullName>Sometimes</fullName>
+                <default>false</default>
+                <label>Sometimes</label>
+            </value>
+            <value>
+                <fullName>Rarely</fullName>
+                <default>false</default>
+                <label>Rarely</label>
+            </value>
+            <value>
+                <fullName>Unable</fullName>
+                <default>false</default>
+                <label>Unable</label>
+            </value>
+            <value>
+                <fullName>Never Tried</fullName>
+                <default>false</default>
+                <label>Never Tried</label>
+            </value>
+            <value>
+                <fullName>Not Applicable</fullName>
+                <default>false</default>
+                <label>Not Applicable</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

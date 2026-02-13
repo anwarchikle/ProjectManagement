@@ -1,0 +1,84 @@
+<template>
+
+    <lightning-card title="All Issues" icon-name="standard:record">
+
+        <div class="slds-p-around_small">
+            <lightning-layout multiple-rows="false" vertical-align="end">
+
+                <lightning-layout-item size="3" padding="horizontal-small">
+                    <lightning-input type="search" label="Search" value={searchKey} onchange={handleSearchChange}>
+                    </lightning-input>
+                </lightning-layout-item>
+
+                <lightning-layout-item size="2" padding="horizontal-small">
+                    <lightning-combobox label="Status" value={selectedStatus} options={statusOptions}
+                        onchange={handleStatusFilter}>
+                    </lightning-combobox>
+                </lightning-layout-item>
+
+                <lightning-layout-item size="2" padding="horizontal-small">
+                    <lightning-combobox label="Severity" value={selectedSeverity} options={severityOptions}
+                        onchange={handleSeverityFilter}>
+                    </lightning-combobox>
+                </lightning-layout-item>
+
+                <lightning-layout-item size="2" padding="horizontal-small">
+                    <lightning-combobox label="Page Size" value={pageSize} options={pageSizeOptions}
+                        onchange={handlePageSizeChange}>
+                    </lightning-combobox>
+                </lightning-layout-item>
+                <lightning-layout-item size="2" padding="horizontal-small">
+                    <lightning-button 
+                      variant="neutral"
+                      label="Reset" 
+                      onclick={handleReset} 
+                    ></lightning-button>
+                </lightning-layout-item>
+
+            </lightning-layout>
+        </div>
+
+        <div class="slds-p-around_small slds-scrollable_x">
+            <template if:true={visibleRecords}>
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                    <thead>
+                        <tr>
+                            <template for:each={columns} for:item="col">
+                                <th key={col.fieldApiName}>{col.label}</th>
+                            </template>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={visibleRecords} for:item="row">
+                            <tr key={row.Id}>
+                                <template for:each={row.cells} for:item="cell">
+                                    <td key={cell.fieldApiName}>
+                                        <template if:true={cell.isLink}>
+                                            <a href={cell.url} target="_blank">{cell.value}</a>
+                                        </template>
+                                        <template if:false={cell.isLink}>
+                                            {cell.value}
+                                        </template>
+                                    </td>
+                                </template>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </template>
+        </div>
+
+        <!-- PAGINATION -->
+        <div class="slds-grid slds-m-around_medium">
+            <lightning-button label="Previous" onclick={handlePreviousPage} disabled={isPreviousDisabled}>
+            </lightning-button>
+
+            <div class="slds-col_bump-left">
+                <lightning-button label="Next" onclick={handleNextPage} disabled={isNextDisabled}>
+                </lightning-button>
+            </div>
+        </div>
+
+    </lightning-card>
+
+</template>

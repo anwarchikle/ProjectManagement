@@ -1,0 +1,124 @@
+<template>
+    <lightning-card title="Retest & Verification">
+        <!-- List View Selector -->
+        <div class="slds-p-around_small slds-border_bottom" slot="actions">
+            <lightning-combobox
+                name="listViewSelector"
+                label="Select List View"
+                value={selectedListViewId}
+                placeholder="Choose a list view"
+                options={listViewOptions}
+                onchange={handleListViewChange}
+                variant="label-hidden">
+            </lightning-combobox>
+        </div>
+
+        <!-- Status Cards -->
+        <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_medium">
+            <div class="slds-col slds-size_1-of-4">
+                <div class="slds-box slds-box_x-small slds-text-align_center status-card pending">
+                    <lightning-icon icon-name="standard:queue" size="small" class="slds-m-right_x-small"></lightning-icon>
+                    <span class="status-label">Pending Retest</span>
+                    <div class="status-count">{pendingCount}</div>
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-of-4">
+                <div class="slds-box slds-box_x-small slds-text-align_center status-card fixed">
+                    <lightning-icon icon-name="standard:fix" size="small" class="slds-m-right_x-small"></lightning-icon>
+                    <span class="status-label">Fixed (Awaiting)</span>
+                    <div class="status-count">{fixedCount}</div>
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-of-4">
+                <div class="slds-box slds-box_x-small slds-text-align_center status-card retest">
+                    <lightning-icon icon-name="standard:retail_banking" size="small" class="slds-m-right_x-small"></lightning-icon>
+                    <span class="status-label">In Retest</span>
+                    <div class="status-count">{inRetestCount}</div>
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-of-4">
+                <div class="slds-box slds-box_x-small slds-text-align_center status-card atrisk">
+                    <lightning-icon icon-name="standard:outage" size="small" class="slds-m-right_x-small"></lightning-icon>
+                    <span class="status-label">SLA at Risk</span>
+                    <div class="status-count">{slaAtRiskCount}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Retest Queue Title with Search -->
+        <div class="slds-page-header slds-m-bottom_medium">
+            <div class="slds-grid slds-wrap">
+                <div class="slds-col slds-size_1-of-2">
+                    <h2 class="slds-page-header__title slds-truncate">{selectedListViewLabel}</h2>
+                </div>
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning-input type="search" 
+                                    placeholder="Search..." 
+                                    value={searchKey}
+                                    onchange={handleSearchChange}
+                                    class="slds-float_right">
+                    </lightning-input>
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Table - Using Standard List View -->
+        <div class="slds-p-around_small slds-scrollable_x">
+            <template if:true={visibleRecords}>
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                    <thead>
+                        <tr>
+                            <template for:each={Newcolumns} for:item="col">
+                                <th key={col.fieldApiName}>
+                                    {col.label}
+                                </th>
+                            </template>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={visibleRecords} for:item="row">
+                            <tr key={row.Id}>
+                                <template for:each={row.cells} for:item="cell">
+                                    <td key={cell.fieldApiName}>
+                                        <template if:true={cell.isLink}>
+                                            <a href={cell.url} target="_blank">
+                                                {cell.value}
+                                            </a>
+                                        </template>
+                                        <template if:false={cell.isLink}>
+                                            {cell.value}
+                                        </template>
+                                    </td>
+                                </template>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </template>
+            <template if:false={visibleRecords}>
+                <div class="slds-align_absolute-center slds-m-vertical_medium">
+                    <lightning-icon icon-name="standard:empty" size="small"></lightning-icon>
+                    <span class="slds-m-left_x-small">No items in {selectedListViewLabel}</span>
+                </div>
+            </template>
+        </div>
+
+        <!-- Pagination -->
+        <div class="slds-grid slds-m-around_medium slds-text-align_center">
+            <div>
+                <lightning-button label="Previous" onclick={handlePreviousPage} disabled={isPreviousDisabled}>
+                </lightning-button>
+            </div>
+            &nbsp;&nbsp;
+            <div>
+                <lightning-button label="Next" onclick={handleNextPage} disabled={isNextDisabled}>
+                </lightning-button>
+            </div>
+        </div>
+
+        <!-- Action Modal (Keep existing modal code) -->
+        <template if:true={showModal}>
+            <!-- ... existing modal code ... -->
+        </template>
+    </lightning-card>
+</template>

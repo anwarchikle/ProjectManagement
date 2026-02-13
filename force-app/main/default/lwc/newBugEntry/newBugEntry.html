@@ -1,0 +1,338 @@
+<template>
+    <lightning-card title="QA Bug Tracker" icon-name="action:bug">
+        
+        <!-- Enhanced Compact Filter Section -->
+        <div class="filters-bar">
+            <div class="filters-row">
+                <div class="filter-item">
+                    <c-lwc-custom-lookup 
+                        unique-name="Project" 
+                        object-a-p-i-name="Project__c"
+                        icon-name="standard:asset_object" 
+                        onprogressvaluechange={handleLookupSelection}
+                        oncustomlookupupdateevent={handleLookupUpdate} 
+                        label-for-component="Project"
+                        place-holder="Select Project">
+                    </c-lwc-custom-lookup>
+                </div>
+
+                <div class="filter-item">
+                    <c-lwc-custom-lookup 
+                        unique-name="Milestone" 
+                        object-a-p-i-name="Milestone__c"
+                        icon-name="standard:entity_milestone" 
+                        onprogressvaluechange={handleLookupSelection}
+                        where={mileStoneCondition} 
+                        oncustomlookupupdateevent={handleLookupUpdate}
+                        label-for-component="Milestone" 
+                        place-holder="Select Milestone">
+                    </c-lwc-custom-lookup>
+                </div>
+
+                <div class="filter-item">
+                    <c-lwc-custom-lookup 
+                        unique-name="TaskList" 
+                        object-a-p-i-name="Task_List__c"
+                        icon-name="standard:action_list_component" 
+                        onprogressvaluechange={handleLookupSelection}
+                        where={taskListCondition} 
+                        oncustomlookupupdateevent={handleLookupUpdate}
+                        label-for-component="TaskList" 
+                        place-holder="Select Task List">
+                    </c-lwc-custom-lookup>
+                </div>
+
+                <div class="filter-item">
+                    <!-- Manual Label -->
+                    <label class="custom-white-label">Environment</label>
+                    
+                    <lightning-combobox 
+                        name="environment" 
+                        label="Environment"
+                        variant="label-hidden" 
+                        placeholder="Select Environment" 
+                        options={environmentPicklistValues} 
+                        onchange={handleChange}>
+                    </lightning-combobox>
+                </div>
+            </div>
+        </div>
+
+        <!-- Enhanced Compact Table -->
+        <div class="table-container">
+
+            <div class="table-wrapper">
+                <table class="elegant-table">
+                    <thead>
+                        <tr>
+                            <th class="col-number">#</th>
+                            <th class="col-title">Bug Title </th>
+                            <th class="col-description">Description</th>
+                            <th class="col-severity">Severity </th>
+                            <th class="col-type">Type</th>
+                            <th class="col-files">Files</th>
+                            <th class="col-expand">Details</th>
+                            <th class="col-actions">Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <template for:each={itemList} for:item="item">
+                            <!-- Main Bug Row -->
+                            <tr key={item.id} class="bug-row">
+                                <!-- Bug Number -->
+                                <td class="cell-number">
+                                    <div class="bug-badge">{item.id}</div>
+                                </td>
+
+                                <!-- Bug Title -->
+                                <td class="cell-input">
+                                    <lightning-input 
+                                        variant="label-hidden" 
+                                        placeholder="Enter bug title..."
+                                        value={item.title}
+                                        data-id={item.id} 
+                                        data-field="title" 
+                                        onchange={handleInputChange}
+                                        class="table-input">
+                                    </lightning-input>
+                                </td>
+
+                                <!-- Description -->
+                                <td class="cell-input">
+                                    <lightning-textarea 
+                                        variant="label-hidden" 
+                                        placeholder="Brief description..."
+                                        value={item.description}
+                                        data-id={item.id} 
+                                        data-field="description" 
+                                        onchange={handleInputChange}
+                                        class="table-textarea">
+                                    </lightning-textarea>
+                                </td>
+
+                                <!-- Severity -->
+                                <td class="cell-select">
+                                    <lightning-combobox 
+                                        variant="label-hidden" 
+                                        value={item.severity}
+                                        options={SeverityPicklistValues} 
+                                        data-id={item.id} 
+                                        data-field="severity"
+                                        onchange={handleInputChange}
+                                        class="table-select">
+                                    </lightning-combobox>
+                                </td>
+
+                                <!-- Type -->
+                                <td class="cell-select">
+                                    <lightning-combobox 
+                                        variant="label-hidden" 
+                                        value={item.type} 
+                                        options={TypePicklistValues}
+                                        data-id={item.id} 
+                                        data-field="type" 
+                                        onchange={handleInputChange}
+                                        class="table-select">
+                                    </lightning-combobox>
+                                </td>
+
+                                <!-- Files -->
+                                <td class="cell-files">
+                                    <div class="files-wrapper">
+                                        <lightning-button-icon 
+                                            icon-name="utility:upload" 
+                                            variant="border-filled"
+                                            alternative-text="Upload"
+                                            title="Upload Files"
+                                            data-id={item.id}
+                                            onclick={handleUploadClick}
+                                            class="file-btn">
+                                        </lightning-button-icon>
+                                        
+                                        <template if:true={item.hasFiles}>
+                                            <span class="file-badge">{item.fileCount}</span>
+                                            <lightning-button-icon 
+                                                icon-name={item.fileToggleIcon}
+                                                variant="bare"
+                                                alternative-text="Toggle"
+                                                title={item.fileToggleTitle}
+                                                data-id={item.id}
+                                                onclick={handleToggleFiles}
+                                                class="toggle-btn">
+                                            </lightning-button-icon>
+                                        </template>
+                                        
+                                        <input 
+                                            type="file" 
+                                            multiple 
+                                            accept=".csv,.doc,.docx,.xls,.xlsx,.pdf,.png,.jpg,.jpeg,.gif,.txt,.zip"
+                                            data-id={item.id}
+                                            onchange={handleFileSelect}
+                                            class="file-input-hidden">
+                                    </div>
+                                </td>
+
+                                <!-- Expand Details -->
+                                <td class="cell-expand" onclick={toggleExpand} data-id={item.id}>
+                                    <template if:true={item.expanded}>
+                                        <lightning-button-icon 
+                                            icon-name="utility:chevronup"
+                                            variant="bare"
+                                            alternative-text="Collapse"
+                                            class="expand-btn">
+                                        </lightning-button-icon>
+                                    </template>
+                                    <template if:false={item.expanded}>
+                                        <lightning-button-icon 
+                                            icon-name="utility:chevrondown"
+                                            variant="bare"
+                                            alternative-text="Expand"
+                                            class="expand-btn">
+                                        </lightning-button-icon>
+                                    </template>
+                                </td>
+
+                                <!-- Actions -->
+                                <td class="cell-actions">
+                                    <lightning-button-icon 
+                                        icon-name="utility:delete" 
+                                        variant="bare"
+                                        alternative-text="Delete"
+                                        title="Delete"
+                                        data-id={item.id}
+                                        onclick={removeRow}
+                                        class="delete-btn">
+                                    </lightning-button-icon>
+                                </td>
+                            </tr>
+
+                            <!-- Files Row (Collapsible) -->
+                            <template if:true={item.showFiles}>
+                                <tr key={item.id} class="files-row">
+                                    <td colspan="8" class="files-cell">
+                                        <div class="files-container">
+                                            <template for:each={item.files} for:item="file">
+                                                <div key={file.documentId} class="file-chip">
+                                                    <lightning-icon icon-name={file.icon} size="xx-small"></lightning-icon>
+                                                    <span class="file-name">{file.fileName}</span>
+                                                    <span class="file-size">({file.fileSizeFormatted})</span>
+                                                    <div class="file-actions">
+                                                        <!-- <lightning-button-icon 
+                                                            icon-name="utility:preview" 
+                                                            variant="bare"
+                                                            size="x-small"
+                                                            alternative-text="Preview"
+                                                            data-item-id={item.id}
+                                                            data-id={file.documentId}
+                                                            onclick={handlePreviewFile}>
+                                                        </lightning-button-icon> -->
+                                                        <lightning-button-icon 
+                                                            icon-name="utility:close" 
+                                                            variant="bare"
+                                                            size="x-small"
+                                                            alternative-text="Remove"
+                                                            data-item-id={item.id}
+                                                            data-id={file.documentId}
+                                                            onclick={handleRemoveFile}>
+                                                        </lightning-button-icon>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </template>
+
+                            <!-- Expanded Details Row -->
+                            <template if:true={item.expanded}>
+                                <tr key={item.id} class="details-row">
+                                    <td colspan="8" class="details-cell">
+                                        <div class="details-grid">
+                                            <div class="detail-field">
+                                                <label class="detail-label">Steps to Reproduce</label>
+                                                <lightning-textarea 
+                                                    variant="label-hidden"
+                                                    placeholder="1. Step one...&#10;2. Step two..."
+                                                    value={item.stepsToReproduce}
+                                                    data-id={item.id} 
+                                                    data-field="stepsToReproduce"
+                                                    onchange={handleInputChange}
+                                                    rows="3"
+                                                    class="detail-textarea">
+                                                </lightning-textarea>
+                                            </div>
+
+                                            <div class="detail-field">
+                                                <label class="detail-label">Expected Result</label>
+                                                <lightning-textarea 
+                                                    variant="label-hidden"
+                                                    placeholder="What should happen..."
+                                                    value={item.expectedResult}
+                                                    data-id={item.id}
+                                                    data-field="expectedResult" 
+                                                    onchange={handleInputChange}
+                                                    rows="3"
+                                                    class="detail-textarea">
+                                                </lightning-textarea>
+                                            </div>
+
+                                            <div class="detail-field">
+                                                <label class="detail-label">Actual Result</label>
+                                                <lightning-textarea 
+                                                    variant="label-hidden"
+                                                    placeholder="What actually happened..."
+                                                    value={item.actualResult}
+                                                    data-id={item.id}
+                                                    data-field="actualResult" 
+                                                    onchange={handleInputChange}
+                                                    rows="3"
+                                                    class="detail-textarea">
+                                                </lightning-textarea>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </template>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Add Bug Button -->
+            <div class="add-bug-section">
+                <lightning-button 
+                    label="Add Bug" 
+                    icon-name="utility:add"
+                    variant="brand"
+                    onclick={addRow} 
+                    class="add-bug-btn">
+                </lightning-button>
+            </div>
+        </div>
+
+        <!-- Fixed Action Footer -->
+        <div class="action-footer">
+            <div class="footer-left">
+                <lightning-icon icon-name="utility:info_alt" size="x-small"></lightning-icon>
+                <span class="footer-text">Total: {itemList.length} bug(s)</span>
+            </div>
+            <div class="footer-right">
+                <lightning-button 
+                    label="Reset" 
+                    variant="neutral"
+                    onclick={resetForm} 
+                    class="footer-btn">
+                </lightning-button>
+                <lightning-button 
+                    label="Submit All" 
+                    variant="brand"
+                    icon-name="utility:check"
+                    onclick={handleSubmit} 
+                    class="footer-btn submit-btn">
+                </lightning-button>
+            </div>
+        </div>
+
+    </lightning-card>
+</template>

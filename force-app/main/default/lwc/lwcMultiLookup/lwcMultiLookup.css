@@ -1,0 +1,14 @@
+.lookup-container {
+    position: relative;
+}
+
+.slds-dropdown {
+        position: absolute;
+    top: 100%;
+    margin-left: 100px;
+    left: 0;
+    width: 20%;
+    z-index: 1000;
+    max-height: 250px;
+    overflow-y: auto;
+}

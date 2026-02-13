@@ -1,0 +1,408 @@
+<template>
+    <div class="page-container">
+
+        <!-- Fixed Header -->
+        <div class="fixed-header new-div">
+            <div
+                class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-p-around_small slds-m-around_medium">
+                <!-- Empty left space -->
+                <div class="slds-col"></div>
+
+                <!-- Centered Title -->
+                <div class="slds-col slds-text-align_center">
+                    <h2 class="header-title">New Task</h2>
+                </div>
+
+                <!-- Right aligned button -->
+                <div class="slds-col slds-text-align_right">
+                    <lightning-button variant="neutral" label="Expand/Collapse All" icon-name="utility:chevrondown"
+                        onclick={expandAll} class="slds-m-right_small">
+                    </lightning-button>
+                    <lightning-button variant="neutral" label="Add Task Row" icon-name="utility:add" onclick={addRow}>
+                    </lightning-button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scrollable Task List -->
+        <div class="scrollable-tasks my-div" if:true={recordIdAvail}>
+            <template for:each={tasks} for:item="task" for:index="index">
+
+                <div key={task.id} class="task-row slds-border_bottom" data-index={index}>
+
+                    <template if:false={task.isExpanded}>
+                        <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-p-horizontal_medium slds-m-around_medium collapsed-row"
+                            data-index={index} onclick={handleCollapsedToggle}>
+                            <div class="slds-col">
+                                <template if:true={task.taskName}>
+                                    <span class="slds-text-heading_small">{task.taskName}</span>
+                                </template>
+                                <template if:false={task.taskName}>
+                                    <span class="slds-text-heading_small">Task {task.displayIndex}</span>
+                                </template>
+                            </div>
+                            <div class="slds-col slds-text-align_right">
+                                <lightning-button-stateful class="slds-m-left_x-small" selected={task.isExpanded}
+                                    label-when-off="Expand Section" label-when-on="Collapse Section"
+                                    icon-name-when-off="utility:edit" icon-name-when-on="utility:chevronup"
+                                    variant="brand-outline" data-index={index} onclick={handleCollapsedToggle}>
+                                </lightning-button-stateful>
+                            </div>
+                        </div>
+                    </template>
+
+                    <template if:true={task.isExpanded}>
+                        <div class="slds-grid slds-wrap slds-gutters_large slds-m-around_medium">
+
+                            <!-- Row 1 -->
+                            <div class="slds-col slds-size_1-of-5">
+                                <lightning-input label="Task Name" name="taskName" data-index={index}
+                                    value={task.taskName} onchange={handleInputChange} required>
+                                </lightning-input>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-5">
+                                <lightning-record-picker label="Project" object-api-name="Project__c" data-index={index}
+                                    value={task.project} onchange={handleProjectChange} required>
+                                </lightning-record-picker>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-5">
+                                <lightning-combobox label="Milestone" name="milestone" options={task.milestoneOptions}
+                                    data-index={index} value={task.milestone} onchange={handleMilestoneChange}
+                                    disabled={task.milestoneDisabled} required placeholder="Select Milestone">
+                                </lightning-combobox>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-5">
+                                <lightning-combobox label="Task List" name="taskList" options={task.taskListOptions}
+                                    data-index={index} value={task.taskList} onchange={handleTaskListChange}
+                                    disabled={task.taskListDisabled} required placeholder="Select Task List">
+                                </lightning-combobox>
+                            </div>
+                            <!-- **************************************************** -->
+                            <div class="slds-col slds-size_1-of-5">
+                                <c-lwc-multi-lookup label="Team Members" object-name="User" field-name="Email"
+                                    data-index={index} selected-contact-list={task.teamMembersForChild}
+                                    onselected={handleTeamMembersChange} required>
+                                </c-lwc-multi-lookup>
+                            </div>
+
+                            <!-- Row 2 -->
+
+                            <div class="slds-col slds-size_1-of-5">
+                                <lightning-combobox label="Priority" name="priority" options={priorityOptions}
+                                    data-index={index} value={task.priority} onchange={handleComboboxChange} required>
+                                </lightning-combobox>
+                            </div>
+
+
+                            <div class="slds-col slds-size_1-of-5">
+                                <lightning-combobox label="Billing Type" name="billingType" options={billingOptions}
+                                    data-index={index} value={task.billingType} onchange={handleComboboxChange}
+                                    required>
+                                </lightning-combobox>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-5">
+                                <lightning-input type="date" label="Start Date" name="startDate" data-index={index}
+                                    value={task.startDate} onchange={handleStartDateChange} min={todayDate} required>
+                                </lightning-input>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-5">
+                                <lightning-input type="date" label="End Date" name="endDate" data-index={index}
+                                    value={task.endDate} onchange={handleEndDateChange} min={task.minEndDate}
+                                    disabled={task.endDateDisabled} required>
+                                </lightning-input>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-5">
+                                <lightning-input type="number" label="Work Hours" name="workHours" data-index={index}
+                                    value={task.workHours} disabled={task.workHoursDisabled}
+                                    readonly={task.workHoursReadOnly} onchange={handleWorkHoursManualChange}
+                                    onblur={handleWorkHoursManualBlur}>
+                                </lightning-input>
+                            </div>
+
+                            <!-- Row 3 -->
+                            <!-- ================= COMMENT SECTION ================= -->
+                            <div class="slds-col slds-size_1-of-1 slds-m-top_medium">
+                                <div class="slds-box slds-theme_default slds-m-top_medium">
+                                    <lightning-input-rich-text label="Comment"
+                                        placeholder="Add comments or notes for this task..." data-index={index}
+                                        value={task.comments} onchange={handleCommentChange}>
+                                    </lightning-input-rich-text>
+                                </div>
+                            </div>
+
+                            <!-- ======== WORK ALLOCATION PANEL (opens only when Flexible is toggled ON) ======== -->
+                            <div class="slds-col slds-size_1-of-1" if:true={task.isAllocOpen}>
+                                <div class="alloc-panel slds-m-top_small">
+
+                                    <!-- NEW top header -->
+                                    <div
+                                        class="alloc-header slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-p-around_small slds-m-bottom_small">
+                                        <div class="slds-media slds-media_center">
+                                            <lightning-icon icon-name="utility:table" size="x-small"
+                                                class="slds-m-right_x-small"></lightning-icon>
+                                            <div class="slds-media__body">
+                                                <h3 class="alloc-title">
+                                                    Work Allocation <span class="mode-pill">Flexible</span>
+                                                </h3>
+                                                <span class="slds-text-body_small slds-text-color_weak">Daily baseline: 8h</span>
+                                            </div>
+                                        </div>
+                                        <div class="slds-text-align_right">
+                                            <span class="slds-text-title slds-text-color_weak">Total</span>
+                                            <span class="slds-text-heading_small slds-m-left_x-small">{task.workHours}h</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- ===================== FLEXIBLE MODE ONLY ===================== -->
+                                    <template if:true={task.isFlexible}>
+                                        <!-- keep your existing FLEXIBLE markup exactly as-is -->
+                                        <div class="alloc-3pane flexible" data-alloc={index}>
+                                            <!-- LEFT: Owner (fixed) -->
+                                            <div class="pane-left">
+                                                <!-- Header -->
+                                                <div class="row header">
+                                                    <div class="cell-title">Owner</div>
+                                                </div>
+
+                                                <!-- BODY: scrollable (3 users visible) -->
+                                                <div class="users-scroll">
+                                                    <template for:each={task.allocationRows} for:item="row">
+                                                        <div key={row.userId} class="row" style="margin-bottom: 12px;">
+                                                            <div class="owner-line">
+                                                                <span class="avatar">{row.initials}</span>
+                                                                <span class="owner-name">{row.name}</span>
+                                                            </div>
+                                                        </div>
+                                                    </template>
+                                                </div>
+
+                                                <!-- Footer -->
+                                                <!-- <div class="row footer"></div> -->
+                                            </div>
+
+                                            <!-- CENTER: One scroll container that wraps header + body + (we keep horizontal scroll here) -->
+                                            <div class="pane-center">
+                                                <div class="dates-scroll">
+                                                    <!-- Header (dates) -->
+                                                    <div class="row header no-border">
+                                                        <div class="dates-grid">
+                                                            <template for:each={task.dateColumns} for:item="col">
+                                                                <div key={col.date} class="date-col">{col.label}</div>
+                                                            </template>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- BODY: scrollable vertically -->
+                                                    <div class="users-scroll">
+                                                        <template for:each={task.allocationRows} for:item="row"
+                                                            for:index="uIndex">
+                                                            <div key={row.userId} class="row">
+                                                                <div class="dates-grid">
+                                                                    <template for:each={row.cells} for:item="cell"
+                                                                        for:index="cIndex">
+                                                                        <div key={cell.date} class="cell-col">
+                                                                            <div class="cell-stack">
+                                                                                <div class="cell-top">
+                                                                                    <lightning-input type="number"
+                                                                                        variant="label-hidden"
+                                                                                        step="0.25" min="0" max="12"
+                                                                                        inputmode="decimal"
+                                                                                        value={cell.hours}
+                                                                                        data-index={index}
+                                                                                        data-userindex={uIndex}
+                                                                                        data-dateindex={cIndex}
+                                                                                        onkeydown={blockInvalidKeys}
+                                                                                        onpaste={sanitizePaste}
+                                                                                        onchange={handleCellHoursChange}
+                                                                                        onblur={handleCellHoursBlur}>
+                                                                                    </lightning-input>
+                                                                                </div>
+                                                                                <div class="cell-bottom">
+                                                                                    <span class={cell.badgeClass}>{cell.percent}</span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </template>
+                                                                </div>
+                                                            </div>
+                                                        </template>
+                                                    </div>
+
+                                                    <!-- Footer spacer -->
+                                                    <!-- <div class="row footer no-border"></div> -->
+                                                </div>
+                                            </div>
+
+                                            <!-- RIGHT: Totals (fixed) -->
+                                            <div class="pane-right">
+                                                <!-- Header -->
+                                                <div class="row header right" style="padding: 0;">
+                                                    <div class="cell-title">Total Hours</div>
+                                                </div>
+
+                                                <!-- BODY: scrollable vertically (3 users visible) -->
+                                                <div class="users-scroll">
+                                                    <template for:each={task.allocationRows} for:item="row">
+                                                        <div key={row.userId} class="row right"
+                                                            style="margin-bottom: 12px;">
+                                                            <div class="total-val">{row.total}h</div>
+                                                        </div>
+                                                    </template>
+                                                </div>
+
+                                                <!-- Footer
+        <div class="row footer right">
+            <div class="total-val">{task.workHours}h</div>
+        </div> -->
+                                            </div>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+                            <!-- ======== END WORK ALLOCATION PANEL ======== -->
+
+
+
+                            <!-- Compact File Preview Section (if files exist) -->
+<!-- Compact File Preview Section (if files exist) with Toggle -->
+<div class="slds-col slds-size_1-of-1 slds-m-top_small" if:true={task.hasFiles}>
+    <div class="slds-box slds-theme_shade">
+        <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-m-bottom_x-small">
+            <h3 class="slds-text-heading_small">
+                <lightning-icon icon-name="utility:attach" size="x-small" class="slds-m-right_xx-small"></lightning-icon>
+                Attached Files ({task.fileCount})
+            </h3>
+            
+            <!-- Toggle Button -->
+<lightning-button-icon 
+    icon-name={task.fileToggleIcon}
+    variant="bare"
+    alternative-text="Toggle Files"
+    title={task.fileToggleTitle}
+    data-index={index}
+    onclick={handleToggleFileSection}
+    class="file-toggle-btn">
+</lightning-button-icon>
+        </div>
+        
+        <!-- Compact File List (conditionally displayed) -->
+        <div class="file-list-compact" if:true={task.isFilesSectionOpen}>
+            <template for:each={task.files} for:item="file">
+                <div key={file.documentId} class="file-item-compact">
+                    <div class="file-info">
+                        <lightning-icon icon-name={file.icon} size="x-small"></lightning-icon>
+                        <span class="file-name" title={file.fileName}>{file.fileName}</span>
+                        <span class="file-size">({file.fileSizeFormatted})</span>
+                    </div>
+                    <div class="file-actions">
+                        <lightning-button-icon 
+                            icon-name="utility:preview" 
+                            variant="bare"
+                            alternative-text="Preview"
+                            title="Preview"
+                            data-index={index}
+                            data-id={file.documentId}
+                            onclick={handlePreviewFile}>
+                        </lightning-button-icon>
+                        <lightning-button-icon 
+                            icon-name="utility:delete" 
+                            variant="bare"
+                            alternative-text="Remove"
+                            title="Remove"
+                            data-index={index}
+                            data-id={file.documentId}
+                            onclick={handleRemoveFile}>
+                        </lightning-button-icon>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </div>
+</div>
+
+<!-- Row Actions: Upload Files + Toggle (Flexible) + Collapse + Delete -->
+<div class="slds-col slds-size_1-of-1 slds-text-align_right slds-m-top_medium row-actions">
+    
+    <!-- File Upload Button -->
+<lightning-button 
+    variant="neutral" 
+    label="Upload Files"
+    icon-name="utility:upload"
+    data-index={index}
+    onclick={handleUploadClick}
+    class="slds-m-right_x-small">
+</lightning-button>
+
+<!-- Hidden File Input -->
+    <input 
+    type="file" 
+    multiple 
+    accept=".csv,.doc,.docx,.xls,.xlsx,.pdf,.png,.jpg,.jpeg,.gif,.txt,.zip"
+    data-index={index}
+    onchange={handleFileSelect}
+    class="file-input-hidden"
+    style="display: none;">
+
+    <!-- Flexible / Standard Allocation Toggle -->
+    <lightning-button-stateful 
+        class="alloc-toggle slds-m-right_x-small"
+        selected={task.isAllocOpen} 
+        label-when-off="Allocate Flexible Hour"
+        label-when-on="Allocate Standard Hour" 
+        icon-name-when-off="utility:chevrondown"
+        icon-name-when-on="utility:chevronup" 
+        variant="brand-outline" 
+        data-index={index}
+        onclick={handleToggleAlloc}>
+    </lightning-button-stateful>
+
+    <!-- Collapse/Expand Toggle -->
+    <lightning-button-stateful 
+        class="slds-m-right_x-small" 
+        selected={task.isExpanded}
+        label-when-off="Expand Section" 
+        label-when-on="Collapse Section"
+        icon-name-when-off="utility:chevrondown" 
+        icon-name-when-on="utility:chevronup"
+        variant="brand-outline" 
+        data-index={index} 
+        onclick={handleCollapsedToggle}>
+    </lightning-button-stateful>
+
+    <!-- Delete button -->
+    <lightning-button 
+        variant="destructive" 
+        icon-name="utility:delete" 
+        data-id={task.id} 
+        style="margin-top: 15px;"
+        onclick={deleteRow} 
+        disabled={isDeleteDisabled} 
+        title="Remove Task">
+    </lightning-button>
+</div>
+                        </div>
+                    </template>
+                </div>
+
+            </template>
+        </div>
+
+        <!-- Fixed Footer -->
+        <div class="fixed-footer">
+            <div class="slds-text-align_center">
+                <lightning-button variant="neutral" label="Cancel" onclick={handleCancel}>
+                </lightning-button>
+                &nbsp;&nbsp;
+                <lightning-button variant="brand" label="Save All Tasks" onclick={handleSave}>
+                </lightning-button>
+            </div>
+        </div>
+
+    </div>
+</template>

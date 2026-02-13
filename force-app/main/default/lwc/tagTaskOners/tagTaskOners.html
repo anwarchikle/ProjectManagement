@@ -1,0 +1,81 @@
+<template>
+    <lightning-card title="Tag Task Owners" icon-name="standard:team_member" class="team-card">
+        <div class="body">
+
+            <!-- Label -->
+            <label class="section-label">
+                Add Task Team
+            </label>
+
+            <!-- Search Box -->
+            <div class="search-box">
+                <lightning-icon
+                    icon-name="utility:search"
+                    size="x-small"
+                    class="search-icon">
+                </lightning-icon>
+
+                <input
+                    type="text"
+                    class="search-input"
+                    placeholder="Search users..."
+                    value={searchTerm}
+                    onkeyup={handleKeyUp} />
+            </div>
+
+            <!-- Search Results -->
+            <template if:true={users.length}>
+                <div class="results-box">
+                    <template for:each={users} for:item="user">
+                        <div
+                            key={user.Id}
+                            class="result-item"
+                            data-id={user.Id}
+                            data-name={user.Name}
+                            onmousedown={handleUserSelect}>
+
+                            <!-- Avatar -->
+                            <div class="avatar">
+                                <lightning-icon
+                                    icon-name="standard:user"
+                                    size="x-small">
+                                </lightning-icon>
+                            </div>
+
+                            <div class="user-info">
+                                <div class="name">{user.Name}</div>
+                            </div>
+
+                        </div>
+                    </template>
+                </div>
+            </template>
+
+            <!-- Selected Users -->
+            <template if:true={selectedUsers.length}>
+                <div class="pill-container">
+                    <template for:each={selectedUsers} for:item="user">
+                        <span key={user.Id} class="selected-pill">
+                            {user.Name}
+                            <button
+                                class="pill-close"
+                                name={user.Id}
+                                onclick={handleRemoveUser}>
+                                ×
+                            </button>
+                        </span>
+                    </template>
+                </div>
+            </template>
+
+            <!-- Assign Button -->
+            <button
+                class="assign-btn"
+                onclick={handleAssignTask}
+                disabled={disableAssignButton}>
+                Assign Task
+            </button>
+
+        </div>
+    </lightning-card>
+</template>

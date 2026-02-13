@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Retesting</fullName>
+    <columns>NAME</columns>
+    <columns>Affected_Milestone__c</columns>
+    <columns>Environment__c</columns>
+    <columns>Status__c</columns>
+    <columns>Issue_Id__c</columns>
+    <columns>Project__c</columns>
+    <columns>Severity__c</columns>
+    <columns>Tasks__c</columns>
+    <columns>Retest_Result__c</columns>
+    <columns>Classification__c</columns>
+    <columns>Commnets__c</columns>
+    <filterScope>Mine</filterScope>
+    <filters>
+        <field>Status__c</field>
+        <operation>equals</operation>
+        <value>In Retest</value>
+    </filters>
+    <label>Retesting</label>
+</ListView>

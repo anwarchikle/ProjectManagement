@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label><!-- Budget Type --></label>
+    <name>Budget_Type__c</name>
+    <picklistValues>
+        <masterLabel>Based On Milestone</masterLabel>
+        <translation><!-- Based On Milestone --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Based On Project</masterLabel>
+        <translation><!-- Based On Project --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Based On Task</masterLabel>
+        <translation><!-- Based On Task --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Based On User</masterLabel>
+        <translation><!-- Based On User --></translation>
+    </picklistValues>
+</CustomFieldTranslation>

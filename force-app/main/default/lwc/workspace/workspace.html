@@ -1,0 +1,137 @@
+<template>
+    <div class="full-screen">
+        <br/>
+        <lightning-layout multiple-rows>
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="10"
+                padding="horizontal-small">
+                <div>
+                    <lightning-button variant="Brand" label="New Project" title="titleName" onclick={createNewProject}>
+                    </lightning-button>
+                </div>
+            </lightning-layout-item>
+
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="2"
+                padding="horizontal-small">
+                <div>
+                    <lightning-combobox name="dateFilter" label="View" value={selectedDateFilter}
+                        options={dateFilterOptions} onchange={handleDateFilterChange} variant="label-hidden">
+                    </lightning-combobox>
+                </div>
+
+            </lightning-layout-item>
+
+
+        </lightning-layout>
+
+        <br/>
+
+        <div class="table-container">
+            <div class="fixed-columns">
+                <table class="tree-table">
+                    <colgroup>
+                        <col style="width: 100px;">  <!-- Actions -->
+                        <col style="width: 60px;">   <!-- Sequence -->
+                        <col style="width: 40px;">   <!-- Icon -->
+                        <col style="width: 280px;">  <!-- Name (increased for better spacing) -->
+                        <col style="width: 120px;">  <!-- Status -->
+                        <col style="width: 120px;">  <!-- Completion -->
+                        <col style="width: 140px;">  <!-- Estimated Hours -->
+                        <col style="width: 120px;">  <!-- Logged Hours -->
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th class="actions">Actions</th>
+                            <th class="sequence">#</th>
+                            <th class="icon"></th>
+                            <th class="name">Name</th>
+                            <th>Status</th>
+                            <th>Completion</th>
+                            <th>Estimated Hours</th>
+                            <th>Logged Hours</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={visibleRows} for:item="row">
+                            <tr key={row.Id}>
+                                <td class="actions">
+                                    <lightning-button-icon icon-name="utility:edit" variant="bare" data-id={row.Id}
+                                        onclick={handleEdit}>
+                                    </lightning-button-icon>
+                                    &nbsp;
+                                    <lightning-button-icon icon-name="utility:add" variant="bare" data-id={row.Id}
+                                        onclick={handleAdd} disabled={row.disableAdd} title={row.addTooltip}>
+                                    </lightning-button-icon>
+                                    &nbsp;
+                                    <lightning-button-icon icon-name="utility:adduser" variant="bare" data-id={row.Id}
+                                        onclick={handleUser}>
+                                    </lightning-button-icon>
+                                </td>
+
+                                <td class="sequence">{row.sequence}</td>
+
+                                <td class="icon" style={row.indentStyle}>
+                                    <template if:true={row.hasChildren}>
+                                        <lightning-button-icon icon-name={row.toggleIcon} size="small" variant="bare"
+                                            data-id={row.Id} onclick={toggleRow}>
+                                        </lightning-button-icon>
+                                    </template>
+                                </td>
+
+                                <td class="name" style={row.indentStyle}>
+                                    <a href="javascript:void(0);" data-id={row.Id} onclick={handleNavigate} title={row.Name}>
+                                        {row.Name}
+                                    </a>
+                                </td>
+
+                                <td><span class={row.statusClass}>{row.Status}</span></td>
+                                <td>{row.completion}</td>
+                                <td>{row.EstimatedHours}</td>
+                                <td>{row.LoggedHours}</td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="gantt-container">
+                <div class="gantt-scroll-wrapper">
+                    <table class="gantt-table">
+                        <thead>
+                            <tr>
+                                <th class="timeline-header">
+                                    <div class="timeline-header-container">
+                                        <div class="timeline-months">
+                                            <template for:each={timelineMonths} for:item="month">
+                                                <div key={month.name} class="timeline-month">
+                                                    {month.name}
+                                                </div>
+                                            </template>
+                                        </div>
+                                        <div class="timeline-today-marker" if:true={todayPosition}>
+                                            <div class="today-line" style="left: {todayPosition}%;"></div>
+                                            <div class="today-label" style="left: {todayPosition}%;">Today</div>
+                                        </div>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={visibleRows} for:item="row">
+                                <tr key={row.Id}>
+                                    <td class="timeline">
+                                        <div class="timeline-container" style={row.timelineStyle}>
+                                            <div class="timeline-bar" style={row.timelineBarStyle}
+                                                title={row.timelineTitle}>
+                                                <span class="timeline-label">{row.timelineLabel}</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

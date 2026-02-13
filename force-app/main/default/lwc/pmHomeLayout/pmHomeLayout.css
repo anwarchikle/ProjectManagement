@@ -1,0 +1,126 @@
+:host {
+    --bg-dark: #0f172a;
+    --bg-panel: #111827;
+    --bg-card: #1f2933;
+    --accent: #22c55e;
+    --text-primary: #e5e7eb;
+    --text-muted: #9ca3af;
+}
+
+/* Layout */
+.pm-app {
+    display: flex;
+    height: 100vh;
+    background: var(--bg-dark);
+    color: var(--text-primary);
+}
+
+/* Sidebar */
+.sidebar {
+    width: 220px;
+    background: #020617;
+    padding: 16px;
+}
+
+.logo {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.nav li {
+    list-style: none;
+    padding: 10px;
+    margin-bottom: 6px;
+    cursor: pointer;
+    border-radius: 6px;
+    color: var(--text-muted);
+}
+
+.nav li:hover {
+    background: var(--bg-card);
+}
+
+.nav li.active {
+    background: var(--accent);
+    color: #000;
+}
+
+/* Main */
+.main {
+    flex: 1;
+    padding: 20px;
+    overflow: auto;
+}
+
+/* KPI Cards */
+.kpi-section {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.kpi-card {
+    background: var(--bg-card);
+    padding: 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.2s;
+    min-height: 110px;
+}
+
+.kpi-card:hover {
+    transform: translateY(-4px);
+    border: 1px solid var(--accent);
+}
+
+/* KPI internal layout */
+.kpi-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    height: 100%;
+}
+
+/* Left side */
+.kpi-left {
+    flex: 1;
+}
+
+.kpi-label {
+    color: var(--text-muted);
+    font-size: 14px;
+}
+
+/* Number centered */
+.kpi-number {
+    font-size: 32px;
+    font-weight: bold;
+    margin-top: 12px;
+    text-align: center;
+}
+
+/* Right side icon */
+.kpi-right {
+    display: flex;
+    align-items: flex-start;
+}
+
+.kpi-right lightning-icon {
+    --sds-c-icon-color-foreground-default: var(--accent);
+    --sds-c-icon-sizing: 1.6rem;
+}
+
+/* Content */
+.content {
+    background: var(--bg-panel);
+    padding: 20px;
+    border-radius: 12px;
+    min-height: 400px;
+}
+
+.page-title {
+    font-size: 20px;
+    margin-bottom: 10px;
+}

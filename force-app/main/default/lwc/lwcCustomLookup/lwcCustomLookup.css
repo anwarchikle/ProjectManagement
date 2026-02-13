@@ -1,0 +1,10 @@
+.slds-dropdown {
+    width: 100%;
+    max-height: 300px;
+    overflow-y: auto;
+    position: absolute;
+    z-index: 7000;
+}
+.slds-form-element__label {
+    color: white;
+}

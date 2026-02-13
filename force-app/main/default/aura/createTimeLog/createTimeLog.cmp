@@ -1,0 +1,8 @@
+<aura:component implements="lightning:isUrlAddressable,force:hasRecordId,lightning:actionOverride" access="global">
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="parentRecordId" type="String" />
+    <aura:attribute name="parentObjectApiName" type="String" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <!-- Pass both parent id and object api name to the LWC -->
+	<c:createTimeLogCompo recordId="{!v.parentRecordId}" parent-object="{!v.parentObjectApiName}"/>
+</aura:component>
