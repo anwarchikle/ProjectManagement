@@ -36,6 +36,12 @@ export default class MyBugs extends LightningElement {
     @track isLoading = true;
     userId = Id;
 
+    // Pagination
+    @track pageSize = 10;
+    pageToken = null;
+    nextPageToken = null;
+    previousPageToken = null;
+
     connectedCallback() {
         this.loadInitialData();
     }
@@ -43,7 +49,9 @@ export default class MyBugs extends LightningElement {
     // Wire List View Data
     @wire(getListUi, { 
         objectApiName: ISSUES_OBJECT, 
-        listViewApiName: '$selectedListView' 
+        listViewApiName: '$selectedListView',
+        pageSize: '$pageSize',
+        pageToken: '$pageToken'
     })
     wiredListView(result) {
         this.wiredData = result;
@@ -51,6 +59,8 @@ export default class MyBugs extends LightningElement {
 
         if (data) {
             this.Newcolumns = data.info.displayColumns || [];
+            this.nextPageToken = data.records.nextPageToken;
+            this.previousPageToken = data.records.previousPageToken;
             this.processListViewRecords(data.records.records);
             this.isLoading = false;
         }
@@ -299,19 +309,88 @@ export default class MyBugs extends LightningElement {
 
     // Event Handlers
     handleSearchChange(event) {
+        debugger;
         this.searchKey = event.target.value;
+        if(this.searchKey != ''){
+            this.pageSize = Number('200');
+        }else{
+            this.pageSize = Number('20');
+        }
     }
 
     handleProjectFilter(event) {
+        debugger;
         this.selectedProject = event.detail.value;
+        if(this.selectedProject != ''){
+            this.pageSize = Number('200');
+        }else{
+            this.pageSize = Number('20');
+        }
     }
 
     handleStatusFilter(event) {
+        debugger;
         this.selectedStatus = event.detail.value;
+        if(this.selectedStatus != ''){
+            this.pageSize = Number('200');
+        }else{
+            this.pageSize = Number('20');
+        }
     }
 
     handleSeverityFilter(event) {
+        debugger;
         this.selectedSeverity = event.detail.value;
+        if(this.selectedSeverity != ''){
+            this.pageSize = Number('200');
+        }else{
+            this.pageSize = Number('20');
+        }
+    }
+
+    handlePageSizeChange(event) {
+        debugger;
+        this.pageSize = Number(event.detail.value);
+        this.pageToken = null;
+    }
+
+    handleNextPage() {
+        if (this.nextPageToken) {
+            this.pageToken = this.nextPageToken;
+        }
+    }
+
+    handlePreviousPage() {
+        if (this.previousPageToken) {
+            this.pageToken = this.previousPageToken;
+        }
+    }
+
+    handleReset() {
+        this.searchKey = '';
+        this.selectedProject = '';
+        this.selectedStatus = '';
+        this.selectedSeverity = '';
+        this.pageSize = 10;
+        this.pageToken = null;
+    }
+
+    get isNextDisabled() {
+        return !this.nextPageToken;
+    }
+
+    get isPreviousDisabled() {
+        return !this.previousPageToken;
+    }
+
+    get pageSizeOptions() {
+        return [
+            { label: '10', value: '10' },
+            { label: '20', value: '20' },
+            { label: '50', value: '50' },
+            { label: '100', value: '100' },
+            { label: '200', value: '200' }
+        ];
     }
 
     handleExport() {

@@ -90,6 +90,15 @@
     flex: 0 0 200px;
 }
 
+.reset-icon-button {
+    margin-left: 4px;
+}
+
+.page-size-input {
+    max-width: 120px;
+    display: inline-block;
+}
+
 .bug-count-display {
     padding-bottom: 8px;
 }

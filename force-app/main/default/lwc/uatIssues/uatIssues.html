@@ -1,8 +1,31 @@
 <template>
 
-    <lightning-card title="All Issues" icon-name="standard:record">
+    <lightning-card title="UAT Issues" icon-name="standard:record">
 
         <div class="slds-p-around_small">
+
+            <div class="metrics-container">
+                <div class="metric-card">
+                    <div class="metric-label">Total Raised</div>
+                    <div class="metric-value">{totalRaised}</div>
+                </div>
+
+                <div class="metric-card highlight-orange">
+                    <div class="metric-label">Open</div>
+                    <div class="metric-value">{openCount}</div>
+                </div>
+
+                <div class="metric-card highlight-red">
+                    <div class="metric-label">Critical/Blocker Open</div>
+                    <div class="metric-value">{criticalBlockerOpen}</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-label">Avg Aging (Open)</div>
+                    <div class="metric-value">{avgAging}</div>
+                </div>
+            </div>
+
             <lightning-layout multiple-rows="false" vertical-align="end">
 
                 <lightning-layout-item size="3" padding="horizontal-small">
@@ -28,11 +51,9 @@
                     </lightning-combobox>
                 </lightning-layout-item>
                 <lightning-layout-item size="2" padding="horizontal-small">
-                    <lightning-button 
-                      variant="neutral"
-                      label="Reset" 
-                      onclick={handleReset} 
-                    ></lightning-button>
+                    <lightning-button-icon icon-name="utility:refresh" alternative-text="Reset filters"
+                        class="reset-icon-button" onclick={handleReset}>
+                    </lightning-button-icon>
                 </lightning-layout-item>
 
             </lightning-layout>
@@ -43,7 +64,7 @@
                 <table class="slds-table slds-table_cell-buffer slds-table_bordered">
                     <thead>
                         <tr>
-                            <template for:each={columns} for:item="col">
+                            <template for:each={Newcolumns} for:item="col">
                                 <th key={col.fieldApiName}>{col.label}</th>
                             </template>
                         </tr>

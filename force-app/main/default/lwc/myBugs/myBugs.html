@@ -5,7 +5,7 @@
             <h2 class="page-title">Bugs Raised by Me</h2>
         </div>
 
-        <div slot="actions">
+        <!-- <div slot="actions">
             <div class="action-buttons">
                 <lightning-button 
                     label="Export to Excel" 
@@ -19,7 +19,7 @@
                     onclick={handleSaveView}>
                 </lightning-button>
             </div>
-        </div>
+        </div> -->
 
         <div class="slds-card__body">
             <!-- Main Content Section -->
@@ -110,6 +110,14 @@
                             onchange={handleSearchChange}
                             class="search-input">
                         </lightning-input>
+
+                        <!-- Reset Filters (Icon Button) -->
+                        <lightning-button-icon
+                            icon-name="utility:refresh"
+                            alternative-text="Reset filters"
+                            class="reset-icon-button"
+                            onclick={handleReset}>
+                        </lightning-button-icon>
                     </div>
 
                     <div class="bug-count-display">
@@ -167,6 +175,32 @@
                         </template>
                     </div>
                 </template>
+
+                <!-- Pagination Controls -->
+                <div class="slds-grid slds-m-top_medium slds-p-horizontal_small">
+                    <div class="slds-col slds-text-align_right">
+                        <lightning-button 
+                            label="Previous" 
+                            onclick={handlePreviousPage} 
+                            disabled={isPreviousDisabled}>
+                        </lightning-button>
+
+                        <lightning-button 
+                            class="slds-m-left_small"
+                            label="Next" 
+                            onclick={handleNextPage} 
+                            disabled={isNextDisabled}>
+                        </lightning-button>
+
+                        <lightning-combobox 
+                            class="slds-m-left_small page-size-input"
+                            label="Page Size" 
+                            value={pageSize} 
+                            options={pageSizeOptions}
+                            onchange={handlePageSizeChange}>
+                        </lightning-combobox>
+                    </div>
+                </div>
             </div>
         </div>
     </lightning-card>

@@ -4,6 +4,7 @@ import { getObjectInfo, getPicklistValues } from 'lightning/uiObjectInfoApi';
 import ISSUES_OBJECT from '@salesforce/schema/Issue_Bug__c';
 import STATUS_FIELD from '@salesforce/schema/Issue_Bug__c.Status__c';
 import SEVERITY_FIELD from '@salesforce/schema/Issue_Bug__c.Severity__c';
+import uatIssues from '@salesforce/apex/Mybugscontroller.uatIssues';
 
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
@@ -13,12 +14,15 @@ export default class UatIssues extends LightningElement {
 
     @track records = [];
     @track columns = [];
+    @track totalRaised;
+    @track openCount;
+    @track criticalBlockerOpen;
 
     searchKey = '';
     selectedStatus = '';
     selectedSeverity = '';
 
-    @track pageSize = 10;
+    @track pageSize = 20;
     pageToken = null;
     nextPageToken = null;
     previousPageToken = null;
@@ -33,10 +37,9 @@ export default class UatIssues extends LightningElement {
 
     @track statusOptions = [];
 
-    @wire(getPicklistValues, {
-        recordTypeId: '$recordTypeId', fieldApiName: STATUS_FIELD
-    })
+    @wire(getPicklistValues, {recordTypeId: '$recordTypeId', fieldApiName: STATUS_FIELD})
     wiredStatus({ data }) {
+        debugger;
         if (data) {
             this.statusOptions = [
                 { label: 'All', value: '' },
@@ -52,27 +55,19 @@ export default class UatIssues extends LightningElement {
 
     @wire(getPicklistValues, { recordTypeId: '$recordTypeId', fieldApiName: SEVERITY_FIELD })
     wiredSeverity({ data }) {
+        debugger;
         if (data) {
             this.severityOptions = [
                 { label: 'All', value: '' },
-                ...data.values.map(item => ({
-                    label: item.label,
-                    value: item.value
-                }))
+                ...data.values.map(item => ({label: item.label,value: item.value}))
             ];
         }
     }
 
-
-
-    @wire(getListUi, {
-        objectApiName: ISSUES_OBJECT,
-        listViewApiName: '$selectedListView',
-        pageSize: '$pageSize',
-        pageToken: '$pageToken'
-    })
+    @wire(getListUi, {objectApiName: ISSUES_OBJECT, listViewApiName: '$selectedListView',
+        pageSize: '$pageSize', pageToken: '$pageToken',filterBy:'{searchKey},{selectedStatus},{selectedSeverity}'})
     wiredListView({ error, data }) {
-
+        debugger;
         if (data) {
 
             this.Newcolumns = data.info.displayColumns || [];
@@ -96,8 +91,6 @@ export default class UatIssues extends LightningElement {
                         isLink: false,
                         url: null
                     };
-
-                    // 🔹 Relationship fields (Example: Project__r.Name)
                     if (fieldApi.includes('.')) {
 
                         let relationshipField = fieldApi.split('.')[0];
@@ -113,8 +106,6 @@ export default class UatIssues extends LightningElement {
                             cell.url = '/' + parentField.value.id;
                         }
                     }
-
-                    // 🔹 Normal fields
                     else {
 
                         let fieldData = record.fields[fieldApi];
@@ -124,13 +115,10 @@ export default class UatIssues extends LightningElement {
                             fieldData?.value ||
                             '';
 
-                        // Name field hyperlink
                         if (fieldApi === 'Name') {
                             cell.isLink = true;
                             cell.url = '/' + record.id;
                         }
-
-                        // Lookup field hyperlink
                         if (fieldData?.value?.id) {
                             cell.isLink = true;
                             cell.url = '/' + fieldData.value.id;
@@ -163,6 +151,22 @@ export default class UatIssues extends LightningElement {
         }
     }
 
+    connectedCallback() {
+        debugger;
+        this.callApexMethod();
+    }
+
+    callApexMethod() {
+        uatIssues()
+            .then(result => {
+                this.totalRaised = result.Total;
+                this.openCount = result.Open;
+                this.criticalBlockerOpen = result.Critical;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
 
     get visibleRecords() {
         let filtered = [...this.records];
@@ -197,17 +201,61 @@ export default class UatIssues extends LightningElement {
         return filtered;
     }
 
-    handleSearchChange(event) {
+     handleSearchChange(event) {
+        debugger;
         this.searchKey = event.target.value;
+        if(this.searchKey != ''){
+            this.pageSize = Number('200');
+        }else{
+            this.pageSize = Number('20');
+        }
+    }
+
+    handleProjectFilter(event) {
+        debugger;
+        this.selectedProject = event.detail.value;
+        if(this.selectedProject != ''){
+            this.pageSize = Number('200');
+        }else{
+            this.pageSize = Number('20');
+        }
     }
 
     handleStatusFilter(event) {
+        debugger;
         this.selectedStatus = event.detail.value;
+        if(this.selectedStatus != ''){
+            this.pageSize = Number('200');
+        }else{
+            this.pageSize = Number('20');
+        }
     }
 
     handleSeverityFilter(event) {
+        debugger;
         this.selectedSeverity = event.detail.value;
+        if(this.selectedSeverity != ''){
+            this.pageSize = Number('200');
+        }else{
+            this.pageSize = Number('20');
+        }
     }
+
+
+    // handleSearchChange(event) {
+    //     this.searchKey = event.target.value;
+    //     this.pageSize = Number('200');
+    // }
+
+    // handleStatusFilter(event) {
+    //     this.selectedStatus = event.detail.value;
+    //     this.pageSize = Number('200');
+    // }
+
+    // handleSeverityFilter(event) {
+    //     this.selectedSeverity = event.detail.value;
+    //     this.pageSize = Number('200');
+    // }
 
     handlePageSizeChange(event) {
         this.pageSize = Number(event.detail.value);
@@ -231,7 +279,7 @@ export default class UatIssues extends LightningElement {
         this.searchKey = '';
         this.selectedStatus = '';
         this.selectedSeverity = '';
-        this.pageSize = 10;
+        this.pageSize = 20;
         this.pageToken = null;
     }
 

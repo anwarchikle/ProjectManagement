@@ -149,4 +149,24 @@ public with sharing class Mybugscontroller {
         
         return values;
     }
+
+    @AuraEnabled
+    public static Map<String,Integer> uatIssues() {
+        try {
+
+            Map<String,Integer> data = new Map<String,Integer>();
+            Integer totalBugs = [SELECT Id FROM Issue_Bug__c WHERE Environment__c = 'UAT' AND Status__c != 'Completed'].size();
+            Integer openBugs = [SELECT Id FROM Issue_Bug__c WHERE Environment__c = 'UAT' AND Status__c = 'Open'].size();
+            Integer criticalBugs = [SELECT Id FROM Issue_Bug__c WHERE Environment__c = 'UAT' AND (Status__c = 'Critical' OR Status__c = 'Blocker')].size();
+
+            data.put('Total', totalBugs);
+            data.put('Open', openBugs);
+            data.put('Critical', criticalBugs);
+            return data;
+        } catch (Exception e) {
+            System.debug('Error: ' + e.getMessage());
+            return null;
+        }
+    }
+
 }
