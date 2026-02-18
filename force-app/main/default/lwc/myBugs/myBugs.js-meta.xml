@@ -8,6 +8,9 @@
         <target>lightning__HomePage</target>
         <target>lightning__Tab</target>
         <target>lightningCommunity__Page</target>
+		<target>lightningCommunity__Page_Layout</target>
+		<target>lightningCommunity__Theme_Layout</target>
+		<target>lightningCommunity__Default</target>
     </targets>
     
     <masterLabel>My Bugs</masterLabel>

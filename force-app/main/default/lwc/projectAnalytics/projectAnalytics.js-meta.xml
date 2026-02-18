@@ -17,7 +17,6 @@
 		<target>lightningCommunity__Page</target>
 		<target>lightningCommunity__Page_Layout</target>
 		<target>lightningCommunity__Theme_Layout</target>
-		<target>lightningCommunity__Default</target>
 	
 	</targets>
 	<targetConfigs>

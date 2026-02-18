@@ -64,7 +64,7 @@ public class bugEntriesController {
                 }
 
                 if (String.isNotBlank(projectDetails.get('taskListId'))) {
-                    bug.Task_List__c = (Id) projectDetails.get('taskListId');
+                    //bug.Task_List__c = (Id) projectDetails.get('taskListId');
                 }
 
                 bug.Environment__c = projectDetails.get('environment');

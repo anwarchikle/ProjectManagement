@@ -1,44 +1,111 @@
+/* ==============================
+   STATUS CARD
+============================== */
+
 .status-card {
-    margin: 0 4px;
+    background: #ffffff;
+    border-radius: 14px;
     padding: 1rem;
-    border-radius: 4px;
-    transition: all 0.2s;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.2s ease;
 }
 
 .status-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-}
-
-.status-card.pending {
-    background-color: #f3f2f2;
-    border-left: 4px solid #ffb75d;
-}
-
-.status-card.fixed {
-    background-color: #f3f2f2;
-    border-left: 4px solid #4bca81;
-}
-
-.status-card.retest {
-    background-color: #f3f2f2;
-    border-left: 4px solid #5eb4ff;
-}
-
-.status-card.atrisk {
-    background-color: #fef3f2;
-    border-left: 4px solid #ea001e;
+    transform: translateY(-4px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
 }
 
 .status-label {
-    font-size: 0.8125rem;
-    color: #3e3e3c;
-    margin-left: 4px;
+    display: block;
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+    color: #555;
 }
 
 .status-count {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-top: 8px;
-    color: #080707;
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin-top: 0.4rem;
+}
+
+/* Color Indicators */
+.pending { border-left: 4px solid #ff9800; }
+.fixed { border-left: 4px solid #4caf50; }
+.retest { border-left: 4px solid #2196f3; }
+.atrisk { border-left: 4px solid #f44336; }
+
+/* ==============================
+   HEADER
+============================== */
+
+.header-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.search-container {
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* ==============================
+   TABLE
+============================== */
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+.slds-table th {
+    background-color: #f3f3f3;
+    font-weight: 600;
+}
+
+/* ==============================
+   EMPTY STATE
+============================== */
+
+.empty-state {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1.5rem;
+    color: #777;
+}
+
+/* ==============================
+   PAGINATION
+============================== */
+
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+/* ==============================
+   MOBILE RESPONSIVENESS
+============================== */
+
+@media screen and (max-width: 768px) {
+
+    .search-container {
+        justify-content: flex-start;
+        margin-top: 0.5rem;
+    }
+
+    .mobile-btn-group {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .slds-table th,
+    .slds-table td {
+        font-size: 0.75rem;
+        padding: 0.4rem;
+    }
 }

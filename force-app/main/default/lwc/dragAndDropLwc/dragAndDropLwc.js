@@ -8,6 +8,7 @@ import STATUS_FIELD from '@salesforce/schema/Tasks__c.Status__c';
 import ID_FIELD from '@salesforce/schema/Tasks__c.Id';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getTaskListViews from '@salesforce/apex/taskController.getTaskListViews';
+import isInternalUser from '@salesforce/apex/taskController.isInternalUser'
 export default class DragAndDropLwc extends LightningElement {
     records;
     pickVals;
@@ -19,9 +20,30 @@ export default class DragAndDropLwc extends LightningElement {
     wiredData;
     @track showExportDialog = false;
     @track selectedExportStatus = 'All';
+    @track isInternalUser = false;
     /* ============================
        FETCH TASKS
     ============================ */
+
+    connectedCallback() {
+        this.checkUserType();
+    }
+
+    checkUserType() {
+        isInternalUser()
+            .then(result => {
+                this.isInternalUser = result;
+                console.log('Is Internal User:', result);
+            })
+            .catch(error => {
+                console.error('Error checking user type:', error);
+                this.isInternalUser = false;
+            });
+    }
+
+
+
+
     @wire(getTaskListViews)
     wiredTaskListViews({ data, error }) {
         debugger;
@@ -425,5 +447,24 @@ export default class DragAndDropLwc extends LightningElement {
                 variant: 'success'
             })
         );
+    }
+
+    handleAdd(event) {
+        debugger;
+        const recordId = event.currentTarget.dataset.id;
+        if (this.isInternalUser) {
+                const compDefinition = {
+                    componentDef: 'c:newTask',
+                    attributes: {
+                        recordId: recordId
+                    }
+                };
+                const encodedDef = btoa(JSON.stringify(compDefinition));
+                window.open('/one/one.app#' + encodedDef, '_blank');
+            } else {
+                const url = `/s/new-task?recordId=${recordId}`;
+                window.open(url, '_blank');
+            }
+
     }
 }

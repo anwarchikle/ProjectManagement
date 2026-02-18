@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label><!-- Role --></label>
+    <name>Role__c</name>
+    <picklistValues>
+        <masterLabel>Developer</masterLabel>
+        <translation><!-- Developer --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Project Manager</masterLabel>
+        <translation><!-- Project Manager --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>QA</masterLabel>
+        <translation><!-- QA --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Senior Developer</masterLabel>
+        <translation><!-- Senior Developer --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Team Lead</masterLabel>
+        <translation><!-- Team Lead --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>UI/UX</masterLabel>
+        <translation><!-- UI/UX --></translation>
+    </picklistValues>
+</CustomFieldTranslation>

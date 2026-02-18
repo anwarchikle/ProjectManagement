@@ -49,11 +49,12 @@ export default class MyBugs extends LightningElement {
     // Wire List View Data
     @wire(getListUi, { 
         objectApiName: ISSUES_OBJECT, 
-        listViewApiName: '$selectedListView',
+        listViewApiName: 'My_List',
         pageSize: '$pageSize',
         pageToken: '$pageToken'
     })
     wiredListView(result) {
+        debugger;
         this.wiredData = result;
         const { error, data } = result;
 
@@ -73,6 +74,7 @@ export default class MyBugs extends LightningElement {
     }
 
     processListViewRecords(records) {
+        debugger;
         this.records = records.map(record => {
             let row = {
                 Id: record.id,
@@ -141,6 +143,7 @@ export default class MyBugs extends LightningElement {
     }
 
     async loadInitialData() {
+        debugger;
         try {
             this.isLoading = true;
             
@@ -155,6 +158,7 @@ export default class MyBugs extends LightningElement {
     }
 
     processFilterOptions(data) {
+        debugger;
         // Project options
         this.projectOptions = [
             { label: 'All Projects', value: '' },
@@ -175,6 +179,7 @@ export default class MyBugs extends LightningElement {
     }
 
     calculateMetrics() {
+        debugger;
         if (!this.records || this.records.length === 0) {
             this.totalRaised = 0;
             this.openCount = 0;

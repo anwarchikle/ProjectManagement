@@ -81,11 +81,6 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>Issue_Bug__c.Task_List__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
         <field>Milestone__c.Actual_End_Date__c</field>
         <readable>true</readable>
     </fieldPermissions>

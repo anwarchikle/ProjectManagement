@@ -47,4 +47,8 @@
         </sections>
     </layouts>
     <startsWith>Consonant</startsWith>
+    <validationRules>
+        <errorMessage><!-- Please Fill Assigned To --></errorMessage>
+        <name>Assigned_to_should_not_be_null</name>
+    </validationRules>
 </CustomObjectTranslation>

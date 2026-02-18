@@ -17,6 +17,8 @@ export default class RetestAndVerificationCompo extends NavigationMixin(Lightnin
     @track wiredResult;
     @track wiredListResult;
     @track listViewOptions = [];
+    @track totalRetestRecordsCount = 0;
+    
     
     searchKey = '';
     selectedListViewId = 'Retesting'; // Your list view API name
@@ -37,8 +39,11 @@ export default class RetestAndVerificationCompo extends NavigationMixin(Lightnin
         pageSize: 200,
         pageToken: '$pageToken'
     })
-    wiredListView({ error, data }) {
-        
+    wiredListView(result) {
+        debugger;
+        this.wiredListResult = result;
+        const { error, data } = result;
+
         if (data) {
             
             this.Newcolumns = data.info.displayColumns || [];
@@ -138,7 +143,8 @@ export default class RetestAndVerificationCompo extends NavigationMixin(Lightnin
         }
     }
 
-    calculateCountsFromListView(data) {
+        calculateCountsFromListView(data) {
+
         let counts = {
             pending: 0,
             fixed: 0,
@@ -147,31 +153,40 @@ export default class RetestAndVerificationCompo extends NavigationMixin(Lightnin
         };
 
         data.forEach(record => {
+
             let retestStatus = record.fields?.Retest_Status__c?.value;
+            let status = record.fields?.Status__c?.value;
             let slaStatus = record.fields?.SLA_Status__c?.value;
 
-            switch(retestStatus) {
-                case 'Pending Retest':
-                    counts.pending++;
-                    break;
-                case 'Fixed (Awaiting)':
-                    counts.fixed++;
-                    break;
-                case 'In Retest':
-                    counts.inRetest++;
-                    break;
+            // Pending
+            if (retestStatus === 'Pending Retest') {
+                counts.pending++;
             }
 
+            // In Retest
+            if (retestStatus === 'In Retest') {
+                counts.inRetest++;
+            }
+
+            // Fixed → based on Status__c
+            if (status === 'Completed') {
+                counts.fixed++;
+            }
+
+            // SLA
             if (slaStatus === 'At Risk') {
                 counts.slaAtRisk++;
             }
+
         });
 
         this.pendingCount = counts.pending;
         this.fixedCount = counts.fixed;
         this.inRetestCount = counts.inRetest;
         this.slaAtRiskCount = counts.slaAtRisk;
+        this.totalRetestRecordsCount = data.length;
     }
+
 
     calculateCountsFromApex(data) {
         let counts = {
@@ -203,6 +218,7 @@ export default class RetestAndVerificationCompo extends NavigationMixin(Lightnin
         this.fixedCount = counts.fixed;
         this.inRetestCount = counts.inRetest;
         this.slaAtRiskCount = counts.slaAtRisk;
+        this.totalRetestRecordsCount = data.length;
     }
 
     get visibleRecords() {
@@ -242,6 +258,50 @@ export default class RetestAndVerificationCompo extends NavigationMixin(Lightnin
     handlePreviousPage() {
         if (this.previousPageToken) {
             this.pageToken = this.previousPageToken;
+        }
+    }
+
+    // ================= PASS / FAIL QUICK ACTIONS =================
+
+    async handlePassClick(event) {
+        const recordId = event.currentTarget.dataset.id;
+
+        try {
+            await updateRetestStatus({
+                recordId,
+                status: 'Completed'
+            });
+
+            this.showToast('Success', 'Issue marked as Completed', 'success');
+
+            await Promise.all([
+                this.wiredResult ? refreshApex(this.wiredResult) : Promise.resolve(),
+                this.wiredListResult ? refreshApex(this.wiredListResult) : Promise.resolve()
+            ]);
+        } catch (error) {
+            console.error(error);
+            this.showToast('Error', 'Error updating status to Completed', 'error');
+        }
+    }
+
+    async handleFailClick(event) {
+        const recordId = event.currentTarget.dataset.id;
+
+        try {
+            await updateRetestStatus({
+                recordId,
+                status: 'Open'
+            });
+
+            this.showToast('Success', 'Issue re-opened as Open', 'success');
+
+            await Promise.all([
+                this.wiredResult ? refreshApex(this.wiredResult) : Promise.resolve(),
+                this.wiredListResult ? refreshApex(this.wiredListResult) : Promise.resolve()
+            ]);
+        } catch (error) {
+            console.error(error);
+            this.showToast('Error', 'Error updating status to Open', 'error');
         }
     }
 

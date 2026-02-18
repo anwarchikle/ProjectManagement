@@ -11,6 +11,10 @@
         <translation><!-- Closed --></translation>
     </picklistValues>
     <picklistValues>
+        <masterLabel>Completed</masterLabel>
+        <translation><!-- Completed --></translation>
+    </picklistValues>
+    <picklistValues>
         <masterLabel>Critical</masterLabel>
         <translation><!-- Critical --></translation>
     </picklistValues>

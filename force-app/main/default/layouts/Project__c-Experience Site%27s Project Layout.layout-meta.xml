@@ -222,7 +222,6 @@
     <relatedLists>
         <fields>NAME</fields>
         <fields>Issue_Id__c</fields>
-        <fields>Tasks__c</fields>
         <fields>Assignee__c</fields>
         <fields>Due_Date__c</fields>
         <fields>Status__c</fields>

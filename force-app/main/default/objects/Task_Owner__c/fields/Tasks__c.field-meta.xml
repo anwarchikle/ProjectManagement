@@ -3,7 +3,6 @@
     <fullName>Tasks__c</fullName>
     <label>Tasks</label>
     <referenceTo>Tasks__c</referenceTo>
-    <relationshipLabel>Task Owners</relationshipLabel>
     <relationshipName>Task_Owners</relationshipName>
     <relationshipOrder>0</relationshipOrder>
     <reparentableMasterDetail>false</reparentableMasterDetail>

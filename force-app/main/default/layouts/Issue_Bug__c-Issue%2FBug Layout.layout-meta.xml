@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Layout xmlns="http://soap.sforce.com/2006/04/metadata">
-    <excludeButtons>OpenSlackRecordChannel</excludeButtons>
     <excludeButtons>Submit</excludeButtons>
     <layoutSections>
         <customLabel>false</customLabel>
@@ -22,19 +21,15 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Task_List__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Required</behavior>
-                <field>Tasks__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>Environment__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Type__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Issue_Iteration__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
@@ -210,7 +205,6 @@
         <fields>NAME</fields>
         <fields>Issue_Id__c</fields>
         <fields>Project__c</fields>
-        <fields>Tasks__c</fields>
         <fields>Assignee__c</fields>
         <fields>Due_Date__c</fields>
         <fields>Status__c</fields>
@@ -219,7 +213,7 @@
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
-        <relatedList>Issue_Mapping__c.Issue_Bug__c</relatedList>
+        <relatedList>Tasks__c.Issue_Bug__c</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>

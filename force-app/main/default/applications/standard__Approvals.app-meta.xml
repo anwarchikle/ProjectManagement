@@ -19,7 +19,7 @@
     <tabs>Team_User__c</tabs>
     <tabs>Resource_Allocation__c</tabs>
     <tabs>Holiday__c</tabs>
-    <tabs>Issue_Mapping__c</tabs>
+    <tabs>Time_Log__c</tabs>
     <uiType>Lightning</uiType>
     <workspaceConfig>
         <mappings>
@@ -27,9 +27,6 @@
         </mappings>
         <mappings>
             <tab>Issue_Bug__c</tab>
-        </mappings>
-        <mappings>
-            <tab>Issue_Mapping__c</tab>
         </mappings>
         <mappings>
             <tab>Milestone__c</tab>
@@ -57,6 +54,9 @@
         </mappings>
         <mappings>
             <tab>Team__c</tab>
+        </mappings>
+        <mappings>
+            <tab>Time_Log__c</tab>
         </mappings>
         <mappings>
             <tab>standard-ApprovalsHome</tab>

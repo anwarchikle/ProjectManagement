@@ -5,12 +5,17 @@ import ISSUES_OBJECT from '@salesforce/schema/Issue_Bug__c';
 import STATUS_FIELD from '@salesforce/schema/Issue_Bug__c.Status__c';
 import SEVERITY_FIELD from '@salesforce/schema/Issue_Bug__c.Severity__c';
 import uatIssues from '@salesforce/apex/Mybugscontroller.uatIssues';
+import { getRecord, updateRecord } from 'lightning/uiRecordApi';
+import USER_ID from '@salesforce/user/Id';
+import USER_ROLE_FIELD from '@salesforce/schema/User.Role__c';
+import CLASSIFICATION_FIELD from '@salesforce/schema/Issue_Bug__c.Classification__c';
 
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import { refreshApex } from '@salesforce/apex';
 
 export default class UatIssues extends LightningElement {
 
-    @api selectedListView;
+    @api selectedListView = 'UAT';
 
     @track records = [];
     @track columns = [];
@@ -27,6 +32,15 @@ export default class UatIssues extends LightningElement {
     nextPageToken = null;
     previousPageToken = null;
 
+    // Current user role & permissions
+    currentUserRole;
+    canEditClassification = false;
+
+    // Draft values for edited classifications
+    draftValues = {};
+
+    wiredListViewResult;
+
     recordTypeId;
     @wire(getObjectInfo, { objectApiName: ISSUES_OBJECT })
     objectInfo({ data }) {
@@ -37,9 +51,8 @@ export default class UatIssues extends LightningElement {
 
     @track statusOptions = [];
 
-    @wire(getPicklistValues, {recordTypeId: '$recordTypeId', fieldApiName: STATUS_FIELD})
+    @wire(getPicklistValues, { recordTypeId: '$recordTypeId', fieldApiName: STATUS_FIELD })
     wiredStatus({ data }) {
-        debugger;
         if (data) {
             this.statusOptions = [
                 { label: 'All', value: '' },
@@ -51,94 +64,145 @@ export default class UatIssues extends LightningElement {
         }
     }
 
+    // Wire current user Role__c
+    @wire(getRecord, { recordId: USER_ID, fields: [USER_ROLE_FIELD] })
+    wiredUser({ data, error }) {
+        if (data) {
+            this.currentUserRole = data.fields.Role__c?.value;
+            this.canEditClassification =
+                this.currentUserRole === 'Consultant' ||
+                this.currentUserRole === 'Project Manager';
+        } else if (error) {
+            // If user role can't be fetched, keep editing disabled
+            console.error('Error fetching user role', error);
+            this.canEditClassification = false;
+        }
+    }
+
     @track severityOptions = [];
+    @track classificationOptions = [];
 
     @wire(getPicklistValues, { recordTypeId: '$recordTypeId', fieldApiName: SEVERITY_FIELD })
     wiredSeverity({ data }) {
-        debugger;
         if (data) {
             this.severityOptions = [
                 { label: 'All', value: '' },
-                ...data.values.map(item => ({label: item.label,value: item.value}))
+                ...data.values.map(item => ({ label: item.label, value: item.value }))
             ];
         }
     }
 
-    @wire(getListUi, {objectApiName: ISSUES_OBJECT, listViewApiName: '$selectedListView',
-        pageSize: '$pageSize', pageToken: '$pageToken',filterBy:'{searchKey},{selectedStatus},{selectedSeverity}'})
-    wiredListView({ error, data }) {
-        debugger;
+    @wire(getPicklistValues, { recordTypeId: '$recordTypeId', fieldApiName: CLASSIFICATION_FIELD })
+    wiredClassification({ data }) {
+        if (data) {
+            this.classificationOptions = data.values.map(item => ({
+                label: item.label,
+                value: item.value
+            }));
+        }
+    }
+
+    @wire(getListUi, {
+        objectApiName: ISSUES_OBJECT,
+        listViewApiName: '$selectedListView',
+        pageSize: '$pageSize',
+        pageToken: '$pageToken'
+    })
+    wiredListView(result) {
+
+        this.wiredListViewResult = result;
+
+        const { error, data } = result;
+
         if (data) {
 
-            this.Newcolumns = data.info.displayColumns || [];
-            this.nextPageToken = data.records.nextPageToken;
-            this.previousPageToken = data.records.previousPageToken;
+            this.Newcolumns =
+                data.info?.displayColumns || [];
 
-            this.records = data.records.records.map(record => {
+            this.nextPageToken =
+                data.records?.nextPageToken || null;
 
-                let row = {
-                    Id: record.id,
-                    cells: []
-                };
+            this.previousPageToken =
+                data.records?.previousPageToken || null;
 
-                this.Newcolumns.forEach(col => {
+            if (data.records) {
 
-                    let fieldApi = col.fieldApiName;
+                this.records = data.records.records.map(record => {
 
-                    let cell = {
-                        fieldApiName: fieldApi,
-                        value: '',
-                        isLink: false,
-                        url: null
+                    let row = {
+                        Id: record.id,
+                        cells: []
                     };
-                    if (fieldApi.includes('.')) {
 
-                        let relationshipField = fieldApi.split('.')[0];
-                        let parentField = record.fields[relationshipField];
+                    this.Newcolumns.forEach(col => {
 
-                        if (parentField?.value) {
+                        let fieldApi = col.fieldApiName;
+
+                        let cell = {
+                            fieldApiName: fieldApi,
+                            value: '',
+                            isLink: false,
+                            url: null,
+                            isClassification: fieldApi === CLASSIFICATION_FIELD.fieldApiName
+                        };
+
+                        // 🔹 Relationship field (e.g., Project__r.Name)
+                        if (fieldApi.includes('.')) {
+
+                            let relationshipField = fieldApi.split('.')[0];
+                            let parentField = record.fields[relationshipField];
+
+                            if (parentField?.value) {
+
+                                cell.value =
+                                    parentField.displayValue ||
+                                    parentField.value.fields?.Name?.value ||
+                                    '';
+
+                                cell.isLink = true;
+                                cell.url = '/' + parentField.value.id;
+                            }
+                        }
+
+                        // 🔹 Normal field
+                        else {
+
+                            let fieldData = record.fields[fieldApi];
+
                             cell.value =
-                                parentField.displayValue ||
-                                parentField.value.fields?.Name?.value ||
+                                fieldData?.displayValue ||
+                                fieldData?.value ||
                                 '';
 
-                            cell.isLink = true;
-                            cell.url = '/' + parentField.value.id;
+                            // Name field clickable
+                            if (fieldApi === 'Name') {
+                                cell.isLink = true;
+                                cell.url = '/' + record.id;
+                            }
+
+                            // Lookup field clickable
+                            if (fieldData?.value?.id) {
+
+                                cell.isLink = true;
+                                cell.url = '/' + fieldData.value.id;
+
+                                cell.value =
+                                    fieldData.displayValue ||
+                                    fieldData.value.fields?.Name?.value ||
+                                    '';
+                            }
                         }
-                    }
-                    else {
 
-                        let fieldData = record.fields[fieldApi];
+                        row.cells.push(cell);
+                    });
 
-                        cell.value =
-                            fieldData?.displayValue ||
-                            fieldData?.value ||
-                            '';
-
-                        if (fieldApi === 'Name') {
-                            cell.isLink = true;
-                            cell.url = '/' + record.id;
-                        }
-                        if (fieldData?.value?.id) {
-                            cell.isLink = true;
-                            cell.url = '/' + fieldData.value.id;
-
-                            cell.value =
-                                fieldData.displayValue ||
-                                fieldData.value.fields?.Name?.value ||
-                                '';
-                        }
-                    }
-
-                    row.cells.push(cell);
-
+                    return row;
                 });
-
-                return row;
-            });
+            }
         }
 
-        if (error) {
+        else if (error) {
+
             console.error(error);
 
             this.dispatchEvent(
@@ -151,8 +215,8 @@ export default class UatIssues extends LightningElement {
         }
     }
 
+
     connectedCallback() {
-        debugger;
         this.callApexMethod();
     }
 
@@ -201,12 +265,16 @@ export default class UatIssues extends LightningElement {
         return filtered;
     }
 
-     handleSearchChange(event) {
+    get hasDraftValues() {
+        return Object.keys(this.draftValues || {}).length > 0;
+    }
+
+    handleSearchChange(event) {
         debugger;
         this.searchKey = event.target.value;
-        if(this.searchKey != ''){
+        if (this.searchKey != '') {
             this.pageSize = Number('200');
-        }else{
+        } else {
             this.pageSize = Number('20');
         }
     }
@@ -214,9 +282,9 @@ export default class UatIssues extends LightningElement {
     handleProjectFilter(event) {
         debugger;
         this.selectedProject = event.detail.value;
-        if(this.selectedProject != ''){
+        if (this.selectedProject != '') {
             this.pageSize = Number('200');
-        }else{
+        } else {
             this.pageSize = Number('20');
         }
     }
@@ -224,9 +292,9 @@ export default class UatIssues extends LightningElement {
     handleStatusFilter(event) {
         debugger;
         this.selectedStatus = event.detail.value;
-        if(this.selectedStatus != ''){
+        if (this.selectedStatus != '') {
             this.pageSize = Number('200');
-        }else{
+        } else {
             this.pageSize = Number('20');
         }
     }
@@ -234,13 +302,89 @@ export default class UatIssues extends LightningElement {
     handleSeverityFilter(event) {
         debugger;
         this.selectedSeverity = event.detail.value;
-        if(this.selectedSeverity != ''){
+        if (this.selectedSeverity != '') {
             this.pageSize = Number('200');
-        }else{
+        } else {
             this.pageSize = Number('20');
         }
     }
 
+
+    handleClassificationChange(event) {
+        const recordId = event.target.dataset.id;
+        const fieldApiName = event.target.dataset.field;
+        const value = event.target.value;
+
+        if (!recordId || !fieldApiName) {
+            return;
+        }
+
+        const existingDraft = this.draftValues[recordId] || {};
+        this.draftValues = {
+            ...this.draftValues,
+            [recordId]: {
+                ...existingDraft,
+                [fieldApiName]: value
+            }
+        };
+
+        // Update local UI value
+        this.records = this.records.map(row => {
+            if (row.Id === recordId) {
+                const updatedCells = row.cells.map(cell => {
+                    if (cell.fieldApiName === fieldApiName) {
+                        return { ...cell, value };
+                    }
+                    return cell;
+                });
+                return { ...row, cells: updatedCells };
+            }
+            return row;
+        });
+    }
+
+    handleSave() {
+        debugger;
+        const recordInputs = Object.keys(this.draftValues).map(recordId => {
+            const fields = { Id: recordId };
+            Object.keys(this.draftValues[recordId]).forEach(fieldApiName => {
+                fields[fieldApiName] = this.draftValues[recordId][fieldApiName];
+            });
+            return { fields };
+        });
+
+        if (!recordInputs.length) {
+            return;
+        }
+
+        const promises = recordInputs.map(recordInput => updateRecord(recordInput));
+
+        Promise.all(promises)
+            .then(() => {
+                this.draftValues = {};
+                this.dispatchEvent(
+                    new ShowToastEvent({
+                        title: 'Success',
+                        message: 'Classification updated successfully',
+                        variant: 'success'
+                    })
+                );
+
+                if (this.wiredListViewResult) {
+                    refreshApex(this.wiredListViewResult);
+                }
+            })
+            .catch(error => {
+                console.error('Error updating records', error);
+                this.dispatchEvent(
+                    new ShowToastEvent({
+                        title: 'Error updating records',
+                        message: error.body?.message || 'Error while saving changes',
+                        variant: 'error'
+                    })
+                );
+            });
+    }
 
     // handleSearchChange(event) {
     //     this.searchKey = event.target.value;

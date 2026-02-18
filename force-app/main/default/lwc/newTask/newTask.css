@@ -155,6 +155,7 @@
 /* ========== TASK ROW GRID LAYOUT ========== */
 .task-row .slds-grid {
     gap: var(--spacing-md);
+    justify-content: space-around;
 }
 
 .task-row .slds-col {
@@ -609,6 +610,27 @@ lightning-input-rich-text {
 
 .alloc-toggle {
     transition: var(--transition-normal);
+}
+
+/* ************************************************************************* */
+
+.billing-toggle {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 0;
+    margin: 0;
+}
+
+.billing-element__label {
+    font-weight: var(--slds-s-label-font-weight);
+    margin-block-end: var(--slds-s-label-spacing-gap, calc(var(--slds-g-spacing-1) / 2));
+}
+
+.billing-required {
+    color: var(--color-error);
+    margin-right: 2px;
 }
 
 /* ========== BUTTON ENHANCEMENTS ========== */

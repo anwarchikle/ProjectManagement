@@ -258,7 +258,8 @@ public with sharing class taskController {
                 Start_Date__c = wrapper.startDate,
                 End_Date__c = wrapper.endDate,
                 Work_Hours__c = wrapper.workHours,
-                Comment__c = wrapper.comments
+                Comment__c = wrapper.comments,
+                Issue_Bug__c = wrapper.issueBug
             ));
         }
         
@@ -365,6 +366,25 @@ public with sharing class taskController {
         
         return weekdays;
     }
+
+    // Added From WorkSpaceController
+    @AuraEnabled(cacheable=true)
+    public static Boolean isInternalUser() {
+        try {
+            // Check if user is in a Community/Experience Site
+            // Network.getNetworkId() returns null for internal users
+            // Returns a NetworkId for Experience Site/Community users
+            Id networkId = Network.getNetworkId();
+            
+            // If networkId is null, user is an internal Salesforce user
+            return networkId == null;
+            
+        } catch (Exception e) {
+            System.debug('Error checking user type: ' + e.getMessage());
+            // Default to false (treat as site user) if error occurs
+            return false;
+        }
+    }
     
     public class FileWrapper {
         @AuraEnabled public String fileName { get; set; }
@@ -387,6 +407,7 @@ public with sharing class taskController {
         @AuraEnabled public Date endDate { get; set; }
         @AuraEnabled public Decimal workHours { get; set; }
         @AuraEnabled public String comments { get; set; }
+        @AuraEnabled public Id issueBug { get; set; }
         @AuraEnabled public List<Id> teamMemberIds { get; set; }
         @AuraEnabled public List<AllocationWrapper> allocationData { get; set; }
         @AuraEnabled public List<FileWrapper> files { get; set; }  // ← CHANGED TO FileWrapper

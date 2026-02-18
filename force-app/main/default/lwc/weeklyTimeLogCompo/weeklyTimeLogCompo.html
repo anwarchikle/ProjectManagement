@@ -1,268 +1,260 @@
 <template>
-    <section class={containerClass}>
-        <div class="modal-container">
+    <!-- HEADER -->
+    <header class="modal-header">
+        <div class="header-left">
+            <lightning-icon icon-name="action:log_event" size="small"
+                class="slds-m-right_small"></lightning-icon>
+            <h2 class="slds-text-heading_medium">Weekly Time Log</h2>
+        </div>
 
-            <!-- HEADER -->
-            <header class="modal-header">
-                <div class="header-left">
-                    <lightning-icon icon-name="action:log_event" size="small"
-                        class="slds-m-right_small"></lightning-icon>
-                    <h2 class="slds-text-heading_medium">Weekly Time Log</h2>
-                </div>
-
-                <div class="header-actions">
-                    <!-- Button to switch to Single Time Log -->
-               
-                    
-                    <lightning-button-icon
-                        icon-name="action:back"
-                        alternative-text="Single Time Log"
-                        title="Single Time Log"
-                        onclick={handleSwitchToSingle}>
-                    </lightning-button-icon>
-                    
-                    <div class="week-navigation">
-                        <lightning-button-icon 
-                            icon-name="utility:left"
-                            alternative-text="Previous Week"
-                            title="Previous Week"
-                            onclick={handlePrevWeek}>
-                        </lightning-button-icon>
-                        <span class="week-display">{weekRange} | (WEEK-{weekNumber})</span>
-                        <lightning-button-icon 
-                            icon-name="utility:right"
-                            alternative-text="Next Week"
-                            title="Next Week"
-                            onclick={handleNextWeek}>
-                        </lightning-button-icon>
-                    </div>
-
-                    <lightning-button-icon
-                        icon-name="utility:close"
-                        variant="bare"
-                        onclick={handleCancel}
-                        alternative-text="Close">
-                    </lightning-button-icon>
-                </div>
-            </header>
-
-            <!-- MAIN CONTENT -->
-            <div class="modal-body">
-                
-                <!-- TIME LOGS TABLE -->
-                <div class="time-logs-table">
-                    <table class="slds-table slds-table_cell-buffer slds-table_bordered">
-                        <thead>
-                            <tr>
-                                <th>Project</th>
-                                <th>Task</th>
-                                <th>User</th>
-                                <th>Billable Type</th>
-                                <th>Mon {weekDays.mon}</th>
-                                <th>Tue {weekDays.tue}</th>
-                                <th>Wed {weekDays.wed}</th>
-                                <th>Thu {weekDays.thu}</th>
-                                <th>Fri {weekDays.fri}</th>
-                                <th>Sat {weekDays.sat}</th>
-                                <th>Sun {weekDays.sun}</th>
-                                <th>Total</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <template for:each={timeLogRows} for:item="row" for:index="index">
-                                <tr key={row.id}>
-                                    <td>
-                                        <lightning-combobox
-                                            name="project"
-                                            placeholder="Select Project"
-                                            options={projectOptions}
-                                            value={row.projectId}
-                                            onchange={handleRowChange}
-                                            data-index={index}
-                                            data-field="projectId"
-                                            required>
-                                        </lightning-combobox>
-                                    </td>
-                                    <td>
-                                        <lightning-combobox
-                                            name="task"
-                                            placeholder="Select Task"
-                                            options={row.taskOptions}
-                                            value={row.taskId}
-                                            onchange={handleRowChange}
-                                            data-index={index}
-                                            data-field="taskId">
-                                        </lightning-combobox>
-                                    </td>
-                                    <td>
-                                        <div class="user-display">
-                                            <lightning-icon icon-name="standard:user" size="x-small" class="slds-m-right_xx-small"></lightning-icon>
-                                            <span>{row.userName}</span>
-                                            <template if:true={row.userId}>
-                                                <span class="user-id-hidden" data-userid={row.userId}></span>
-                                            </template>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <lightning-combobox
-                                            name="billableType"
-                                            placeholder="Select Type"
-                                            options={billableTypeOptions}
-                                            value={row.billableType}
-                                            onchange={handleRowChange}
-                                            data-index={index}
-                                            data-field="billableType"
-                                            required>
-                                        </lightning-combobox>
-                                    </td>
-                                    <td>
-                                        <lightning-input
-                                            type="number"
-                                            step="0.25"
-                                            min="0"
-                                            max="24"
-                                            value={row.mon}
-                                            onchange={handleRowChange}
-                                            data-index={index}
-                                            data-field="mon"
-                                            formatter="decimal">
-                                        </lightning-input>
-                                    </td>
-                                    <td>
-                                        <lightning-input
-                                            type="number"
-                                            step="0.25"
-                                            min="0"
-                                            max="24"
-                                            value={row.tue}
-                                            onchange={handleRowChange}
-                                            data-index={index}
-                                            data-field="tue"
-                                            formatter="decimal">
-                                        </lightning-input>
-                                    </td>
-                                    <td>
-                                        <lightning-input
-                                            type="number"
-                                            step="0.25"
-                                            min="0"
-                                            max="24"
-                                            value={row.wed}
-                                            onchange={handleRowChange}
-                                            data-index={index}
-                                            data-field="wed"
-                                            formatter="decimal">
-                                        </lightning-input>
-                                    </td>
-                                    <td>
-                                        <lightning-input
-                                            type="number"
-                                            step="0.25"
-                                            min="0"
-                                            max="24"
-                                            value={row.thu}
-                                            onchange={handleRowChange}
-                                            data-index={index}
-                                            data-field="thu"
-                                            formatter="decimal">
-                                        </lightning-input>
-                                    </td>
-                                    <td>
-                                        <lightning-input
-                                            type="number"
-                                            step="0.25"
-                                            min="0"
-                                            max="24"
-                                            value={row.fri}
-                                            onchange={handleRowChange}
-                                            data-index={index}
-                                            data-field="fri"
-                                            formatter="decimal">
-                                        </lightning-input>
-                                    </td>
-                                    <td>
-                                        <lightning-input
-                                            type="number"
-                                            step="0.25"
-                                            min="0"
-                                            max="24"
-                                            value={row.sat}
-                                            onchange={handleRowChange}
-                                            data-index={index}
-                                            data-field="sat"
-                                            formatter="decimal">
-                                        </lightning-input>
-                                    </td>
-                                    <td>
-                                        <lightning-input
-                                            type="number"
-                                            step="0.25"
-                                            min="0"
-                                            max="24"
-                                            value={row.sun}
-                                            onchange={handleRowChange}
-                                            data-index={index}
-                                            data-field="sun"
-                                            formatter="decimal">
-                                        </lightning-input>
-                                    </td>
-                                    <td class="total-cell">{row.total}</td>
-                                    <td>
-                                        <lightning-button-icon
-                                            icon-name="utility:delete"
-                                            variant="bare"
-                                            alternative-text="Delete"
-                                            onclick={handleDeleteRow}
-                                            data-index={index}>
-                                        </lightning-button-icon>
-                                    </td>
-                                </tr>
-                            </template>
-                            
-                            <!-- EMPTY STATE -->
-                            <template if:true={showEmptyState}>
-                                <tr>
-                                    <td colspan="13" class="empty-state">
-                                        <lightning-icon icon-name="utility:time" size="small"></lightning-icon>
-                                        <p>No time logs added. Click "Add Row" to start logging time.</p>
-                                    </td>
-                                </tr>
-                            </template>
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <td colspan="11" class="footer-label">
-                                    <lightning-button
-                                        label="Add Row"
-                                        variant="neutral"
-                                        onclick={handleAddRow}
-                                        class="add-row-btn">
-                                    </lightning-button>
-                                </td>
-                                <td class="total-cell"><strong>{grandTotal}</strong></td>
-                                <td></td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
+        <div class="header-actions">
+            <div class="header-user">
+            <lightning-icon
+                icon-name="standard:user"
+                size="small"
+                class="slds-m-right_xx-small">
+            </lightning-icon>
+            <span>{loggedInUserName}</span>
+        </div>
+            <!-- Button to switch to Single Time Log -->
+            <lightning-button-icon
+                icon-name="action:back"
+                alternative-text="Single Time Log"
+                title="Single Time Log"
+                onclick={handleSwitchToSingle}>
+            </lightning-button-icon>
+            
+            <div class="week-navigation">
+                <lightning-button-icon 
+                    icon-name="utility:left"
+                    alternative-text="Previous Week"
+                    title="Previous Week"
+                    onclick={handlePrevWeek}>
+                </lightning-button-icon>
+                <span class="week-display">{weekRange} | (WEEK-{weekNumber})</span>
+                <lightning-button-icon 
+                    icon-name="utility:right"
+                    alternative-text="Next Week"
+                    title="Next Week"
+                    onclick={handleNextWeek}>
+                </lightning-button-icon>
             </div>
 
-            <!-- FOOTER -->
-            <footer class="modal-footer">
-                <lightning-button label="Cancel" onclick={handleCancel}></lightning-button>
-                <lightning-button 
-                    label="Save & New" 
-                    variant="neutral" 
-                    onclick={handleSaveAndNew}>
-                </lightning-button>
-                <lightning-button 
-                    label="Save" 
-                    variant="brand" 
-                    onclick={handleSave}>
-                </lightning-button>
-            </footer>
-
+            <lightning-button-icon
+                icon-name="utility:close"
+                variant="bare"
+                onclick={handleCancel}
+                alternative-text="Close">
+            </lightning-button-icon>
         </div>
-    </section>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <div class="modal-body">
+        
+        <!-- TIME LOGS TABLE -->
+        <div class="time-logs-table">
+            <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                <thead>
+                    <tr>
+                        <th>Project</th>
+                        <th>Task</th>
+                        <th>Billable Type</th>
+                        <th>Mon {weekDays.mon}</th>
+                        <th>Tue {weekDays.tue}</th>
+                        <th>Wed {weekDays.wed}</th>
+                        <th>Thu {weekDays.thu}</th>
+                        <th>Fri {weekDays.fri}</th>
+                        <th>Sat {weekDays.sat}</th>
+                        <th>Sun {weekDays.sun}</th>
+                        <th>Total</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template for:each={timeLogRows} for:item="row" for:index="index">
+                        <tr key={row.id}>
+                            <td>
+                                <lightning-combobox
+                                    name="project"
+                                    placeholder="Select Project"
+                                    options={projectOptions}
+                                    value={row.projectId}
+                                    onchange={handleRowChange}
+                                    data-index={index}
+                                    data-field="projectId"
+                                    required>
+                                </lightning-combobox>
+                            </td>
+                            <td>
+                                <lightning-combobox
+                                    name="task"
+                                    placeholder="Select Task"
+                                    options={row.taskOptions}
+                                    value={row.taskId}
+                                    onchange={handleRowChange}
+                                    data-index={index}
+                                    data-field="taskId"
+                                    required>
+                                </lightning-combobox>
+                            </td>
+                            
+                            <td>
+                                <lightning-combobox
+                                    name="billableType"
+                                    placeholder="Select Type"
+                                    options={billableTypeOptions}
+                                    value={row.billableType}
+                                    onchange={handleRowChange}
+                                    data-index={index}
+                                    data-field="billableType"
+                                    >
+                                </lightning-combobox>
+                            </td>
+                            <td>
+                                <lightning-input
+                                    type="number"
+                                    step="0.25"
+                                    min="0"
+                                    max={dailyCapacity}
+                                    value={row.mon}
+                                    onchange={handleRowChange}
+                                    data-index={index}
+                                    data-field="mon"
+                                    formatter="decimal">
+                                </lightning-input>
+                            </td>
+                            <td>
+                                <lightning-input
+                                    type="number"
+                                    step="0.25"
+                                    min="0"
+                                    max={dailyCapacity}
+                                    value={row.tue}
+                                    onchange={handleRowChange}
+                                    data-index={index}
+                                    data-field="tue"
+                                    formatter="decimal">
+                                </lightning-input>
+                            </td>
+                            <td>
+                                <lightning-input
+                                    type="number"
+                                    step="0.25"
+                                    min="0"
+                                    max={dailyCapacity}
+                                    value={row.wed}
+                                    onchange={handleRowChange}
+                                    data-index={index}
+                                    data-field="wed"
+                                    formatter="decimal">
+                                </lightning-input>
+                            </td>
+                            <td>
+                                <lightning-input
+                                    type="number"
+                                    step="0.25"
+                                    min="0"
+                                    max={dailyCapacity}
+                                    value={row.thu}
+                                    onchange={handleRowChange}
+                                    data-index={index}
+                                    data-field="thu"
+                                    formatter="decimal">
+                                </lightning-input>
+                            </td>
+                            <td>
+                                <lightning-input
+                                    type="number"
+                                    step="0.25"
+                                    min="0"
+                                    max={dailyCapacity}
+                                    value={row.fri}
+                                    onchange={handleRowChange}
+                                    data-index={index}
+                                    data-field="fri"
+                                    formatter="decimal">
+                                </lightning-input>
+                            </td>
+                            <td>
+                                <lightning-input
+                                    type="number"
+                                    step="0.25"
+                                    min="0"
+                                    max={dailyCapacity}
+                                    value={row.sat}
+                                    onchange={handleRowChange}
+                                    data-index={index}
+                                    data-field="sat"
+                                    formatter="decimal">
+                                </lightning-input>
+                            </td>
+                            <td>
+                                <lightning-input
+                                    type="number"
+                                    step="0.25"
+                                    min="0"
+                                    max={dailyCapacity}
+                                    value={row.sun}
+                                    onchange={handleRowChange}
+                                    data-index={index}
+                                    data-field="sun"
+                                    formatter="decimal">
+                                </lightning-input>
+                            </td>
+                            <td class="total-cell">{row.total}</td>
+                            <td>
+                                <lightning-button-icon
+                                    icon-name="utility:delete"
+                                    variant="bare"
+                                    alternative-text="Delete"
+                                    onclick={handleDeleteRow}
+                                    data-index={index}>
+                                </lightning-button-icon>
+                            </td>
+                        </tr>
+                    </template>
+                    
+                    <!-- EMPTY STATE -->
+                    <template if:true={showEmptyState}>
+                        <tr>
+                            <td colspan="13" class="empty-state">
+                                <lightning-icon icon-name="utility:time" size="small"></lightning-icon>
+                                <p>No time logs added. Click "Add Row" to start logging time.</p>
+                            </td>
+                        </tr>
+                    </template>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="11" class="footer-label">
+                            <lightning-button
+                                label="Add Row"
+                                variant="neutral"
+                                onclick={handleAddRow}
+                                class="add-row-btn">
+                            </lightning-button>
+                        </td>
+                        <td class="total-cell"><strong>{grandTotal}</strong></td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="modal-footer">
+        <lightning-button label="Cancel" onclick={handleCancel}></lightning-button>
+        <lightning-button 
+            label="Save & New" 
+            variant="neutral" 
+            onclick={handleSaveAndNew}>
+        </lightning-button>
+        <lightning-button 
+            label="Save" 
+            variant="brand" 
+            onclick={handleSave}>
+        </lightning-button>
+    </footer>
 </template>

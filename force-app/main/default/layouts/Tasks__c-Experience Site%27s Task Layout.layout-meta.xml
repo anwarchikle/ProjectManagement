@@ -68,6 +68,10 @@
                 <behavior>Readonly</behavior>
                 <field>Extra_Hours__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Issue_Bug__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -224,16 +228,6 @@
         <relatedList>Time_Log__c.Tasks__c</relatedList>
     </relatedLists>
     <relatedLists>
-        <fields>NAME</fields>
-        <fields>Issue_Id__c</fields>
-        <fields>Project__c</fields>
-        <fields>Assignee__c</fields>
-        <fields>Due_Date__c</fields>
-        <fields>Status__c</fields>
-        <fields>Flag__c</fields>
-        <relatedList>Issue_Bug__c.Tasks__c</relatedList>
-    </relatedLists>
-    <relatedLists>
         <relatedList>RelatedEntityHistoryList</relatedList>
     </relatedLists>
     <relatedLists>
@@ -245,10 +239,6 @@
         <fields>Resource__c</fields>
         <fields>Allocated_Hours__c</fields>
         <relatedList>Resource_Allocation__c.Task__c</relatedList>
-    </relatedLists>
-    <relatedLists>
-        <fields>NAME</fields>
-        <relatedList>Issue_Mapping__c.Tasks__c</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>

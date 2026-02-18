@@ -150,7 +150,6 @@
     <relatedLists>
         <fields>NAME</fields>
         <fields>Issue_Id__c</fields>
-        <fields>Tasks__c</fields>
         <fields>Assignee__c</fields>
         <fields>Due_Date__c</fields>
         <fields>Status__c</fields>
@@ -160,7 +159,6 @@
     <relatedLists>
         <fields>NAME</fields>
         <fields>Issue_Id__c</fields>
-        <fields>Tasks__c</fields>
         <fields>Assignee__c</fields>
         <fields>Due_Date__c</fields>
         <fields>Status__c</fields>
@@ -184,10 +182,6 @@
     <relatedLists>
         <fields>NAME</fields>
         <relatedList>Tasks__c.Milestone__c</relatedList>
-    </relatedLists>
-    <relatedLists>
-        <fields>NAME</fields>
-        <relatedList>Issue_Mapping__c.Milestone__c</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>

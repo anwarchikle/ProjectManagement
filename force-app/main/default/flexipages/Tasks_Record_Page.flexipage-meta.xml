@@ -75,6 +75,12 @@
                 <identifier>RecordCompletion_Percentage__cField</identifier>
             </fieldInstance>
         </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.Issue_Bug__c</fieldItem>
+                <identifier>RecordIssue_Bug__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
         <name>Facet-1ed5f3b1-0dbf-439b-8186-8ee8a15af235</name>
         <type>Facet</type>
     </flexiPageRegions>

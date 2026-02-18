@@ -1,141 +1,185 @@
 <template>
-    <section class={containerClass}>
-        <div class="modal-container">
-            
-            <!-- ========== ADD TIME LOG COMPONENT (DEFAULT VIEW) ========== -->
-            <template if:true={showAddTimeLog}>
-                <!-- HEADER -->
-                <header class="modal-header">
-                    <div class="header-left">
-                        <lightning-icon icon-name="action:log_event" size="small"
-                            class="slds-m-right_small"></lightning-icon>
-                        <h2 class="slds-text-heading_medium">Add Time Log</h2>
-                    </div>
+    <div class="modal-container slds-scrollable_y">
+        <!-- ========== ADD TIME LOG COMPONENT (DEFAULT VIEW) ========== -->
+        <template if:true={showAddTimeLog}>
+            <!-- HEADER -->
+            <header class="modal-header">
+                <div class="header-left">
+                    <lightning-icon icon-name="action:log_event" size="small" class="slds-m-right_small">
+                    </lightning-icon>
+                    <h2 class="slds-text-heading_medium">Add Time Log</h2>
+                </div>
 
-                    <div class="header-actions">
-                        <!-- Week Logs Button - Switches to Weekly View -->
-                        <lightning-button-icon
-                            icon-name="utility:event"
-                            alternative-text="Weekly time Log"
-                            title="Add Week Logs"
-                            onclick={handleAddWeek}>
-                        </lightning-button-icon>
+                <div class="header-actions">
+                    <!-- Week Logs Button - Switches to Weekly View -->
+                    <lightning-button-icon icon-name="utility:event" alternative-text="Weekly time Log"
+                        title="Weekly time Log" onclick={handleAddWeek}>
+                    </lightning-button-icon>
 
-                        <lightning-button-icon
-                            icon-name="utility:close"
-                            variant="bare"
-                            onclick={handleCancel}
-                            alternative-text="Close">
-                        </lightning-button-icon>
-                    </div>
-                </header>
+                    <lightning-button-icon icon-name="utility:close" variant="bare" onclick={handleCancel}
+                        alternative-text="Close">
+                    </lightning-button-icon>
+                </div>
+            </header>
 
-                <!-- Add Time Log Form -->
-                <lightning-record-edit-form
-                    object-api-name="Time_Log__c"
-                    record-type-id={recordTypeId}
-                    onsubmit={handleSubmit}
-                    onsuccess={handleSuccess}
-                    onerror={handleError}>
+            <!-- Custom Add Time Log Form -->
+            <form class="modal-body">
+                <!-- TIME LOG INFO -->
+                <div class="section">
+                    <div class="section-title">TIME LOG INFORMATION</div>
 
-                    <div class="modal-body">
-                        <!-- TIME LOG INFO -->
-                        <div class="section">
-                            <div class="section-title">TIME LOG INFORMATION</div>
+                    <lightning-layout multiple-rows="true">
+                        <!-- Row 1 -->
+                        <lightning-layout-item size="12" medium-device-size="6" large-device-size="3"
+                            padding="horizontal-small">
+                            <lightning-combobox
+                                name="Projects__c"
+                                label="Project"
+                                value={projectValue}
+                                placeholder="Select Project"
+                                options={projectOptions}
+                                required
+                                onchange={handleProjectChange}
+                                disabled={isProjectLocked}>
+                            </lightning-combobox>
+                        </lightning-layout-item>
 
-                            <div class="grid two-col">
-                                <!-- Project (Auto filled & disabled) -->
-                                <div class="field-group">
-                                    <lightning-input-field 
-                                        field-name="Projects__c"
-                                        value={parentProjectId}
-                                        required>
-                                    </lightning-input-field>
-                                </div>
+                        <lightning-layout-item size="12" medium-device-size="6" large-device-size="3"
+                            padding="horizontal-small">
+                            <lightning-combobox
+                                name="Tasks__c"
+                                label="Task"
+                                value={taskValue}
+                                placeholder="Select Task"
+                                options={taskOptions}
+                                required
+                                onchange={handleTaskChange}
+                                disabled={isTaskLocked}>
+                            </lightning-combobox>
+                        </lightning-layout-item>
 
-                                <!-- Task (Auto filled & disabled) -->
-                                <div class="field-group">
-                                    <lightning-input-field 
-                                        field-name="Tasks__c"
-                                        value={parentTaskId}
-                                        required>
-                                    </lightning-input-field>
-                                </div>
+                        <lightning-layout-item size="12" medium-device-size="6" large-device-size="3"
+                            padding="horizontal-small">
+                            <lightning-input
+                                type="date"
+                                name="Date__c"
+                                label="Date"
+                                value={dateValue}
+                                required
+                                onchange={handleDateChange}>
+                            </lightning-input>
+                        </lightning-layout-item>
 
-                                <!-- Current Date Auto Filled -->
-                                <div class="field-group">
-                                    <lightning-input-field 
-                                        field-name="Date__c"
-                                        value={todayDate}
-                                        required>
-                                    </lightning-input-field>
-                                </div>
+                        <lightning-layout-item size="12" medium-device-size="6" large-device-size="3"
+                            padding="horizontal-small">
+                            <lightning-input 
+                                type="number"
+                                name="Daily_Logs__c"
+                                label="Daily Logs"
+                                value={dailyHours}
+                                min="0"
+                                max={dailyCapacity}
+                                step="0.5"
+                                required
+                                onchange={handleHoursChange}
+                                message-when-range-overflow={hoursValidationMessage}>
+                            </lightning-input>
+                        </lightning-layout-item>
 
-                                <div class="field-group">
-                                    <lightning-input-field field-name="Daily_Logs__c" required>
-                                    </lightning-input-field>
-                                </div>
+                        <!-- Row 2 -->
+                        <lightning-layout-item size="12" medium-device-size="6" large-device-size="3"
+                            padding="horizontal-small">
+                            <lightning-combobox
+                                name="Issue_Bug__c"
+                                label="Issue/Bug"
+                                value={issueBugValue}
+                                placeholder="Select Issue/Bug"
+                                options={issueBugOptions}
+                                onchange={handleIssueBugChange}>
+                            </lightning-combobox>
+                        </lightning-layout-item>
 
-                                <div class="field-group">
-                                    <lightning-input-field field-name="Issue_Bug__c">
-                                    </lightning-input-field>
-                                </div>
+                        <lightning-layout-item size="12" medium-device-size="6" large-device-size="3"
+                            padding="horizontal-small">
+                            <lightning-combobox
+                                name="User__c"
+                                label="User"
+                                value={userValue}
+                                placeholder="Select User"
+                                options={userOptions}
+                                required
+                                onchange={handleUserChange}
+                                disabled={isUserLocked}>
+                            </lightning-combobox>
+                        </lightning-layout-item>
 
-                                <div class="field-group">
-                                    <lightning-input-field 
-                                        field-name="User__c"
-                                        value={loggedInUserId}>
-                                    </lightning-input-field>
-                                </div>
-                                
-                                <div class="field-group">
-                                    <lightning-input-field field-name="General_Log__c">
-                                    </lightning-input-field>
-                                </div>
-                                
-                                <div class="field-group">
-                                    <lightning-input-field field-name="Billable_Type__c">
-                                    </lightning-input-field>
-                                </div>
+                        <lightning-layout-item size="12" medium-device-size="6" large-device-size="3"
+                            padding="horizontal-small">
+                            <lightning-input
+                                type="text"
+                                name="General_Log__c"
+                                label="General Log"
+                                value={generalLogValue}
+                                onchange={handleGeneralLogChange}>
+                            </lightning-input>
+                        </lightning-layout-item>
 
-                                <div></div>
-                            </div>
-                        </div>
+                        <lightning-layout-item size="12" medium-device-size="6" large-device-size="3"
+                            padding="horizontal-small">
+                            <lightning-combobox
+                                name="Billable_Type__c"
+                                label="Billable Type"
+                                value={billableTypeValue}
+                                placeholder="Select Billable Type"
+                                options={billableTypeOptions}
+                                onchange={handleBillableTypeChange}>
+                            </lightning-combobox>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </div>
 
-                        <!-- OTHER INFO -->
-                        <div class="section">
-                            <div class="section-title">OTHER INFORMATION</div>
+                <!-- OTHER INFO -->
+                <div class="section">
+                    <div class="section-title">OTHER INFORMATION</div>
 
-                            <div class="field-group full-width">
-                                <lightning-input-field field-name="Notes__c">
-                                </lightning-input-field>
-                            </div>
-                        </div>
-                    </div>
+                    <lightning-layout multiple-rows="true">
+                        <lightning-layout-item size="12" padding="horizontal-small">
+                            <lightning-textarea
+                                name="Notes__c"
+                                label="Notes"
+                                value={notesValue}
+                                onchange={handleNotesChange}>
+                            </lightning-textarea>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </div>
+            </form>
 
-                    <!-- FOOTER -->
-                    <footer class="modal-footer">
-                        <lightning-button label="Cancel" onclick={handleCancel}></lightning-button>
-                        <lightning-button type="submit" name="saveAndNew" variant="neutral" label="Save & New"></lightning-button>
-                        <lightning-button type="submit" variant="brand" label="Save"></lightning-button>
-                    </footer>
-                </lightning-record-edit-form>
-            </template>
+            <!-- FOOTER -->
+            <footer class="modal-footer">
+                <lightning-button label="Cancel" onclick={handleCancel}></lightning-button>
+                <lightning-button 
+                    label="Save & New" 
+                    variant="brand" 
+                    onclick={handleSaveAndNew}
+                    disabled={isSaving}>
+                </lightning-button>
+                <lightning-button 
+                    label="Save" 
+                    variant="brand" 
+                    onclick={handleSave}
+                    disabled={isSaving}>
+                </lightning-button>
+            </footer>
+        </template>
 
-            <!-- ========== WEEKLY TIME LOG COMPONENT (SECONDARY VIEW) ========== -->
-            <template if:true={showWeeklyLog}>
-                <!-- Weekly Log Header with Back button -->
-                               <!-- Your Weekly Time Log Component -->
-                <c-weekly-time-log-compo
-                    parent-task-id={parentTaskId}
-                    parent-project-id={parentProjectId}
-                    logged-in-user-id={loggedInUserId}
-                    onback={handleBackToAddTimeLog}
-                    onclose={handleCancel}
-                    onswitchtosingle={handleSwitchToSingle}>
-                   </c-weekly-time-log-compo>
-            </template>
-            
-        </div>
-    </section>
+        <!-- ========== WEEKLY TIME LOG COMPONENT (SECONDARY VIEW) ========== -->
+        <template if:true={showWeeklyLog}>
+            <!-- Weekly Log Header with Back button -->
+            <c-weekly-time-log-compo record-id={parentTaskId} project-id={parentProjectId}
+                logged-in-user-id={loggedInUserId} onback={handleBackToAddTimeLog} onclose={handleCancel}
+                onswitchtosingle={handleSwitchToSingle}>
+            </c-weekly-time-log-compo>
+        </template>
+    </div>
 </template>

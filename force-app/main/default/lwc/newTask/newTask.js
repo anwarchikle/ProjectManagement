@@ -43,6 +43,9 @@ export default class NewTask extends NavigationMixin(LightningElement) {
 
     @track billingOptions;
     @track priorityOptions;
+    defaultPriority;
+    billableValue;
+    nonBillableValue;
     todayDate;
 
     allocationModeOptions = [
@@ -103,6 +106,12 @@ export default class NewTask extends NavigationMixin(LightningElement) {
     BillingInfo({ data }) {
         if (data) {
             this.billingOptions = data.values;
+
+            const billable = data.values.find(item => item.label === 'Billable');
+            const nonBillable = data.values.find(item => item.label === 'Non Billable' || item.label === 'Non-Billable');
+
+            this.billableValue = billable ? billable.value : (data.values[0] && data.values[0].value);
+            this.nonBillableValue = nonBillable ? nonBillable.value : this.billableValue;
         }
     }
 
@@ -110,6 +119,18 @@ export default class NewTask extends NavigationMixin(LightningElement) {
     priorityInfo({ data }) {
         if (data) {
             this.priorityOptions = data.values;
+
+            const medium = data.values.find(item => item.label === 'Medium');
+            this.defaultPriority = medium ? medium.value : (data.values[0] && data.values[0].value);
+
+            if (this.defaultPriority && this.tasks && this.tasks.length) {
+                this.tasks = this.tasks.map(task => {
+                    if (!task.priority) {
+                        return { ...task, priority: this.defaultPriority };
+                    }
+                    return task;
+                });
+            }
         }
     }
 
@@ -130,11 +151,12 @@ export default class NewTask extends NavigationMixin(LightningElement) {
             teamMembers: [],
             teamMembersForChild: [],
             workHours: '',
-            priority: '',
-            billingType: '',
+            priority: this.defaultPriority || '',
+            billingType: this.billableValue || '',
             startDate: '',
             endDate: '',
             comments: '',
+            issueBug: null,
             files: [],              // *** ADD THIS ***
             hasFiles: false,        // *** ADD THIS ***
             fileCount: 0,           // *** ADD THIS ***
@@ -154,7 +176,8 @@ export default class NewTask extends NavigationMixin(LightningElement) {
             workHoursReadOnly: true,
             dateColumns: [],
             dayTotals: [],
-            allocationRows: []
+            allocationRows: [],
+            isBillable: true
         };
 
         this.tasks = [...this.tasks, newTask];
@@ -253,6 +276,24 @@ export default class NewTask extends NavigationMixin(LightningElement) {
         this.tasks = this.tasks.map((task, idx) => {
             if (idx === index) {
                 return { ...task, [fieldName]: value };
+            }
+            return task;
+        });
+    }
+
+    handleBillableToggle(event) {
+        const index = parseInt(event.target.dataset.index, 10);
+        const checked = event.target.checked;
+
+        const billingValue = checked ? this.billableValue : this.nonBillableValue || this.billableValue;
+
+        this.tasks = this.tasks.map((task, idx) => {
+            if (idx === index) {
+                return {
+                    ...task,
+                    isBillable: checked,
+                    billingType: billingValue
+                };
             }
             return task;
         });
@@ -763,6 +804,19 @@ getFileIcon(fileType) {
         });
     }
 
+    handleIssueChange(event){
+        debugger;
+        const index = parseInt(event.target.dataset.index, 10);
+        const issueBugId = event.detail?.recordId || null;
+
+        this.tasks = this.tasks.map((task, idx) => {
+            if (idx === index) {
+                return { ...task, issueBug: issueBugId };
+            }
+            return task;
+        });
+    }
+
     handleSave() {
         debugger;
         const isValid = this.validateTasks();
@@ -780,6 +834,7 @@ getFileIcon(fileType) {
                 endDate: task.endDate,
                 workHours: task.workHours,
                 comments: task.comments,
+                issueBug: task.issueBug,
                 files: (task.files || []).map(file => ({
                     fileName: file.name,
                     docId: file.documentId,        // This maps to FileWrapper.docId

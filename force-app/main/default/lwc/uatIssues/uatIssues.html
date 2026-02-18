@@ -1,5 +1,4 @@
 <template>
-
     <lightning-card title="UAT Issues" icon-name="standard:record">
 
         <div class="slds-p-around_small">
@@ -74,11 +73,32 @@
                             <tr key={row.Id}>
                                 <template for:each={row.cells} for:item="cell">
                                     <td key={cell.fieldApiName}>
-                                        <template if:true={cell.isLink}>
-                                            <a href={cell.url} target="_blank">{cell.value}</a>
+                                        <template if:true={cell.isClassification}>
+                                            <template if:true={canEditClassification}>
+                                                <lightning-combobox
+                                                    value={cell.value}
+                                                    options={classificationOptions}
+                                                    data-id={row.Id}
+                                                    data-field={cell.fieldApiName}
+                                                    onchange={handleClassificationChange}>
+                                                </lightning-combobox>
+                                            </template>
+                                            <template if:false={canEditClassification}>
+                                                <template if:true={cell.isLink}>
+                                                    <a href={cell.url} target="_blank">{cell.value}</a>
+                                                </template>
+                                                <template if:false={cell.isLink}>
+                                                    {cell.value}
+                                                </template>
+                                            </template>
                                         </template>
-                                        <template if:false={cell.isLink}>
-                                            {cell.value}
+                                        <template if:false={cell.isClassification}>
+                                            <template if:true={cell.isLink}>
+                                                <a href={cell.url} target="_blank">{cell.value}</a>
+                                            </template>
+                                            <template if:false={cell.isLink}>
+                                                {cell.value}
+                                            </template>
                                         </template>
                                     </td>
                                 </template>
@@ -88,6 +108,12 @@
                 </table>
             </template>
         </div>
+
+        <template if:true={hasDraftValues}>
+            <div class="slds-m-around_small slds-text-align_right">
+                <lightning-button variant="brand" label="Save" onclick={handleSave}></lightning-button>
+            </div>
+        </template>
 
         <!-- PAGINATION -->
         <div class="slds-grid slds-m-around_medium">

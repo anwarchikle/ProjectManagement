@@ -1,30 +1,76 @@
 import { LightningElement, api, track, wire } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { NavigationMixin, CurrentPageReference } from 'lightning/navigation';
-import getTaskWithProject from '@salesforce/apex/TimeLogHelper.getTaskWithProject';
+import { refreshApex } from '@salesforce/apex';
 import USER_ID from '@salesforce/user/Id';
 
-export default class TimeLogForm extends NavigationMixin(LightningElement) {
+
+// Apex imports
+import getTaskWithProject from '@salesforce/apex/TimeLogHelper.getTaskWithProject';
+import getProjects from '@salesforce/apex/TimeLogHelper.getProjects';
+import getTasksByProject from '@salesforce/apex/TimeLogHelper.getTasksByProject';
+import getBillablePicklistValues from '@salesforce/apex/TimeLogHelper.getBillablePicklistValues';
+import getIssueBugPicklistValues from '@salesforce/apex/TimeLogHelper.getIssueBugPicklistValues';
+import getActiveUsers from '@salesforce/apex/TimeLogHelper.getActiveUsers';
+import getDailyCapacityValue from '@salesforce/apex/TimeLogHelper.getDailyCapacityValue';
+import createTimeLog from '@salesforce/apex/TimeLogHelper.createTimeLog';
+
+export default class CreateTimeLogCompo extends NavigationMixin(LightningElement) {
     @api recordTypeId;
     @api recordId;
 
+    // Store wired results for refresh
+    wiredTaskResult;
+
+    // Form field values
+    @track projectValue = '';
+    @track taskValue = '';
+    @track dateValue = '';
+    @track dailyHours = '';
+    @track issueBugValue = '';
+    @track userValue = '';
+    @track generalLogValue = '';
+    @track billableTypeValue = '';
+    @track notesValue = '';
+
+    // Picklist options
+    @track projectOptions = [];
+    @track taskOptions = [];
+    @track userOptions = [];
+    @track issueBugOptions = [];
+    @track billableTypeOptions = [];
+
+    // State variables
     parentTaskId;
     parentProjectId;
     todayDate;
     loggedInUserId = USER_ID;
     isEmbedded = false;
     lockTaskProject = false;
-    
-    // Always start with Add Time Log component
-    @track showAddTimeLog = true;  // Default: Show Add Time Log
-    @track showWeeklyLog = false;  // Default: Hide Weekly Log
+    isSaving = false;
+    dailyCapacity = 16; // Default value, will be updated from custom label via Apex
 
-    get viewClass() {
-    return this.showWeeklyLog 
-        ? 'view slide-left'
-        : 'view slide-right';
-}
+    // View state
+    @track showAddTimeLog = true;
+    @track showWeeklyLog = false;
 
+    // Computed properties for field locking
+    get isProjectLocked() {
+        return this.parentProjectId ? true : false;
+    }
+
+    get isTaskLocked() {
+        return this.parentTaskId ? true : false;
+    }
+
+    get isUserLocked() {
+        return this.loggedInUserId ? true : false;
+    }
+
+    // This uses the dynamically loaded dailyCapacity from Apex
+    get hoursValidationMessage() {
+        return `You cannot log more than ${this.dailyCapacity} hours in a day`;
+    }
 
     /* -----------------------------------------
        GET CONTEXT (RECORD PAGE / RELATED LIST)
@@ -33,31 +79,34 @@ export default class TimeLogForm extends NavigationMixin(LightningElement) {
     wiredPageRef(pageRef) {
         if (!pageRef) return;
 
-        // Component placed on Tasks__c record page
         if (this.recordId) {
             this.parentTaskId = this.recordId;
-            // Reset to default view when component opens
+            if (this.parentTaskId) {
+                this.taskValue = this.parentTaskId;
+            }
             this.resetToDefaultView();
             return;
         }
 
         const state = pageRef.state || {};
 
-        // Related list → New
         if (state.backgroundContext) {
             const bg = state.backgroundContext;
-
             if (bg.includes('/Tasks__c/')) {
                 this.parentTaskId = bg.split('/Tasks__c/')[1].split('/')[0];
+                if (this.parentTaskId) {
+                    this.taskValue = this.parentTaskId;
+                }
             }
         }
 
-        // Explicit param (button override URL)
         if (!this.parentTaskId && state.c__recordId) {
             this.parentTaskId = state.c__recordId;
+            if (this.parentTaskId) {
+                this.taskValue = this.parentTaskId;
+            }
         }
-        
-        // Always reset to default view when component opens
+
         this.resetToDefaultView();
     }
 
@@ -65,9 +114,11 @@ export default class TimeLogForm extends NavigationMixin(LightningElement) {
     wiredPageRef2(pageRef) {
         if (!pageRef) return;
 
-        // If component is placed directly on record page
         if (this.recordId) {
             this.parentTaskId = this.recordId;
+            if (this.parentTaskId) {
+                this.taskValue = this.parentTaskId;
+            }
             this.isEmbedded = true;
             this.resetToDefaultView();
             return;
@@ -77,79 +128,224 @@ export default class TimeLogForm extends NavigationMixin(LightningElement) {
 
         if (state.backgroundContext) {
             const bg = state.backgroundContext;
-
             if (bg.includes('/Tasks__c/')) {
                 this.parentTaskId = bg.split('/Tasks__c/')[1].split('/')[0];
+                if (this.parentTaskId) {
+                    this.taskValue = this.parentTaskId;
+                }
             }
         }
 
         if (!this.parentTaskId && state.c__recordId) {
             this.parentTaskId = state.c__recordId;
+            if (this.parentTaskId) {
+                this.taskValue = this.parentTaskId;
+            }
         }
 
         this.isEmbedded = false;
         this.resetToDefaultView();
     }
 
-    // Method to reset to default view (Add Time Log)
-    resetToDefaultView() {
-        this.showAddTimeLog = true;
-        this.showWeeklyLog = false;
-    }
-
-    get containerClass() {
-        return this.isEmbedded
-            ? 'page-container'
-            : 'modal-backdrop';
-    }
-            
     /* -----------------------------------------
-       FETCH PROJECT FROM TASK
+       LOAD PICKLIST VALUES AND DAILY CAPACITY
     ------------------------------------------*/
-    @wire(getTaskWithProject, { taskId: '$parentTaskId' })
-    wiredTask({ data, error }) {
-        if (data) {
-            this.parentProjectId = data.Associated_Project__c;
-        } else if (error) {
-            console.error('Error fetching project', error);
-        }
-    }
-
     connectedCallback() {
         document.body.style.overflow = 'hidden';
         const today = new Date();
         this.todayDate = today.toISOString().split('T')[0];
-        // Ensure default view when component loads
+        this.dateValue = this.todayDate;
+        
+        // Load all data
+        this.loadAllData();
+        
+        // Set default user
+        if (this.loggedInUserId) {
+            this.userValue = this.loggedInUserId;
+        }
+        
         this.resetToDefaultView();
     }
 
     disconnectedCallback() {
         document.body.style.overflow = '';
     }
-      handleSwitchToSingle() {
-        // Simply switch back to Add Time Log component
+
+    async loadAllData() {
+        await Promise.all([
+            this.loadDailyCapacity(),
+            this.loadPicklistValues(),
+            this.loadProjects(),
+            this.loadUsers()
+        ]);
+    }
+
+    async loadDailyCapacity() {
+        try {
+            const capacity = await getDailyCapacityValue();
+            if (capacity) {
+                this.dailyCapacity = capacity;
+                console.log('Daily capacity loaded:', capacity);
+            }
+        } catch (error) {
+            console.error('Error loading daily capacity:', error);
+        }
+    }
+
+    async loadPicklistValues() {
+        try {
+            const issueBugResult = await getIssueBugPicklistValues();
+            this.issueBugOptions = issueBugResult.map(value => ({ label: value, value: value }));
+
+            const billableResult = await getBillablePicklistValues();
+            this.billableTypeOptions = billableResult.map(value => ({ label: value, value: value }));
+
+            if (!this.billableTypeValue && billableResult.includes('Billable')) {
+            this.billableTypeValue = 'Billable';
+        }
+
+        } catch (error) {
+            console.error('Error loading picklist values:', error);
+        }
+    }
+
+    async loadProjects() {
+        try {
+            const projects = await getProjects();
+            this.projectOptions = projects.map(proj => ({
+                label: proj.Name,
+                value: proj.Id
+            }));
+        } catch (error) {
+            console.error('Error loading projects:', error);
+        }
+    }
+
+    async loadUsers() {
+        try {
+            const users = await getActiveUsers();
+            this.userOptions = users.map(user => ({
+                label: user.Name,
+                value: user.Id
+            }));
+        } catch (error) {
+            console.error('Error loading users:', error);
+        }
+    }
+
+    async loadTasks(projectId) {
+        if (!projectId) return;
+        
+        try {
+            const tasks = await getTasksByProject({ projectId: projectId });
+            this.taskOptions = tasks.map(task => ({
+                label: task.Name,
+                value: task.Id
+            }));
+        } catch (error) {
+            console.error('Error loading tasks:', error);
+        }
+    }
+
+    /* -----------------------------------------
+       FETCH PROJECT FROM TASK
+    ------------------------------------------*/
+    @wire(getTaskWithProject, { taskId: '$parentTaskId' })
+    wiredTask(result) {
+        this.wiredTaskResult = result;
+        const { data, error } = result;
+        
+        if (data) {
+            this.parentProjectId = data.Associated_Project__c;
+            if (this.parentProjectId) {
+                this.projectValue = this.parentProjectId;
+                this.loadTasks(this.parentProjectId);
+            }
+        } else if (error) {
+            console.error('Error fetching project', error);
+        }
+    }
+
+    /* -----------------------------------------
+       FORM HANDLERS
+    ------------------------------------------*/
+    handleProjectChange(event) {
+        this.projectValue = event.detail.value;
+        this.taskValue = '';
+        this.taskOptions = [];
+        if (this.projectValue) {
+            this.loadTasks(this.projectValue);
+        }
+    }
+
+    handleTaskChange(event) {
+        this.taskValue = event.detail.value;
+    }
+
+    handleDateChange(event) {
+        this.dateValue = event.target.value;
+    }
+
+    handleHoursChange(event) {
+        this.dailyHours = event.target.value;
+        
+        const hours = parseFloat(this.dailyHours);
+        if (hours > this.dailyCapacity) {
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Validation Error',
+                    message: this.hoursValidationMessage,
+                    variant: 'warning',
+                    mode: 'dismissable'
+                })
+            );
+        }
+    }
+
+    handleIssueBugChange(event) {
+        this.issueBugValue = event.detail.value;
+    }
+
+    handleUserChange(event) {
+        this.userValue = event.detail.value;
+    }
+
+    handleGeneralLogChange(event) {
+        this.generalLogValue = event.target.value;
+    }
+
+    handleBillableTypeChange(event) {
+        this.billableTypeValue = event.detail.value;
+    }
+
+    handleNotesChange(event) {
+        this.notesValue = event.target.value;
+    }
+
+    /* -----------------------------------------
+       VIEW SWITCHING
+    ------------------------------------------*/
+    resetToDefaultView() {
         this.showAddTimeLog = true;
         this.showWeeklyLog = false;
     }
-      
-    /* -----------------------------------------
-        NAVIGATION & VIEW SWITCHING
-    ------------------------------------------*/
-    // Handle Add Week button click - Switch to Weekly Log
+
     handleAddWeek() {
         this.showAddTimeLog = false;
         this.showWeeklyLog = true;
     }
 
-    // Handle Back button click from Weekly component
     handleBackToAddTimeLog() {
         this.showAddTimeLog = true;
         this.showWeeklyLog = false;
     }
 
-    // Handle Cancel/Close
+    handleSwitchToSingle() {
+        this.showAddTimeLog = true;
+        this.showWeeklyLog = false;
+    }
+
     handleCancel() {
-        // If weekly log is showing, go back to Add Time Log first
         if (this.showWeeklyLog) {
             this.handleBackToAddTimeLog();
         } else {
@@ -158,10 +354,8 @@ export default class TimeLogForm extends NavigationMixin(LightningElement) {
     }
 
     closeAndNavigate() {
-        // Reset view for next time component opens
         this.resetToDefaultView();
         
-        // If opened from Task record page or related list
         if (this.parentTaskId) {
             this[NavigationMixin.Navigate]({
                 type: 'standard__recordPage',
@@ -174,95 +368,192 @@ export default class TimeLogForm extends NavigationMixin(LightningElement) {
             return;
         }
 
-        // If opened globally (App launcher / global action)
         window.history.back();
     }
 
     /* -----------------------------------------
-       SUBMIT
+       REFRESH DATA METHOD
     ------------------------------------------*/
-    handleSubmit(event) {
-        event.preventDefault();
+    async refreshData() {
+        try {
+            console.log('Refreshing data...');
+            
+            // Refresh wired task data
+            if (this.wiredTaskResult) {
+                await refreshApex(this.wiredTaskResult);
+            }
+            
+            // Reload daily capacity
+            await this.loadDailyCapacity();
+            
+            // Reload projects
+            await this.loadProjects();
+            
+            // Reload tasks if project is selected
+            if (this.projectValue) {
+                await this.loadTasks(this.projectValue);
+            }
+            
+            // Reload picklist values
+            await this.loadPicklistValues();
+            
+            // Reload users
+            await this.loadUsers();
+            
+            console.log('Data refreshed. Daily capacity:', this.dailyCapacity);
+            
+        } catch (error) {
+            console.error('Error refreshing data:', error);
+        }
+    }
 
-        const requiredFields =
-            this.template.querySelectorAll('lightning-input-field[required]');
+    /* -----------------------------------------
+       VALIDATION
+    ------------------------------------------*/
+    validateForm() {
         let isValid = true;
+        let errorMessages = [];
 
-        requiredFields.forEach(field => {
-            if (!field.value) {
-                field.reportValidity();
+        if (!this.projectValue) {
+            errorMessages.push('Project is required');
+            isValid = false;
+        }
+
+        if (!this.taskValue) {
+            errorMessages.push('Task is required');
+            isValid = false;
+        }
+
+        if (!this.dateValue) {
+            errorMessages.push('Date is required');
+            isValid = false;
+        }
+
+        if (!this.dailyHours || this.dailyHours === '') {
+            errorMessages.push('Daily Logs is required');
+            isValid = false;
+        } else {
+            const hours = parseFloat(this.dailyHours);
+            if (isNaN(hours) || hours <= 0) {
+                errorMessages.push('Hours must be greater than 0');
+                isValid = false;
+            } else if (hours > this.dailyCapacity) {
+                errorMessages.push(this.hoursValidationMessage);
                 isValid = false;
             }
-        });
+        }
+
+        if (!this.userValue) {
+            errorMessages.push('User is required');
+            isValid = false;
+        }
 
         if (!isValid) {
             this.dispatchEvent(
                 new ShowToastEvent({
                     title: 'Missing Required Fields',
-                    message: 'Please fill all required fields',
+                    message: errorMessages.join('. '),
                     variant: 'error',
                     mode: 'sticky'
                 })
             );
+        }
+
+        return isValid;
+    }
+
+    /* -----------------------------------------
+       SUBMIT HANDLERS - FIXED REFRESH
+    ------------------------------------------*/
+    handleSave() {
+        this.saveTimeLog(false);
+    }
+
+    handleSaveAndNew() {
+        this.saveTimeLog(true);
+    }
+
+    async saveTimeLog(isSaveAndNew) {
+        if (!this.validateForm()) {
             return;
         }
 
-        const fields = event.detail.fields;
+        this.isSaving = true;
 
-        // FORCE Task + Project
-        if (this.parentTaskId) {
-            fields.Tasks__c = this.parentTaskId;
+        try {
+            const timeLog = {
+                Projects__c: this.projectValue,
+                Tasks__c: this.taskValue,
+                Date__c: this.dateValue,
+                Daily_Logs__c: parseFloat(this.dailyHours),
+                User__c: this.userValue,
+                Notes__c: this.notesValue || null,
+                Issue_Bug__c: this.issueBugValue || null,
+                General_Log__c: this.generalLogValue || null,
+                Billable_Type__c: this.billableTypeValue || null
+            };
+
+            const result = await createTimeLog({ timeLog: timeLog });
+
+            if (result && result.Id) {
+                // Show success message
+                this.dispatchEvent(
+                    new ShowToastEvent({
+                        title: 'Success',
+                        message: 'Time Log created successfully',
+                        variant: 'success'
+                    })
+                );
+
+                // REFRESH DATA IMMEDIATELY before any navigation
+                await this.refreshData();
+
+                const recordIdToRefresh = this.parentTaskId || this.recordId;
+               
+                if (isSaveAndNew) {
+                    this.resetForm();
+                } else {
+                    // Small delay to ensure refresh completes before navigation
+                    setTimeout(() => {
+                        this.closeAndNavigate();
+                    }, 100);
+                }
+            }
+
+        } catch (error) {
+            console.error('Error creating time log:', error);
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Error',
+                    message: error.body?.message || error.message || 'Save failed',
+                    variant: 'error',
+                    mode: 'sticky'
+                })
+            );
+        } finally {
+            this.isSaving = false;
         }
-
-        if (this.parentProjectId) {
-            fields.Projects__c = this.parentProjectId;
-        }
-
-        this.template
-            .querySelector('lightning-record-edit-form')
-            .submit(fields);
-    }
-
-    /* -----------------------------------------
-       SUCCESS
-    ------------------------------------------*/
-    handleSuccess(event) {
-        this.dispatchEvent(
-            new ShowToastEvent({
-                title: 'Success',
-                message: 'Time Log created successfully',
-                variant: 'success'
-            })
-        );
-
-        const submitter = event.detail.submitter;
-        if (submitter?.name === 'saveAndNew') {
-            this.resetForm();
-        } else {
-            this.closeAndNavigate();
-        }
-    }
-
-    /* -----------------------------------------
-       ERROR
-    ------------------------------------------*/
-    handleError(event) {
-        this.dispatchEvent(
-            new ShowToastEvent({
-                title: 'Error',
-                message: event.detail?.message || 'Save failed',
-                variant: 'error',
-                mode: 'sticky'
-            })
-        );
     }
 
     resetForm() {
-        const form = this.template.querySelector('lightning-record-edit-form');
-        if (form) {
-            form.reset();
-            // Stay in Add Time Log view
-            this.resetToDefaultView();
+        this.dailyHours = '';
+        this.issueBugValue = '';
+        this.generalLogValue = '';
+        this.billableTypeValue = '';
+        this.notesValue = '';
+        this.dateValue = this.todayDate;
+        this.billableTypeValue = 'Billable';
+        
+        if (!this.isProjectLocked) {
+            this.projectValue = '';
+        }
+        if (!this.isTaskLocked) {
+            this.taskValue = '';
+            this.taskOptions = [];
+        }
+        
+        if (this.loggedInUserId) {
+            this.userValue = this.loggedInUserId;
         }
     }
 }

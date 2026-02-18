@@ -507,6 +507,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
+        <field>Issue_Bug__c.Issue_Iteration__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
         <field>Issue_Bug__c.Release_Milestone__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -547,32 +552,7 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>Issue_Bug__c.Task_List__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Issue_Bug__c.Tasks__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
         <field>Issue_Bug__c.Type__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Issue_Mapping__c.Milestone__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Issue_Mapping__c.Task_List__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Issue_Mapping__c.Tasks__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -967,6 +947,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
+        <field>Task_Owner__c.Role__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
         <field>Task_Owner__c.User__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -1033,6 +1018,11 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>Tasks__c.Is_Current__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Tasks__c.Issue_Bug__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -1187,6 +1177,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
+        <field>Time_Log__c.Rejection_Reason__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
         <field>Time_Log__c.Start_Date__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -1200,6 +1195,10 @@
         <field>Time_Log__c.User__c</field>
         <readable>true</readable>
     </fieldPermissions>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Before_Insert_Update_Role</flow>
+    </flowAccesses>
     <flowAccesses>
         <enabled>false</enabled>
         <flow>General_Milestone_and_Task_List_Creation_On_Project</flow>
@@ -1223,6 +1222,10 @@
     <flowAccesses>
         <enabled>false</enabled>
         <flow>Set_User_Project_Key</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>update_role_from_project_team_member</flow>
     </flowAccesses>
     <layoutAssignments>
         <layout>Account-Account %28Support%29 Layout</layout>
@@ -1445,9 +1448,6 @@
     </layoutAssignments>
     <layoutAssignments>
         <layout>Issue_Bug__c-Issue%2FBug Layout</layout>
-    </layoutAssignments>
-    <layoutAssignments>
-        <layout>Issue_Mapping__c-Issue Mapping Layout</layout>
     </layoutAssignments>
     <layoutAssignments>
         <layout>Lead-Lead %28Support%29 Layout</layout>
@@ -1877,10 +1877,6 @@
         <visibility>DefaultOn</visibility>
     </tabVisibilities>
     <tabVisibilities>
-        <tab>Issue_Mapping__c</tab>
-        <visibility>DefaultOn</visibility>
-    </tabVisibilities>
-    <tabVisibilities>
         <tab>Lightning_App_Page</tab>
         <visibility>DefaultOn</visibility>
     </tabVisibilities>
@@ -1938,6 +1934,10 @@
     </tabVisibilities>
     <tabVisibilities>
         <tab>Team__c</tab>
+        <visibility>DefaultOn</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Time_Log__c</tab>
         <visibility>DefaultOn</visibility>
     </tabVisibilities>
     <tabVisibilities>

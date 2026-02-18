@@ -15,6 +15,16 @@
                 <label>Open</label>
             </value>
             <value>
+                <fullName>Critical</fullName>
+                <default>false</default>
+                <label>Critical</label>
+            </value>
+            <value>
+                <fullName>Blocker</fullName>
+                <default>false</default>
+                <label>Blocker</label>
+            </value>
+            <value>
                 <fullName>In progress</fullName>
                 <default>false</default>
                 <label>In progress</label>
@@ -35,14 +45,9 @@
                 <label>In Retest</label>
             </value>
             <value>
-                <fullName>Blocker</fullName>
+                <fullName>Completed</fullName>
                 <default>false</default>
-                <label>Blocker</label>
-            </value>
-            <value>
-                <fullName>Critical</fullName>
-                <default>false</default>
-                <label>Critical</label>
+                <label>Completed</label>
             </value>
         </valueSetDefinition>
     </valueSet>

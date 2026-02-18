@@ -9,6 +9,7 @@ import getTasksByProject from '@salesforce/apex/TimeLogHelper.getTasksByProject'
 import getBillablePicklistValues from '@salesforce/apex/TimeLogHelper.getBillablePicklistValues';
 import createWeeklyTimeLogs from '@salesforce/apex/TimeLogHelper.createWeeklyTimeLogs';
 import getUserName from '@salesforce/apex/TimeLogHelper.getUserName';
+import getDailyCapacityValue from '@salesforce/apex/TimeLogHelper.getDailyCapacityValue';
 
 export default class WeeklyTimeLogForm extends NavigationMixin(LightningElement) {
     loggedInUserId = USER_ID;
@@ -16,6 +17,10 @@ export default class WeeklyTimeLogForm extends NavigationMixin(LightningElement)
     @api projectId; // Project Id if passed directly
     
     @track timeLogRows = [];
+
+     @api parentTaskId; 
+    @api parentProjectId; 
+    @api loggedInUserId; 
    
 
     projectOptions = [];
@@ -29,6 +34,7 @@ export default class WeeklyTimeLogForm extends NavigationMixin(LightningElement)
     weekEnd = null;
     weekNumber = 0;
     weekRange = '';
+    dailyCapacity = 16;
     
     isEmbedded = false;
     parentTaskId = '';
@@ -126,22 +132,76 @@ export default class WeeklyTimeLogForm extends NavigationMixin(LightningElement)
         }
     }
 
+    async loadDailyCapacity() {
+        try {
+            const capacity = await getDailyCapacityValue();
+            if (capacity) {
+                this.dailyCapacity = capacity;
+                console.log('Weekly daily capacity loaded:', capacity);
+            }
+        } catch (error) {
+            console.error('Error loading daily capacity in weekly component:', error);
+        }
+    }
+
     /* -----------------------------------------
        LIFECYCLE
     ------------------------------------------*/
         connectedCallback() {
-        document.body.style.overflow = 'hidden';
-        this.initializeWeek();
+    document.body.style.overflow = 'hidden';
+    this.initializeWeek();
+    this.loadDailyCapacity();
+    
+    // If we received recordId/projectId from parent, use them
+    if (this.recordId && !this.parentTaskId) {
+        this.parentTaskId = this.recordId;
+    }
+    
+    if (this.projectId && !this.parentProjectId) {
+        this.parentProjectId = this.projectId;
+    }
+    
+    console.log('Received from parent:', {
+        recordId: this.recordId,
+        projectId: this.projectId,
+        parentTaskId: this.parentTaskId,
+        parentProjectId: this.parentProjectId,
+        loggedInUserId: this.loggedInUserId
+    });
+    
+    // Add default row if no rows exist
+    if (this.timeLogRows.length === 0) {
+        this.handleAddRow();
         
-        // Debug: Check if userName is set
-        console.log('Logged in user ID:', this.loggedInUserId);
-        console.log('Logged in user name:', this.loggedInUserName);
-        
-        // Add default row if no rows exist
-        if (this.timeLogRows.length === 0) {
-            this.handleAddRow();
+        // If we have a task, pre-fill it
+        if (this.parentTaskId && this.parentProjectId) {
+            setTimeout(() => {
+                this.prefillTaskAndProject();
+            }, 500);
         }
     }
+}
+
+prefillTaskAndProject() {
+    if (this.timeLogRows.length > 0) {
+        const firstRow = this.timeLogRows[0];
+        firstRow.projectId = this.parentProjectId;
+        
+        // Load tasks for this project
+        this.loadTasksForProject(this.parentProjectId, 0).then(() => {
+            // After tasks are loaded, set the task
+            if (this.timeLogRows[0] && this.timeLogRows[0].taskOptions.length > 0) {
+                const matchingTask = this.timeLogRows[0].taskOptions.find(
+                    task => task.value === this.parentTaskId
+                );
+                if (matchingTask) {
+                    this.timeLogRows[0].taskId = matchingTask.value;
+                }
+            }
+            this.timeLogRows = [...this.timeLogRows];
+        });
+    }
+}
 
     disconnectedCallback() {
         document.body.style.overflow = '';
@@ -298,6 +358,15 @@ export default class WeeklyTimeLogForm extends NavigationMixin(LightningElement)
             } else if (['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'].includes(field)) {
                 // Ensure value is a number
                 value = parseFloat(value) || 0;
+                // Enforce per-day capacity on input
+                if (value > this.dailyCapacity) {
+                    this.showToast(
+                        'Validation Error',
+                        `You cannot log more than ${this.dailyCapacity} hours in a day`,
+                        'error'
+                    );
+                    value = this.dailyCapacity;
+                }
                 this.timeLogRows[index][field] = value;
                 this.calculateRowTotal(index);
             }

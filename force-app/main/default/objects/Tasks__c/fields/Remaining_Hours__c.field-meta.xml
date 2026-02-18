@@ -2,7 +2,7 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Remaining_Hours__c</fullName>
     <externalId>false</externalId>
-    <formula>Work_Hours__c - Logged_Hours__c</formula>
+    <formula>Work_Hours__c -  Actual_Hours__c</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>Remaining Hours</label>
     <precision>18</precision>

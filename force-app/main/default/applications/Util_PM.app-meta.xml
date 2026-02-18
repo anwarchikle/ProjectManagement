@@ -149,8 +149,8 @@
     <tabs>Project_Management</tabs>
     <tabs>Resource_Allocation__c</tabs>
     <tabs>Holiday__c</tabs>
-    <tabs>Issue_Mapping__c</tabs>
     <tabs>Retest</tabs>
+    <tabs>Time_Log__c</tabs>
     <uiType>Lightning</uiType>
     <utilityBar>Util_PM_UtilityBar</utilityBar>
 </CustomApplication>

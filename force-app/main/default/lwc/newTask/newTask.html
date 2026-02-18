@@ -61,6 +61,32 @@
                                 </lightning-input>
                             </div>
 
+
+                            <div class="filter-item">
+                                <c-lwc-custom-lookup 
+                                    unique-name="Project" 
+                                    object-a-p-i-name="Project__c"
+                                    icon-name="standard:asset_object" 
+                                    onprogressvaluechange={handleLookupSelection}
+                                    oncustomlookupupdateevent={handleLookupUpdate} 
+                                    label-for-component="Project"
+                                    place-holder="Select Project">
+                                </c-lwc-custom-lookup>
+                            </div>
+
+                            <div class="filter-item">
+                                <c-lwc-custom-lookup 
+                                    unique-name="Milestone" 
+                                    object-a-p-i-name="Milestone__c"
+                                    icon-name="standard:entity_milestone" 
+                                    onprogressvaluechange={handleLookupSelection}
+                                    where={mileStoneCondition} 
+                                    oncustomlookupupdateevent={handleLookupUpdate}
+                                    label-for-component="Milestone" 
+                                    place-holder="Select Milestone">
+                                </c-lwc-custom-lookup>
+                            </div>
+
                             <div class="slds-col slds-size_1-of-5">
                                 <lightning-record-picker label="Project" object-api-name="Project__c" data-index={index}
                                     value={task.project} onchange={handleProjectChange} required>
@@ -82,42 +108,50 @@
                             </div>
                             <!-- **************************************************** -->
                             <div class="slds-col slds-size_1-of-5">
-                                <c-lwc-multi-lookup label="Team Members" object-name="User" field-name="Email"
-                                    data-index={index} selected-contact-list={task.teamMembersForChild}
-                                    onselected={handleTeamMembersChange} required>
-                                </c-lwc-multi-lookup>
+                                <lightning-record-picker label="Issue Bugs" object-api-name="Issue_Bug__c"
+                                    data-index={index} value={task.issueBug} onchange={handleIssueChange} required>
+                                </lightning-record-picker>
                             </div>
+                            
 
                             <!-- Row 2 -->
 
-                            <div class="slds-col slds-size_1-of-5">
+                            <div class="slds-col slds-size_1-of-8">
                                 <lightning-combobox label="Priority" name="priority" options={priorityOptions}
                                     data-index={index} value={task.priority} onchange={handleComboboxChange} required>
                                 </lightning-combobox>
                             </div>
 
 
+                            <div class="slds-col slds-size_1-of-12 billing-toggle">
+                                <label class="billing-element__label"><span class="billing-required">*</span>Billing Type</label>
+                                <lightning-input class="slds-grid" type="toggle" message-toggle-active="Billable"
+                                    message-toggle-inactive="Non Billable" checked={task.isBillable} data-index={index}
+                                    onchange={handleBillableToggle} >
+                                </lightning-input>
+                            </div>
+ 
                             <div class="slds-col slds-size_1-of-5">
-                                <lightning-combobox label="Billing Type" name="billingType" options={billingOptions}
-                                    data-index={index} value={task.billingType} onchange={handleComboboxChange}
-                                    required>
-                                </lightning-combobox>
+                                <c-lwc-multi-lookup label="Team Members" object-name="User" field-name="Email"
+                                    data-index={index} selected-contact-list={task.teamMembersForChild}
+                                    onselected={handleTeamMembersChange} required>
+                                </c-lwc-multi-lookup>
                             </div>
 
-                            <div class="slds-col slds-size_1-of-5">
+                            <div class="slds-col slds-size_1-of-10">
                                 <lightning-input type="date" label="Start Date" name="startDate" data-index={index}
                                     value={task.startDate} onchange={handleStartDateChange} min={todayDate} required>
                                 </lightning-input>
                             </div>
 
-                            <div class="slds-col slds-size_1-of-5">
+                            <div class="slds-col slds-size_1-of-10">
                                 <lightning-input type="date" label="End Date" name="endDate" data-index={index}
                                     value={task.endDate} onchange={handleEndDateChange} min={task.minEndDate}
                                     disabled={task.endDateDisabled} required>
                                 </lightning-input>
                             </div>
 
-                            <div class="slds-col slds-size_1-of-5">
+                            <div class="slds-col slds-size_1-of-10">
                                 <lightning-input type="number" label="Work Hours" name="workHours" data-index={index}
                                     value={task.workHours} disabled={task.workHoursDisabled}
                                     readonly={task.workHoursReadOnly} onchange={handleWorkHoursManualChange}
@@ -150,12 +184,14 @@
                                                 <h3 class="alloc-title">
                                                     Work Allocation <span class="mode-pill">Flexible</span>
                                                 </h3>
-                                                <span class="slds-text-body_small slds-text-color_weak">Daily baseline: 8h</span>
+                                                <span class="slds-text-body_small slds-text-color_weak">Daily baseline:
+                                                    8h</span>
                                             </div>
                                         </div>
                                         <div class="slds-text-align_right">
                                             <span class="slds-text-title slds-text-color_weak">Total</span>
-                                            <span class="slds-text-heading_small slds-m-left_x-small">{task.workHours}h</span>
+                                            <span
+                                                class="slds-text-heading_small slds-m-left_x-small">{task.workHours}h</span>
                                         </div>
                                     </div>
 
@@ -224,7 +260,8 @@
                                                                                     </lightning-input>
                                                                                 </div>
                                                                                 <div class="cell-bottom">
-                                                                                    <span class={cell.badgeClass}>{cell.percent}</span>
+                                                                                    <span
+                                                                                        class={cell.badgeClass}>{cell.percent}</span>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -270,122 +307,86 @@
 
 
                             <!-- Compact File Preview Section (if files exist) -->
-<!-- Compact File Preview Section (if files exist) with Toggle -->
-<div class="slds-col slds-size_1-of-1 slds-m-top_small" if:true={task.hasFiles}>
-    <div class="slds-box slds-theme_shade">
-        <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-m-bottom_x-small">
-            <h3 class="slds-text-heading_small">
-                <lightning-icon icon-name="utility:attach" size="x-small" class="slds-m-right_xx-small"></lightning-icon>
-                Attached Files ({task.fileCount})
-            </h3>
-            
-            <!-- Toggle Button -->
-<lightning-button-icon 
-    icon-name={task.fileToggleIcon}
-    variant="bare"
-    alternative-text="Toggle Files"
-    title={task.fileToggleTitle}
-    data-index={index}
-    onclick={handleToggleFileSection}
-    class="file-toggle-btn">
-</lightning-button-icon>
-        </div>
-        
-        <!-- Compact File List (conditionally displayed) -->
-        <div class="file-list-compact" if:true={task.isFilesSectionOpen}>
-            <template for:each={task.files} for:item="file">
-                <div key={file.documentId} class="file-item-compact">
-                    <div class="file-info">
-                        <lightning-icon icon-name={file.icon} size="x-small"></lightning-icon>
-                        <span class="file-name" title={file.fileName}>{file.fileName}</span>
-                        <span class="file-size">({file.fileSizeFormatted})</span>
-                    </div>
-                    <div class="file-actions">
-                        <lightning-button-icon 
-                            icon-name="utility:preview" 
-                            variant="bare"
-                            alternative-text="Preview"
-                            title="Preview"
-                            data-index={index}
-                            data-id={file.documentId}
-                            onclick={handlePreviewFile}>
-                        </lightning-button-icon>
-                        <lightning-button-icon 
-                            icon-name="utility:delete" 
-                            variant="bare"
-                            alternative-text="Remove"
-                            title="Remove"
-                            data-index={index}
-                            data-id={file.documentId}
-                            onclick={handleRemoveFile}>
-                        </lightning-button-icon>
-                    </div>
-                </div>
-            </template>
-        </div>
-    </div>
-</div>
+                            <!-- Compact File Preview Section (if files exist) with Toggle -->
+                            <div class="slds-col slds-size_1-of-1 slds-m-top_small" if:true={task.hasFiles}>
+                                <div class="slds-box slds-theme_shade">
+                                    <div
+                                        class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-m-bottom_x-small">
+                                        <h3 class="slds-text-heading_small">
+                                            <lightning-icon icon-name="utility:attach" size="x-small"
+                                                class="slds-m-right_xx-small"></lightning-icon>
+                                            Attached Files ({task.fileCount})
+                                        </h3>
 
-<!-- Row Actions: Upload Files + Toggle (Flexible) + Collapse + Delete -->
-<div class="slds-col slds-size_1-of-1 slds-text-align_right slds-m-top_medium row-actions">
-    
-    <!-- File Upload Button -->
-<lightning-button 
-    variant="neutral" 
-    label="Upload Files"
-    icon-name="utility:upload"
-    data-index={index}
-    onclick={handleUploadClick}
-    class="slds-m-right_x-small">
-</lightning-button>
+                                        <!-- Toggle Button -->
+                                        <lightning-button-icon icon-name={task.fileToggleIcon} variant="bare"
+                                            alternative-text="Toggle Files" title={task.fileToggleTitle}
+                                            data-index={index} onclick={handleToggleFileSection}
+                                            class="file-toggle-btn">
+                                        </lightning-button-icon>
+                                    </div>
 
-<!-- Hidden File Input -->
-    <input 
-    type="file" 
-    multiple 
-    accept=".csv,.doc,.docx,.xls,.xlsx,.pdf,.png,.jpg,.jpeg,.gif,.txt,.zip"
-    data-index={index}
-    onchange={handleFileSelect}
-    class="file-input-hidden"
-    style="display: none;">
+                                    <!-- Compact File List (conditionally displayed) -->
+                                    <div class="file-list-compact" if:true={task.isFilesSectionOpen}>
+                                        <template for:each={task.files} for:item="file">
+                                            <div key={file.documentId} class="file-item-compact">
+                                                <div class="file-info">
+                                                    <lightning-icon icon-name={file.icon}
+                                                        size="x-small"></lightning-icon>
+                                                    <span class="file-name" title={file.fileName}>{file.fileName}</span>
+                                                    <span class="file-size">({file.fileSizeFormatted})</span>
+                                                </div>
+                                                <div class="file-actions">
+                                                    <lightning-button-icon icon-name="utility:preview" variant="bare"
+                                                        alternative-text="Preview" title="Preview" data-index={index}
+                                                        data-id={file.documentId} onclick={handlePreviewFile}>
+                                                    </lightning-button-icon>
+                                                    <lightning-button-icon icon-name="utility:delete" variant="bare"
+                                                        alternative-text="Remove" title="Remove" data-index={index}
+                                                        data-id={file.documentId} onclick={handleRemoveFile}>
+                                                    </lightning-button-icon>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </div>
+                            </div>
 
-    <!-- Flexible / Standard Allocation Toggle -->
-    <lightning-button-stateful 
-        class="alloc-toggle slds-m-right_x-small"
-        selected={task.isAllocOpen} 
-        label-when-off="Allocate Flexible Hour"
-        label-when-on="Allocate Standard Hour" 
-        icon-name-when-off="utility:chevrondown"
-        icon-name-when-on="utility:chevronup" 
-        variant="brand-outline" 
-        data-index={index}
-        onclick={handleToggleAlloc}>
-    </lightning-button-stateful>
+                            <!-- Row Actions: Upload Files + Toggle (Flexible) + Collapse + Delete -->
+                            <div class="slds-col slds-size_1-of-1 slds-text-align_right slds-m-top_medium row-actions">
 
-    <!-- Collapse/Expand Toggle -->
-    <lightning-button-stateful 
-        class="slds-m-right_x-small" 
-        selected={task.isExpanded}
-        label-when-off="Expand Section" 
-        label-when-on="Collapse Section"
-        icon-name-when-off="utility:chevrondown" 
-        icon-name-when-on="utility:chevronup"
-        variant="brand-outline" 
-        data-index={index} 
-        onclick={handleCollapsedToggle}>
-    </lightning-button-stateful>
+                                <!-- File Upload Button -->
+                                <lightning-button variant="neutral" label="Upload Files" icon-name="utility:upload"
+                                    data-index={index} onclick={handleUploadClick} class="slds-m-right_x-small">
+                                </lightning-button>
 
-    <!-- Delete button -->
-    <lightning-button 
-        variant="destructive" 
-        icon-name="utility:delete" 
-        data-id={task.id} 
-        style="margin-top: 15px;"
-        onclick={deleteRow} 
-        disabled={isDeleteDisabled} 
-        title="Remove Task">
-    </lightning-button>
-</div>
+                                <!-- Hidden File Input -->
+                                <input type="file" multiple
+                                    accept=".csv,.doc,.docx,.xls,.xlsx,.pdf,.png,.jpg,.jpeg,.gif,.txt,.zip"
+                                    data-index={index} onchange={handleFileSelect} class="file-input-hidden"
+                                    style="display: none;">
+
+                                <!-- Flexible / Standard Allocation Toggle -->
+                                <lightning-button-stateful class="alloc-toggle slds-m-right_x-small"
+                                    selected={task.isAllocOpen} label-when-off="Allocate Flexible Hour"
+                                    label-when-on="Allocate Standard Hour" icon-name-when-off="utility:chevrondown"
+                                    icon-name-when-on="utility:chevronup" variant="brand-outline" data-index={index}
+                                    onclick={handleToggleAlloc}>
+                                </lightning-button-stateful>
+
+                                <!-- Collapse/Expand Toggle -->
+                                <lightning-button-stateful class="slds-m-right_x-small" selected={task.isExpanded}
+                                    label-when-off="Expand Section" label-when-on="Collapse Section"
+                                    icon-name-when-off="utility:chevrondown" icon-name-when-on="utility:chevronup"
+                                    variant="brand-outline" data-index={index} onclick={handleCollapsedToggle}>
+                                </lightning-button-stateful>
+
+                                <!-- Delete button -->
+                                <lightning-button variant="destructive" icon-name="utility:delete" data-id={task.id}
+                                    style="margin-top: 15px;" onclick={deleteRow} disabled={isDeleteDisabled}
+                                    title="Remove Task">
+                                </lightning-button>
+                            </div>
                         </div>
                     </template>
                 </div>

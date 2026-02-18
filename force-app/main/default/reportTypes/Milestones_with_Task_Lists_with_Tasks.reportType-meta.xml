@@ -335,6 +335,11 @@
             <field>Extra_Hours__c</field>
             <table>Milestone__c.Task_Lists__r.Tasks__r</table>
         </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Issue_Bug__c</field>
+            <table>Milestone__c.Task_Lists__r.Tasks__r</table>
+        </columns>
         <masterLabel>Tasks</masterLabel>
     </sections>
 </ReportType>

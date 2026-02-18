@@ -20,18 +20,18 @@
     background: #fbfafa;
     border-radius: 12px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-    width: 90%;
-    max-width: 1100px;
-    max-height: 90vh;
-    overflow: hidden;
+    width: 98%;
+    max-width: 1450px;  /* Changed from 1100px to 1400px */
+    max-height: 100%;
+    
     display: flex;
     flex-direction: column;
     margin: 0 auto;
-    position: relative;
     animation: slideIn 0.25s ease;
     transform-style: preserve-3d;
     animation: flipOpen 0.45s ease-out;
 }
+
 
 /* ================================
    NORMAL PAGE CONTAINER (Record Page)
@@ -207,10 +207,10 @@
 .modal-footer lightning-button {
     --slds-c-button-neutral-color-background: white;
     --slds-c-button-neutral-color-border: #dddbda;
-    --slds-c-button-brand-color-background: #25683e;
-    --slds-c-button-brand-color-border: #25683e;
-    --slds-c-button-brand-color-background-hover: #1a4f2e;
-    --slds-c-button-brand-color-border-hover: #1a4f2e;
+    --slds-c-button-brand-color-background: #185fed;
+    --slds-c-button-brand-color-border: #0176d3;
+    --slds-c-button-brand-color-background-hover: #0176d3;
+    --slds-c-button-brand-color-border-hover: #0176d3;
 }
 
 /* Cancel button - move slightly left */

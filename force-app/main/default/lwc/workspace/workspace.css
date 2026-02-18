@@ -154,7 +154,7 @@ lightning-combobox {
     right: 0;
     height: 2px;
     background: linear-gradient(90deg, var(--color-primary), var(--color-primary-light));
-    z-index: 5;
+    z-index: 4;
 
 }
 
@@ -198,7 +198,7 @@ lightning-combobox {
 .tree-table thead {
     position: sticky;
     top: 0;
-    z-index: 10;
+    z-index: 4;
     background: linear-gradient(180deg, var(--color-gray-800) 0%, var(--color-gray-700) 100%);
 }
 
@@ -472,7 +472,7 @@ lightning-button-icon[icon-name="utility:adduser"]:hover {
 .gantt-table thead {
     position: sticky;
     top: 0;
-    z-index: 10;
+    z-index: 4;
 }
 
 .gantt-table thead th {

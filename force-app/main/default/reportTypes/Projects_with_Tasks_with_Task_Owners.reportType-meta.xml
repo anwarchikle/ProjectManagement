@@ -332,6 +332,11 @@
             <field>Extra_Hours__c</field>
             <table>Project__c.Tasks__r</table>
         </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Issue_Bug__c</field>
+            <table>Project__c.Tasks__r</table>
+        </columns>
         <masterLabel>Tasks</masterLabel>
     </sections>
     <sections>
@@ -378,6 +383,11 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>Is_Current__c</field>
+            <table>Project__c.Tasks__r.Task_Owners__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Role__c</field>
             <table>Project__c.Tasks__r.Task_Owners__r</table>
         </columns>
         <masterLabel>Task Owners</masterLabel>

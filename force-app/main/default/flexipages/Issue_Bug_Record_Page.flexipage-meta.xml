@@ -68,26 +68,6 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Task_List__c</fieldItem>
-                <identifier>RecordTask_List_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>required</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Tasks__c</fieldItem>
-                <identifier>RecordTasks_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
                 <fieldItem>Record.Retest_Status__c</fieldItem>
                 <identifier>RecordRetest_Status__cField</identifier>
             </fieldInstance>
@@ -100,6 +80,16 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.Retest_Result__c</fieldItem>
                 <identifier>RecordRetest_Result__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Issue_Iteration__c</fieldItem>
+                <identifier>RecordIssue_Iteration__cField</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-44b8a1a8-f1f6-4a75-83ad-20ed2f87ae93</name>

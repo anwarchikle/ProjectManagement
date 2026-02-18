@@ -10,13 +10,21 @@
         <div class="toolbar">
             <lightning-combobox name="listview" label="List View" value={selectedListView} placeholder="All"
                 options={listViewOptions} onchange={handleListViewChange}></lightning-combobox>
-            <lightning-input type="search" variant="label-hidden" label="Search" placeholder="Search tasks..."
+            <lightning-input type="search"  label="Search" placeholder="Search tasks..."
                 value={searchKey} onchange={handleSearchChange}></lightning-input>
-            <div class="toolbar-meta">
+            <lightning-button
+                class="new-task-btn slds-m-left_small"
+                label="New Task"
+                icon-name="utility:add"
+                icon-position="left"
+                variant="brand"
+                onclick={handleAdd}>
+            </lightning-button>
+            <!-- <div class="toolbar-meta">
                 <span class="meta-text">{visibleCount} tasks</span>
                 <lightning-button class="export-btn" label="Export PDF" icon-name="utility:download" variant="neutral"
                     onclick={exportToPdf}></lightning-button>
-            </div>
+            </div> -->
         </div>
         <!-- ================== -->
         <!-- KANBAN VIEW -->
@@ -47,7 +55,7 @@
         <!-- ================== -->
         <!-- EXPORT PDF DIALOG -->
         <!-- ================== -->
-        <template if:true={showExportDialog}>
+        <!-- <template if:true={showExportDialog}>
             <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="export-dialog-heading" class="slds-modal slds-fade-in-open">
                 <div class="slds-modal__container">
                     <header class="slds-modal__header">
@@ -73,7 +81,7 @@
                 </div>
             </section>
             <div class="slds-backdrop slds-backdrop_open"></div>
-        </template>
+        </template> -->
     </lightning-card>
 
 </template>

@@ -6,6 +6,7 @@
     <excludeButtons>Clone</excludeButtons>
     <excludeButtons>Delete</excludeButtons>
     <excludeButtons>Edit</excludeButtons>
+    <excludeButtons>OpenSlackRecordChannel</excludeButtons>
     <excludeButtons>PrintableView</excludeButtons>
     <excludeButtons>Submit</excludeButtons>
     <layoutSections>
@@ -28,14 +29,6 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Task_List__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Tasks__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>Environment__c</field>
             </layoutItems>
             <layoutItems>
@@ -45,6 +38,10 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>SLA__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Issue_Iteration__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
@@ -258,7 +255,6 @@
         <fields>NAME</fields>
         <fields>Issue_Id__c</fields>
         <fields>Project__c</fields>
-        <fields>Tasks__c</fields>
         <fields>Assignee__c</fields>
         <fields>Due_Date__c</fields>
         <fields>Status__c</fields>
@@ -267,7 +263,7 @@
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
-        <relatedList>Issue_Mapping__c.Issue_Bug__c</relatedList>
+        <relatedList>Tasks__c.Issue_Bug__c</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>
