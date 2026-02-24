@@ -1,5 +1,5 @@
 <template>
-    <lightning-card  title="Tag Project Team Member" icon-name="standard:team_member">
+    <lightning-card title="Tag Project Team Member" icon-name="standard:team_member">
         <div class="slds-p-around_medium">
 
             <!-- Label -->
@@ -9,46 +9,34 @@
 
             <!-- Search Box -->
             <div class="search-box">
-                <lightning-icon
-                    icon-name="utility:search"
-                    size="x-small"
-                    class="search-icon">
+                <lightning-icon icon-name="utility:search" size="x-small" class="search-icon">
                 </lightning-icon>
 
-                <input
-                    type="text"
-                    class="search-input"
-                    placeholder="Search team members..."
-                    value={searchTerm}
+                <input type="text" class="search-input" placeholder="Search team members..." value={searchTerm}
                     onkeyup={handleKeyUp} />
             </div>
 
-            <!-- Search Results -->
+            <!-- Search Results (main screen, hidden when modal open) -->
             <template if:true={users.length}>
-                <div class="results-box">
-                    <template for:each={users} for:item="user">
-                        <div
-                            key={user.Id}
-                            class="result-item"
-                            data-id={user.Id}
-                            data-name={user.Name}
-                            onmousedown={handleUserSelect}>
+                <template if:false={isAllocationStep}>
+                    <div class="results-box">
+                        <template for:each={users} for:item="user">
+                            <div key={user.Id} class="result-item" data-id={user.Id} data-name={user.Name}
+                                onmousedown={handleUserSelect}>
 
-                            <!-- Avatar (NO JS / NO expression call) -->
-                            <div class="avatar">
-                                <lightning-icon
-                                    icon-name="standard:user"
-                                    size="x-small">
-                                </lightning-icon>
+                                <div class="avatar">
+                                    <lightning-icon icon-name="standard:user" size="x-small">
+                                    </lightning-icon>
+                                </div>
+
+                                <div class="user-info">
+                                    <div class="name">{user.Name}</div>
+                                </div>
+
                             </div>
-
-                            <div class="user-info">
-                                <div class="name">{user.Name}</div>
-                            </div>
-
-                        </div>
-                    </template>
-                </div>
+                        </template>
+                    </div>
+                </template>
             </template>
 
             <!-- Selected Users -->
@@ -57,10 +45,7 @@
                     <template for:each={selectedUsers} for:item="user">
                         <span key={user.Id} class="selected-pill">
                             {user.Name}
-                            <button
-                                class="pill-close"
-                                name={user.Id}
-                                onclick={handleRemoveUser}>
+                            <button class="pill-close" name={user.Id} onclick={handleRemoveUser}>
                                 ×
                             </button>
                         </span>
@@ -68,14 +53,73 @@
                 </div>
             </template>
 
-            <!-- Assign Button -->
-            <button
-                class="assign-btn"
-                onclick={handleAssign}
-                disabled={disableAssignButton}>
-                Assign Project Team
-            </button>
-
         </div>
+
+        <!-- Allocation Section -->
+        <template if:true={isAllocationStep}>
+            <div class="slds-p-around_medium">
+                <h2 class="slds-text-heading_medium slds-m-bottom_small">Allocation Details</h2>
+
+                <!-- Allocation table -->
+                <div class="slds-table_responsive">
+                    <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                        <thead>
+                            <tr class="slds-line-height_reset">
+                                <th scope="col">
+                                    <div class="slds-truncate">User</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate">Role</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate">Rate / Hour</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate">Allocation %</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate">Active</div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={userDetails} for:item="detail">
+                                <tr key={detail.userId} class="slds-hint-parent">
+                                    <td data-label="User">
+                                        <div class="slds-truncate">{detail.name}</div>
+                                    </td>
+                                    <td data-label="Role" style="margin-top: -20px;">
+                                        <lightning-combobox name="role" data-id={detail.userId} value={detail.role}
+                                            options={roleOptions} onchange={handleRoleChange}>
+                                        </lightning-combobox>
+                                    </td>
+                                    <td data-label="Rate / Hour">
+                                        <input type="number" class="slds-input" data-id={detail.userId}
+                                            value={detail.ratePerHour} onchange={handleRateChange} />
+                                    </td>
+                                    <td data-label="Allocation %">
+                                        <input type="number" class="slds-input" min="0" max="100"
+                                            data-id={detail.userId} value={detail.allocationPercent}
+                                            onchange={handleAllocationChange} />
+                                    </td>
+                                    <td data-label="Active">
+                                        <lightning-input type="checkbox" variant="label-hidden"
+                                            data-id={detail.userId} checked={detail.isActive}
+                                            onchange={handleActiveChange}></lightning-input>
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="slds-m-top_medium slds-text-align_right">
+                    <button class="slds-button slds-button_neutral" onclick={handleCancelAllocations}>Cancel</button>
+                    <button class="slds-button slds-button_brand slds-m-left_small" onclick={handleSaveAllocations}
+                        disabled={disableSaveButton}>Save Project Team</button>
+                </div>
+            </div>
+        </template>
+
     </lightning-card>
 </template>

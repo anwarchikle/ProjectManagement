@@ -143,6 +143,10 @@
             <section>Task Information</section>
         </sections>
     </layouts>
+    <quickActions>
+        <label><!-- Edit Tasks --></label>
+        <name>Edit</name>
+    </quickActions>
     <recordTypes>
         <label><!-- Admin --></label>
         <name>Admin</name>

@@ -73,9 +73,5 @@
         <info>&lt;p&gt;Project is in post-delivery support phase.&lt;/p&gt;&lt;p&gt;Only maintenance or issue resolution activities are ongoing.&lt;/p&gt;</info>
         <picklistValueName>Support</picklistValueName>
     </pathAssistantSteps>
-    <pathAssistantSteps>
-        <info>&lt;p&gt;Project is billed based on time and effort spent.&lt;/p&gt;&lt;p&gt;Costs are tracked against actual work hours.&lt;/p&gt;</info>
-        <picklistValueName>T&amp;M</picklistValueName>
-    </pathAssistantSteps>
     <recordTypeName>__MASTER__</recordTypeName>
 </PathAssistant>

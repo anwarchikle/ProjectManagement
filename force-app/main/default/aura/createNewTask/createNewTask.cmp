@@ -1,8 +1,14 @@
-<aura:component implements="lightning:isUrlAddressable,force:hasRecordId,lightning:actionOverride" access="global" >
+<aura:component implements="lightning:isUrlAddressable,force:hasRecordId,lightning:actionOverride" access="global">
     <aura:attribute name="recordId" type="String" />
     <aura:attribute name="parentRecordId" type="String" />
     <aura:attribute name="parentObjectApiName" type="String" />
+    <aura:attribute name="isCommunity" type="Boolean" default="false" />
+
     <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
-    <!-- Pass both parent id and object api name to the LWC -->
-	<c:newTask recordId="{!v.parentRecordId}" parent-object="{!v.parentObjectApiName}"/>
+
+    <!-- For internal users we still render the LWC inline.
+         For Experience Site users, controller opens a new tab and this body is never used. -->
+    <aura:if isTrue="{!not(v.isCommunity)}">
+        <c:newTask recordId="{!v.parentRecordId}" parent-object="{!v.parentObjectApiName}"/>
+    </aura:if>
 </aura:component>

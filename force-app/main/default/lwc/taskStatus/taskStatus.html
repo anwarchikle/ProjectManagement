@@ -1,0 +1,62 @@
+<template>
+    <div class="task-status-container">
+        <template if:true={loading}>
+            <div class="loading-spinner"></div>
+        </template>
+        
+        <template if:false={loading}>
+            <template if:true={error}>
+                <div class="error-message">
+                    <lightning-icon icon-name="utility:error" size="small"></lightning-icon>
+                    <span>Error loading tasks</span>
+                </div>
+            </template>
+            
+            <template if:false={error}>
+                <!-- Header -->
+                <div class="task-header">
+                    <h3 class="task-title">Task Status</h3>
+                    <span class="task-count">Total: {totalTasks}</span>
+                </div>
+
+                <!-- Status Cards -->
+                <div class="status-grid">
+                    <template for:each={displayStats} for:item="stat">
+                        <div key={stat.label} class="status-card" style={stat.color}>
+                            <div class="status-label">{stat.label}</div>
+                            <div class="status-value">{stat.value}</div>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- Recent Tasks -->
+                <template if:true={hasTasks}>
+                    <div class="recent-tasks">
+                        <h4 class="recent-title">Recent Tasks</h4>
+                        <template for:each={recentTasks} for:item="task">
+                            <div key={task.Id} class="task-item">
+                                <lightning-icon 
+                                    icon-name={task.iconName} 
+                                    size="x-small"
+                                    class="task-icon">
+                                </lightning-icon>
+                                <span class="task-subject">{task.Subject}</span>
+                                <span class="task-due-date" if:true={task.ActivityDate}>
+                                    {task.formattedDate}
+                                </span>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+
+                <!-- Empty State -->
+                <template if:false={hasTasks}>
+                    <div class="empty-state">
+                        <lightning-icon icon-name="utility:task" size="small"></lightning-icon>
+                        <span>No tasks found</span>
+                    </div>
+                </template>
+            </template>
+        </template>
+    </div>
+</template>

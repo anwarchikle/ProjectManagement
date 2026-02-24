@@ -1,0 +1,54 @@
+.folder {
+    cursor: pointer;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.folder span {
+    margin-left: 10px;
+}
+
+.slds-modal__container {
+    width: 50%;
+    max-width: 40rem;
+}
+
+.slds-backdrop_open {
+    display: block;
+}
+
+.slds-list_dotted {
+    list-style: dotted;
+    padding-left: 20px;
+}
+
+.slds-item {
+    cursor: pointer;
+    margin: 5px 0;
+}
+
+.slds-modal__footer {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.slds-button_neutral,
+.slds-button_brand,
+.slds-button_destructive {
+    margin-left: 10px;
+}
+
+.slds-modal__container {
+    max-width: 80%;
+}
+
+iframe {
+    border: none;
+}
+
+.uploaded-image {
+    max-width: 100%;
+    display: block;
+    margin: 0 auto; /* Center the image horizontally */
+}

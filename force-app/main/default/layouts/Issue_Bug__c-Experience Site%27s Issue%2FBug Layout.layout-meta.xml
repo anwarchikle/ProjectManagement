@@ -6,7 +6,6 @@
     <excludeButtons>Clone</excludeButtons>
     <excludeButtons>Delete</excludeButtons>
     <excludeButtons>Edit</excludeButtons>
-    <excludeButtons>OpenSlackRecordChannel</excludeButtons>
     <excludeButtons>PrintableView</excludeButtons>
     <excludeButtons>Submit</excludeButtons>
     <layoutSections>
@@ -42,6 +41,26 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Issue_Iteration__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Retesting_Count__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Decision__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Reason_For_Rejected__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Task_List__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Retest_Fixed_Count__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
@@ -150,12 +169,7 @@
         <detailHeading>true</detailHeading>
         <editHeading>true</editHeading>
         <label>Parent Issue/Bugs</label>
-        <layoutColumns>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Issue_Bug__c</field>
-            </layoutItems>
-        </layoutColumns>
+        <layoutColumns/>
         <style>OneColumn</style>
     </layoutSections>
     <layoutSections>
@@ -240,26 +254,28 @@
             <sortOrder>9</sortOrder>
         </platformActionListItems>
     </platformActionList>
-    <relatedLists>
-        <fields>NAME</fields>
-        <fields>Projects__c</fields>
-        <fields>Tasks__c</fields>
-        <fields>User__c</fields>
-        <fields>Billable_Type__c</fields>
-        <relatedList>Time_Log__c.Issue_Bug__c</relatedList>
-    </relatedLists>
+    <quickActionList>
+        <quickActionListItems>
+            <quickActionName>FeedItem.TextPost</quickActionName>
+        </quickActionListItems>
+        <quickActionListItems>
+            <quickActionName>FeedItem.ContentPost</quickActionName>
+        </quickActionListItems>
+        <quickActionListItems>
+            <quickActionName>FeedItem.MobileSmartActions</quickActionName>
+        </quickActionListItems>
+        <quickActionListItems>
+            <quickActionName>FeedItem.LinkPost</quickActionName>
+        </quickActionListItems>
+        <quickActionListItems>
+            <quickActionName>FeedItem.PollPost</quickActionName>
+        </quickActionListItems>
+        <quickActionListItems>
+            <quickActionName>FeedItem.QuestionPost</quickActionName>
+        </quickActionListItems>
+    </quickActionList>
     <relatedLists>
         <relatedList>RelatedNoteList</relatedList>
-    </relatedLists>
-    <relatedLists>
-        <fields>NAME</fields>
-        <fields>Issue_Id__c</fields>
-        <fields>Project__c</fields>
-        <fields>Assignee__c</fields>
-        <fields>Due_Date__c</fields>
-        <fields>Status__c</fields>
-        <fields>Flag__c</fields>
-        <relatedList>Issue_Bug__c.Issue_Bug__c</relatedList>
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>

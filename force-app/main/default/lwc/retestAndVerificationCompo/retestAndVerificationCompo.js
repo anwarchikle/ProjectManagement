@@ -6,6 +6,8 @@ import { getListUi } from 'lightning/uiListApi';
 import ISSUE_BUG_OBJECT from '@salesforce/schema/Issue_Bug__c';
 import getRetestQueue from '@salesforce/apex/RetestController.getRetestQueue';
 import updateRetestStatus from '@salesforce/apex/RetestController.updateRetestStatus';
+import getRetestFixedCountForCurrentUserOrAdmin
+    from '@salesforce/apex/RetestController.getRetestFixedCountForCurrentUserOrAdmin';
 
 export default class RetestAndVerificationCompo extends NavigationMixin(LightningElement) {
     
@@ -258,6 +260,16 @@ export default class RetestAndVerificationCompo extends NavigationMixin(Lightnin
     handlePreviousPage() {
         if (this.previousPageToken) {
             this.pageToken = this.previousPageToken;
+        }
+    }
+
+        @wire(getRetestFixedCountForCurrentUserOrAdmin)
+    wiredRetestFixedCount({ data, error }) {
+        if (data !== undefined) {
+            // This will drive the "Retesting Fixed" card
+            this.fixedCount = data;
+        } else if (error) {
+            console.error('Error loading Retest Fixed count', error);
         }
     }
 

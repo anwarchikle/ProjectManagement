@@ -35,5 +35,17 @@
             <targetType>ExperienceVariation</targetType>
             <targetValue>Default_Theme_Navigation_Menu_Component_Properties</targetValue>
         </target>
+        <target>
+            <groupName>3ac65204-25bb-44db-bd74-3aa13bd40ecc$#$a2037069-f8c4-468e-bbf5-a42827f90a9b</groupName>
+            <priority>1</priority>
+            <targetType>ExperienceVariation</targetType>
+            <targetValue>Project_Detail_Tag_Project_Team_Component</targetValue>
+        </target>
+        <target>
+            <groupName>b91def35-0bf9-4c36-9aa7-aaa633e82165$#$a05b2e4f-bb36-4c5d-9170-4c73e430ca91</groupName>
+            <priority>1</priority>
+            <targetType>ExperienceVariation</targetType>
+            <targetValue>Tasks_Detail_tagTaskOners_Component</targetValue>
+        </target>
     </targets>
 </Audience>

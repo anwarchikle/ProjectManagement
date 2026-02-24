@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PathAssistant xmlns="http://soap.sforce.com/2006/04/metadata">
+    <active>true</active>
+    <entityName>Time_Log__c</entityName>
+    <fieldName>Approval_status__c</fieldName>
+    <masterLabel>Time Log Path</masterLabel>
+    <recordTypeName>__MASTER__</recordTypeName>
+</PathAssistant>

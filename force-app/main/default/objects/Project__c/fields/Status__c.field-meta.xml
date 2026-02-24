@@ -66,11 +66,6 @@
                 <label>Invoiced</label>
             </value>
             <value>
-                <fullName>T&amp;M</fullName>
-                <default>false</default>
-                <label>T&amp;M</label>
-            </value>
-            <value>
                 <fullName>Support</fullName>
                 <default>false</default>
                 <label>Support</label>

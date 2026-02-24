@@ -23,10 +23,6 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Issue_Bug__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>General_Log__c</field>
             </layoutItems>
             <layoutItems>

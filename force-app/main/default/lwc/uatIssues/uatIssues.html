@@ -45,11 +45,18 @@
                 </lightning-layout-item>
 
                 <lightning-layout-item size="2" padding="horizontal-small">
+                    <lightning-combobox label="Project" value={selectedProject} options={projectOptions}
+                        onchange={handleProjectFilter}>
+                    </lightning-combobox>
+                </lightning-layout-item>
+
+                <lightning-layout-item size="2" padding="horizontal-small">
                     <lightning-combobox label="Page Size" value={pageSize} options={pageSizeOptions}
                         onchange={handlePageSizeChange}>
                     </lightning-combobox>
                 </lightning-layout-item>
-                <lightning-layout-item size="2" padding="horizontal-small">
+
+                <lightning-layout-item size="1" padding="horizontal-small">
                     <lightning-button-icon icon-name="utility:refresh" alternative-text="Reset filters"
                         class="reset-icon-button" onclick={handleReset}>
                     </lightning-button-icon>
@@ -63,6 +70,9 @@
                 <table class="slds-table slds-table_cell-buffer slds-table_bordered">
                     <thead>
                         <tr>
+                            <template if:true={isTeamLead}>
+                                <th scope="col">Actions</th>
+                            </template>
                             <template for:each={Newcolumns} for:item="col">
                                 <th key={col.fieldApiName}>{col.label}</th>
                             </template>
@@ -71,15 +81,20 @@
                     <tbody>
                         <template for:each={visibleRecords} for:item="row">
                             <tr key={row.Id}>
+                                <template if:true={isTeamLead}>
+                                    <td>
+                                        <lightning-button variant="brand-outline" label="Create Task" data-id={row.Id}
+                                            onclick={handleCreateTaskClick}>
+                                        </lightning-button>
+                                    </td>
+                                </template>
                                 <template for:each={row.cells} for:item="cell">
                                     <td key={cell.fieldApiName}>
+                                        <!-- Classification inline edit (Consultant + Project Manager) -->
                                         <template if:true={cell.isClassification}>
                                             <template if:true={canEditClassification}>
-                                                <lightning-combobox
-                                                    value={cell.value}
-                                                    options={classificationOptions}
-                                                    data-id={row.Id}
-                                                    data-field={cell.fieldApiName}
+                                                <lightning-combobox value={cell.value} options={classificationOptions}
+                                                    data-id={row.Id} data-field={cell.fieldApiName}
                                                     onchange={handleClassificationChange}>
                                                 </lightning-combobox>
                                             </template>
@@ -92,12 +107,94 @@
                                                 </template>
                                             </template>
                                         </template>
-                                        <template if:false={cell.isClassification}>
-                                            <template if:true={cell.isLink}>
-                                                <a href={cell.url} target="_blank">{cell.value}</a>
+
+                                        <!-- Reproducible inline edit (Project Manager/QA, typically on UAT_QA) -->
+                                        <template if:true={cell.isReproducible}>
+                                            <template if:true={canEditDecision}>
+                                                <lightning-input type="text" value={cell.value} data-id={row.Id}
+                                                    data-field={cell.fieldApiName}
+                                                    onchange={handleClassificationChange}>
+                                                </lightning-input>
                                             </template>
-                                            <template if:false={cell.isLink}>
+                                            <template if:false={canEditDecision}>
                                                 {cell.value}
+                                            </template>
+                                        </template>
+
+                                        <!-- Estimated Hours inline edit (Consultant/Project Manager) -->
+                                        <template if:true={cell.isEstimatedHours}>
+                                            <template if:true={canEditEstimatedHours}>
+                                                <lightning-input type="number" value={cell.value} data-id={row.Id}
+                                                    data-field={cell.fieldApiName}
+                                                    onchange={handleClassificationChange}>
+                                                </lightning-input>
+                                            </template>
+                                            <template if:false={canEditEstimatedHours}>
+                                                {cell.value}
+                                            </template>
+                                        </template>
+
+                                        <!-- Steps To Reproduce inline edit (Project Manager/QA, typically on UAT_QA) -->
+                                        <template if:true={cell.isStepsToReproduce}>
+                                            <template if:true={canEditDecision}>
+                                                <lightning-textarea value={cell.value} data-id={row.Id}
+                                                    data-field={cell.fieldApiName}
+                                                    onchange={handleClassificationChange}>
+                                                </lightning-textarea>
+                                            </template>
+                                            <template if:false={canEditDecision}>
+                                                {cell.value}
+                                            </template>
+                                        </template>
+
+                                        <!-- Reason For Rejected inline edit (Project Manager/QA) -->
+                                        <template if:true={cell.isRejectReason}>
+                                            <template if:true={canEditDecision}>
+                                                <lightning-input type="text" value={cell.value} data-id={row.Id}
+                                                    data-field={cell.fieldApiName}
+                                                    onchange={handleClassificationChange}>
+                                                </lightning-input>
+                                            </template>
+                                            <template if:false={canEditDecision}>
+                                                {cell.value}
+                                            </template>
+                                        </template>
+
+                                        <!-- Decision inline edit (Project Manager/QA) -->
+                                        <template if:true={cell.isDecision}>
+                                            <template if:true={canEditDecision}>
+                                                <lightning-combobox value={cell.value} options={decisionOptions}
+                                                    data-id={row.Id} data-field={cell.fieldApiName}
+                                                    onchange={handleClassificationChange}>
+                                                </lightning-combobox>
+                                            </template>
+                                            <template if:false={canEditDecision}>
+                                                <template if:true={cell.isLink}>
+                                                    <a href={cell.url} target="_blank">{cell.value}</a>
+                                                </template>
+                                                <template if:false={cell.isLink}>
+                                                    {cell.value}
+                                                </template>
+                                            </template>
+                                        </template>
+
+                                        <!-- All other fields -->
+                                        <template if:false={cell.isClassification}>
+                                            <template if:false={cell.isDecision}>
+                                                <template if:false={cell.isRejectReason}>
+                                                    <template if:false={cell.isReproducible}>
+                                                        <template if:false={cell.isStepsToReproduce}>
+                                                            <template if:false={cell.isEstimatedHours}>
+                                                                <template if:true={cell.isLink}>
+                                                                    <a href={cell.url} target="_blank">{cell.value}</a>
+                                                                </template>
+                                                                <template if:false={cell.isLink}>
+                                                                    {cell.value}
+                                                                </template>
+                                                            </template>
+                                                        </template>
+                                                    </template>
+                                                </template>
                                             </template>
                                         </template>
                                     </td>
@@ -113,6 +210,30 @@
             <div class="slds-m-around_small slds-text-align_right">
                 <lightning-button variant="brand" label="Save" onclick={handleSave}></lightning-button>
             </div>
+        </template>
+
+        <!-- Modal for creating Tasks__c from Issue_Bug__c (Team Lead action) -->
+        <template if:true={showTaskModal}>
+            <section role="dialog" tabindex="-1" aria-modal="true" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <button class="slds-button slds-button_icon slds-modal__close" title="Close"
+                            onclick={handleTaskModalClose}>
+                            <lightning-icon icon-name="utility:close" alternative-text="Close"
+                                size="small"></lightning-icon>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                        <h2 class="slds-text-heading_medium">Create Task</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" style="max-height:70vh;overflow:auto;">
+                        <c-new-task record-id={selectedIssueId}></c-new-task>
+                    </div>
+                    <!-- <footer class="slds-modal__footer">
+                        <lightning-button label="Close" onclick={handleTaskModalClose}></lightning-button>
+                    </footer> -->
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
         </template>
 
         <!-- PAGINATION -->

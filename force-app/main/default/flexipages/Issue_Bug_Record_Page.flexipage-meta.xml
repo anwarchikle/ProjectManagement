@@ -92,6 +92,52 @@
                 <identifier>RecordIssue_Iteration__cField</identifier>
             </fieldInstance>
         </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Retesting_Count__c</fieldItem>
+                <identifier>RecordRetesting_Count__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Decision__c</fieldItem>
+                <identifier>RecordDecision__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Reason_For_Rejected__c</fieldItem>
+                <identifier>RecordReason_For_Rejected__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Task_List__c</fieldItem>
+                <identifier>RecordTask_List__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.Retest_Fixed_Count__c</fieldItem>
+                <identifier>RecordRetest_Fixed_Count__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
         <name>Facet-44b8a1a8-f1f6-4a75-83ad-20ed2f87ae93</name>
         <type>Facet</type>
     </flexiPageRegions>
@@ -445,34 +491,6 @@
     </flexiPageRegions>
     <flexiPageRegions>
         <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Issue_Bug__c</fieldItem>
-                <identifier>RecordIssue_Bug_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <name>Facet-f7a54c25-1788-4d61-b70c-5cd6ddbfa6dd</name>
-        <type>Facet</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>body</name>
-                    <value>Facet-f7a54c25-1788-4d61-b70c-5cd6ddbfa6dd</value>
-                </componentInstanceProperties>
-                <componentName>flexipage:column</componentName>
-                <identifier>flexipage_column8</identifier>
-            </componentInstance>
-        </itemInstances>
-        <name>Facet-d9e1515f-a2c1-40a0-b8c4-dfa61f92f79b</name>
-        <type>Facet</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
-        <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
                     <name>columns</name>
@@ -560,24 +578,6 @@
                 </componentInstanceProperties>
                 <componentName>flexipage:fieldSection</componentName>
                 <identifier>flexipage_fieldSection2</identifier>
-            </componentInstance>
-        </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>columns</name>
-                    <value>Facet-d9e1515f-a2c1-40a0-b8c4-dfa61f92f79b</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>horizontalAlignment</name>
-                    <value>false</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>label</name>
-                    <value>Sub Issue / Bugs</value>
-                </componentInstanceProperties>
-                <componentName>flexipage:fieldSection</componentName>
-                <identifier>flexipage_fieldSection5</identifier>
             </componentInstance>
         </itemInstances>
         <mode>Replace</mode>

@@ -46,11 +46,6 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
-        <editable>true</editable>
-        <field>Issue_Bug__c.Issue_Bug__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
         <editable>false</editable>
         <field>Issue_Bug__c.Issue_Id__c</field>
         <readable>true</readable>
@@ -338,11 +333,6 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>Time_Log__c.Is_Current__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Time_Log__c.Issue_Bug__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>

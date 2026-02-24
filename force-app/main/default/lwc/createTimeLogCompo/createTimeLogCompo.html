@@ -30,7 +30,7 @@
 
                     <lightning-layout multiple-rows="true">
                         <!-- Row 1 -->
-                        <lightning-layout-item size="12" medium-device-size="6" large-device-size="3"
+                        <lightning-layout-item size="12" medium-device-size="6" large-device-size="4"
                             padding="horizontal-small">
                             <lightning-combobox
                                 name="Projects__c"
@@ -44,7 +44,7 @@
                             </lightning-combobox>
                         </lightning-layout-item>
 
-                        <lightning-layout-item size="12" medium-device-size="6" large-device-size="3"
+                        <lightning-layout-item size="12" medium-device-size="6" large-device-size="4"
                             padding="horizontal-small">
                             <lightning-combobox
                                 name="Tasks__c"
@@ -58,7 +58,7 @@
                             </lightning-combobox>
                         </lightning-layout-item>
 
-                        <lightning-layout-item size="12" medium-device-size="6" large-device-size="3"
+                        <lightning-layout-item size="12" medium-device-size="6" large-device-size="4"
                             padding="horizontal-small">
                             <lightning-input
                                 type="date"
@@ -70,7 +70,53 @@
                             </lightning-input>
                         </lightning-layout-item>
 
+                       
+
+                        <!-- Row 2 -->
+                        <!-- Commented by Harsh: Issue_Bug__c field removed from Time_Log__c -->
+                        <!--
                         <lightning-layout-item size="12" medium-device-size="6" large-device-size="3"
+                            padding="horizontal-small">
+                            <lightning-combobox
+                                name="Issue_Bug__c"
+                                label="Issue/Bug"
+                                value={issueBugValue}
+                                placeholder="Select Issue/Bug"
+                                options={issueBugOptions}
+                                onchange={handleIssueBugChange}>
+                            </lightning-combobox>
+                        </lightning-layout-item>
+                        -->
+
+                        <lightning-layout-item size="12" medium-device-size="6" large-device-size="4"
+                            padding="horizontal-small">
+                            <lightning-combobox
+                                name="User__c"
+                                label="User"
+                                value={userValue}
+                                placeholder="Select User"
+                                options={userOptions}
+                                required
+                                onchange={handleUserChange}
+                                disabled={isUserLocked}>
+                            </lightning-combobox>
+                                               
+                        </lightning-layout-item>
+
+                        <lightning-layout-item size="12" medium-device-size="6" large-device-size="4"
+                            padding="horizontal-small">
+                            <lightning-combobox
+                                name="Billable_Type__c"
+                                label="Billable Type"
+                                value={billableTypeValue}
+                                placeholder="Select Billable Type"
+                                options={billableTypeOptions}
+                                onchange={handleBillableTypeChange}>
+                            </lightning-combobox>
+                        </lightning-layout-item>
+                   
+
+                    <lightning-layout-item size="12" medium-device-size="6" large-device-size="4"
                             padding="horizontal-small">
                             <lightning-input 
                                 type="number"
@@ -85,57 +131,7 @@
                                 message-when-range-overflow={hoursValidationMessage}>
                             </lightning-input>
                         </lightning-layout-item>
-
-                        <!-- Row 2 -->
-                        <lightning-layout-item size="12" medium-device-size="6" large-device-size="3"
-                            padding="horizontal-small">
-                            <lightning-combobox
-                                name="Issue_Bug__c"
-                                label="Issue/Bug"
-                                value={issueBugValue}
-                                placeholder="Select Issue/Bug"
-                                options={issueBugOptions}
-                                onchange={handleIssueBugChange}>
-                            </lightning-combobox>
-                        </lightning-layout-item>
-
-                        <lightning-layout-item size="12" medium-device-size="6" large-device-size="3"
-                            padding="horizontal-small">
-                            <lightning-combobox
-                                name="User__c"
-                                label="User"
-                                value={userValue}
-                                placeholder="Select User"
-                                options={userOptions}
-                                required
-                                onchange={handleUserChange}
-                                disabled={isUserLocked}>
-                            </lightning-combobox>
-                        </lightning-layout-item>
-
-                        <lightning-layout-item size="12" medium-device-size="6" large-device-size="3"
-                            padding="horizontal-small">
-                            <lightning-input
-                                type="text"
-                                name="General_Log__c"
-                                label="General Log"
-                                value={generalLogValue}
-                                onchange={handleGeneralLogChange}>
-                            </lightning-input>
-                        </lightning-layout-item>
-
-                        <lightning-layout-item size="12" medium-device-size="6" large-device-size="3"
-                            padding="horizontal-small">
-                            <lightning-combobox
-                                name="Billable_Type__c"
-                                label="Billable Type"
-                                value={billableTypeValue}
-                                placeholder="Select Billable Type"
-                                options={billableTypeOptions}
-                                onchange={handleBillableTypeChange}>
-                            </lightning-combobox>
-                        </lightning-layout-item>
-                    </lightning-layout>
+                         </lightning-layout>
                 </div>
 
                 <!-- OTHER INFO -->

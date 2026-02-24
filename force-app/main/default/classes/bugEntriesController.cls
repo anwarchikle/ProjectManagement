@@ -30,17 +30,16 @@ public class bugEntriesController {
             // 🔹 Get Team Lead once
             Id teamLeadId;
             List<Project_Team_Member__c> projectTeamMemberList = [
-                SELECT Id 
+                SELECT Id,Assigned_To__c
                 FROM Project_Team_Member__c 
                 WHERE Role__c = 'Team Lead'
                 LIMIT 1
             ];
 
             if (!projectTeamMemberList.isEmpty()) {
-                teamLeadId = projectTeamMemberList[0].Id;
+                teamLeadId = projectTeamMemberList[0].Assigned_To__c;
             }
 
-            // 🔹 Prepare Bug Records
             List<Issue_Bug__c> bugsToInsert = new List<Issue_Bug__c>();
 
             for (Map<String, Object> bugMap : bugEntries) {
@@ -54,7 +53,6 @@ public class bugEntriesController {
                 bug.Expected_Result__c    = (String) bugMap.get('expectedResult');
                 bug.Actual_Result__c      = (String) bugMap.get('actualResult');
 
-                // Project Details Mapping
                 if (String.isNotBlank(projectDetails.get('projectId'))) {
                     bug.Project__c = (Id) projectDetails.get('projectId');
                 }

@@ -141,6 +141,7 @@
     <tabs>Team__c</tabs>
     <tabs>Milestone__c</tabs>
     <tabs>weekly</tabs>
+    <tabs>Project_Dashboard</tabs>
     <tabs>Task_List__c</tabs>
     <tabs>Tasks__c</tabs>
     <tabs>Issue_Bug__c</tabs>

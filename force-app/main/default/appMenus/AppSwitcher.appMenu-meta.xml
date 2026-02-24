@@ -105,6 +105,10 @@
         <type>CustomApplication</type>
     </appMenuItems>
     <appMenuItems>
+        <name>standard__Shield</name>
+        <type>CustomApplication</type>
+    </appMenuItems>
+    <appMenuItems>
         <name>standard__LightningScheduler</name>
         <type>CustomApplication</type>
     </appMenuItems>
@@ -130,6 +134,10 @@
     </appMenuItems>
     <appMenuItems>
         <name>SF_GanttChart__gantt_chart</name>
+        <type>CustomApplication</type>
+    </appMenuItems>
+    <appMenuItems>
+        <name>standard__Integration</name>
         <type>CustomApplication</type>
     </appMenuItems>
 </AppMenu>

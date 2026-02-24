@@ -20,10 +20,6 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Issue_Bug__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>Approval_status__c</field>
             </layoutItems>
             <layoutItems>

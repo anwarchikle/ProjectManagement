@@ -1,0 +1,16 @@
+<aura:component implements="lightning:isUrlAddressable,force:hasRecordId,lightning:actionOverride,force:lightningQuickAction" access="global">
+    <aura:attribute name="recordId" type="String" />
+
+    <aura:html tag="style">
+        .slds-modal__container {
+            width: 90% !important;
+            max-width: 90% !important;
+        }
+        .slds-modal__footer {
+            display: none !important;
+        }
+    </aura:html>
+    
+    <!-- Call the Edit Task LWC and pass the record ID -->
+    <c:customDashboard recordId="{!v.recordId}"/>
+</aura:component>

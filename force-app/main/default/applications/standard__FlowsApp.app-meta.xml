@@ -24,6 +24,7 @@
     <tabs>Resource_Allocation__c</tabs>
     <tabs>Holiday__c</tabs>
     <tabs>Time_Log__c</tabs>
+    <tabs>standard-FlowLogs</tabs>
     <uiType>Lightning</uiType>
     <utilityBar>FlowsApp_UtilityBar</utilityBar>
 </CustomApplication>

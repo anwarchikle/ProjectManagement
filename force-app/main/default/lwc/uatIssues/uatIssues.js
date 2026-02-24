@@ -4,11 +4,16 @@ import { getObjectInfo, getPicklistValues } from 'lightning/uiObjectInfoApi';
 import ISSUES_OBJECT from '@salesforce/schema/Issue_Bug__c';
 import STATUS_FIELD from '@salesforce/schema/Issue_Bug__c.Status__c';
 import SEVERITY_FIELD from '@salesforce/schema/Issue_Bug__c.Severity__c';
+import REPRODUCIBLE_FIELD from '@salesforce/schema/Issue_Bug__c.Reproducible__c';
+import STEPS_FIELD from '@salesforce/schema/Issue_Bug__c.Steps_To_Reproduce__c';
+import ESTIMATED_HOURS_FIELD from '@salesforce/schema/Issue_Bug__c.Estimated_no_of_hours__c';
 import uatIssues from '@salesforce/apex/Mybugscontroller.uatIssues';
 import { getRecord, updateRecord } from 'lightning/uiRecordApi';
 import USER_ID from '@salesforce/user/Id';
 import USER_ROLE_FIELD from '@salesforce/schema/User.Role__c';
 import CLASSIFICATION_FIELD from '@salesforce/schema/Issue_Bug__c.Classification__c';
+import DECISION_FIELD from '@salesforce/schema/Issue_Bug__c.Decision__c';
+import REJECT_REASON_FIELD from '@salesforce/schema/Issue_Bug__c.Reason_For_Rejected__c';
 
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { refreshApex } from '@salesforce/apex';
@@ -31,13 +36,15 @@ export default class UatIssues extends LightningElement {
     pageToken = null;
     nextPageToken = null;
     previousPageToken = null;
-
-    // Current user role & permissions
     currentUserRole;
     canEditClassification = false;
-
-    // Draft values for edited classifications
+    canEditDecision = false;
+    canEditEstimatedHours = false;
+    isTeamLead = false;
+    rejectedDecisionValue;
     draftValues = {};
+    showTaskModal = false;
+    selectedIssueId;
 
     wiredListViewResult;
 
@@ -64,23 +71,43 @@ export default class UatIssues extends LightningElement {
         }
     }
 
-    // Wire current user Role__c
     @wire(getRecord, { recordId: USER_ID, fields: [USER_ROLE_FIELD] })
     wiredUser({ data, error }) {
         if (data) {
             this.currentUserRole = data.fields.Role__c?.value;
+            this.isTeamLead = this.currentUserRole === 'Team Lead';
+
             this.canEditClassification =
                 this.currentUserRole === 'Consultant' ||
+                this.currentUserRole === 'Project Manager' ||
+                this.currentUserRole === 'QA';
+            this.canEditDecision =
+                this.currentUserRole === 'Project Manager' ||
+                this.currentUserRole === 'QA';
+
+            // Only Consultant and Project Manager can edit Estimated Hours
+            this.canEditEstimatedHours =
+                this.currentUserRole === 'Consultant' ||
                 this.currentUserRole === 'Project Manager';
+
+            // Default list view based on role
+            if (this.currentUserRole === 'QA') {
+                this.selectedListView = 'UAT_QA';
+            } else if (this.currentUserRole === 'Consultant' || this.currentUserRole === 'Project Manager') {
+                this.selectedListView = 'UAT';
+            }
         } else if (error) {
             // If user role can't be fetched, keep editing disabled
             console.error('Error fetching user role', error);
             this.canEditClassification = false;
+            this.canEditDecision = false;
         }
     }
 
     @track severityOptions = [];
+    selectedProject = '';
     @track classificationOptions = [];
+    @track decisionOptions = [];
 
     @wire(getPicklistValues, { recordTypeId: '$recordTypeId', fieldApiName: SEVERITY_FIELD })
     wiredSeverity({ data }) {
@@ -102,6 +129,19 @@ export default class UatIssues extends LightningElement {
         }
     }
 
+    @wire(getPicklistValues, { recordTypeId: '$recordTypeId', fieldApiName: DECISION_FIELD })
+    wiredDecision({ data }) {
+        if (data) {
+            this.decisionOptions = data.values.map(item => ({
+                label: item.label,
+                value: item.value
+            }));
+
+            const rejected = data.values.find(item => item.label === 'Rejected');
+            this.rejectedDecisionValue = rejected ? rejected.value : null;
+        }
+    }
+
     @wire(getListUi, {
         objectApiName: ISSUES_OBJECT,
         listViewApiName: '$selectedListView',
@@ -118,6 +158,28 @@ export default class UatIssues extends LightningElement {
 
             this.Newcolumns =
                 data.info?.displayColumns || [];
+
+            // Ensure Reason_For_Rejected__c column is present in the UI
+            if (!this.Newcolumns.find(col => col.fieldApiName === REJECT_REASON_FIELD.fieldApiName)) {
+                this.Newcolumns = [
+                    ...this.Newcolumns,
+                    {
+                        label: 'Reason For Rejected',
+                        fieldApiName: REJECT_REASON_FIELD.fieldApiName
+                    }
+                ];
+            }
+
+            // Ensure Estimated_no_of_hours__c column is present in the UI
+            if (!this.Newcolumns.find(col => col.fieldApiName === ESTIMATED_HOURS_FIELD.fieldApiName)) {
+                this.Newcolumns = [
+                    ...this.Newcolumns,
+                    {
+                        label: 'Estimated Hours',
+                        fieldApiName: ESTIMATED_HOURS_FIELD.fieldApiName
+                    }
+                ];
+            }
 
             this.nextPageToken =
                 data.records?.nextPageToken || null;
@@ -143,7 +205,12 @@ export default class UatIssues extends LightningElement {
                             value: '',
                             isLink: false,
                             url: null,
-                            isClassification: fieldApi === CLASSIFICATION_FIELD.fieldApiName
+                            isClassification: fieldApi === CLASSIFICATION_FIELD.fieldApiName,
+                            isDecision: fieldApi === DECISION_FIELD.fieldApiName,
+                            isRejectReason: fieldApi === REJECT_REASON_FIELD.fieldApiName,
+                            isReproducible: fieldApi === REPRODUCIBLE_FIELD.fieldApiName,
+                            isStepsToReproduce: fieldApi === STEPS_FIELD.fieldApiName,
+                            isEstimatedHours: fieldApi === ESTIMATED_HOURS_FIELD.fieldApiName
                         };
 
                         // 🔹 Relationship field (e.g., Project__r.Name)
@@ -262,11 +329,50 @@ export default class UatIssues extends LightningElement {
             );
         }
 
+        if (this.selectedProject) {
+            filtered = filtered.filter(row =>
+                row.cells.some(cell =>
+                    (
+                        cell.fieldApiName === 'Associated_Project__c' ||
+                        cell.fieldApiName === 'Associated_Project__r.Name' ||
+                        cell.fieldApiName === 'Project__c' ||
+                        cell.fieldApiName === 'Project__r.Name'
+                    ) &&
+                    cell.value === this.selectedProject
+                )
+            );
+        }
+
         return filtered;
     }
 
     get hasDraftValues() {
         return Object.keys(this.draftValues || {}).length > 0;
+    }
+
+    get projectOptions() {
+        // Build distinct project names from current records for filtering
+        const names = new Set();
+
+        (this.records || []).forEach(row => {
+            (row.cells || []).forEach(cell => {
+                if (
+                    cell.value &&
+                    (
+                        cell.fieldApiName === 'Associated_Project__c' ||
+                        cell.fieldApiName === 'Associated_Project__r.Name' ||
+                        cell.fieldApiName === 'Project__c' ||
+                        cell.fieldApiName === 'Project__r.Name'
+                    )
+                ) {
+                    names.add(cell.value);
+                }
+            });
+        });
+
+        const options = Array.from(names).map(name => ({ label: name, value: name }));
+        // Prepend "All" option
+        return [{ label: 'All', value: '' }, ...options];
     }
 
     handleSearchChange(event) {
@@ -343,8 +449,88 @@ export default class UatIssues extends LightningElement {
         });
     }
 
-    handleSave() {
+    handleCreateTaskClick(event) {
         debugger;
+        const issueId = event.currentTarget.dataset.id;
+        if (!issueId) {
+            return;
+        }
+        this.selectedIssueId = issueId;
+        this.showTaskModal = true;
+    }
+
+    handleTaskModalClose() {
+        this.showTaskModal = false;
+        this.selectedIssueId = undefined;
+    }
+
+    handleSave() {
+        // Validation: if Decision__c is Rejected, Reason_For_Rejected__c is mandatory
+        if (this.rejectedDecisionValue) {
+            for (const row of this.records) {
+                const recordId = row.Id;
+
+                const decisionDraft = this.draftValues[recordId]?.[DECISION_FIELD.fieldApiName];
+                const reasonDraft = this.draftValues[recordId]?.[REJECT_REASON_FIELD.fieldApiName];
+
+                let currentDecision = decisionDraft;
+                let currentReason = reasonDraft;
+
+                if (!currentDecision || currentReason === undefined) {
+                    // derive from existing cells if not in draft
+                    const decisionCell = row.cells.find(c => c.fieldApiName === DECISION_FIELD.fieldApiName);
+                    const reasonCell = row.cells.find(c => c.fieldApiName === REJECT_REASON_FIELD.fieldApiName);
+
+                    if (!currentDecision && decisionCell) {
+                        currentDecision = decisionCell.value;
+                    }
+                    if (currentReason === undefined && reasonCell) {
+                        currentReason = reasonCell.value;
+                    }
+                }
+
+                if (currentDecision === this.rejectedDecisionValue && !currentReason) {
+                    this.dispatchEvent(
+                        new ShowToastEvent({
+                            title: 'Validation Error',
+                            message: 'Reason For Rejected is mandatory when Decision is Rejected.',
+                            variant: 'error'
+                        })
+                    );
+                    return;
+                }
+            }
+        }
+
+        // Validation: Estimated_no_of_hours__c is mandatory for Consultant/Project Manager
+        if (this.canEditEstimatedHours) {
+            for (const recordId of Object.keys(this.draftValues)) {
+                const hoursDraft = this.draftValues[recordId]?.[ESTIMATED_HOURS_FIELD.fieldApiName];
+                let currentHours = hoursDraft;
+
+                if (currentHours === undefined || currentHours === null || currentHours === '') {
+                    const row = this.records.find(r => r.Id === recordId);
+                    if (row) {
+                        const hoursCell = row.cells.find(c => c.fieldApiName === ESTIMATED_HOURS_FIELD.fieldApiName);
+                        if (hoursCell) {
+                            currentHours = hoursCell.value;
+                        }
+                    }
+                }
+
+                if (!currentHours) {
+                    this.dispatchEvent(
+                        new ShowToastEvent({
+                            title: 'Validation Error',
+                            message: 'Estimated No of Hours is mandatory.',
+                            variant: 'error'
+                        })
+                    );
+                    return;
+                }
+            }
+        }
+
         const recordInputs = Object.keys(this.draftValues).map(recordId => {
             const fields = { Id: recordId };
             Object.keys(this.draftValues[recordId]).forEach(fieldApiName => {
@@ -423,6 +609,7 @@ export default class UatIssues extends LightningElement {
         this.searchKey = '';
         this.selectedStatus = '';
         this.selectedSeverity = '';
+        this.selectedProject = '';
         this.pageSize = 20;
         this.pageToken = null;
     }

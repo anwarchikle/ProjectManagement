@@ -12,7 +12,7 @@ public class ProjectSharingHandlerNew {
             Set<Id> projectIds = new Set<Id>();
             
             for (Project_Team_Member__c ptm : listOfProjectTeamMember) {
-                if (ptm.Project__c != null && ptm.Assigned_To__c != null) {
+                if (ptm.Project__c != null && ptm.Assigned_To__c != null && ptm.Is_Active__c == true) {
                     projectIds.add(ptm.Project__c);
                 }
             }
@@ -23,7 +23,7 @@ public class ProjectSharingHandlerNew {
             
             Map<Id, List<Project_Team_Member__c>> projectToMembers = new Map<Id, List<Project_Team_Member__c>>();
             
-            List<Project_Team_Member__c> listOfProjectTeamMembers =[SELECT Id, Project__c, Assigned_To__c, Assigned_To__r.Name FROM Project_Team_Member__c WHERE Project__c IN :projectIds];
+            List<Project_Team_Member__c> listOfProjectTeamMembers =[SELECT Id, Project__c,Is_Active__c, Assigned_To__c, Assigned_To__r.Name FROM Project_Team_Member__c WHERE Project__c IN :projectIds];
             
             System.debug('Queried Project_Team_Member__c size => ' + listOfProjectTeamMembers.size());
             
@@ -39,14 +39,16 @@ public class ProjectSharingHandlerNew {
             
             for (Id projectId : projectToMembers.keySet()) {
                 for (Project_Team_Member__c member : projectToMembers.get(projectId)) {
+                    if(member.Is_Active__c == true){
+                        Project__Share share = new Project__Share();
+                        share.ParentId     = projectId;
+                        share.UserOrGroupId = member.Assigned_To__c;
+                        share.AccessLevel  = ACCESS_LVL;
+                        share.RowCause     = ROW_CAUSE;
+                        
+                        sharesToInsert.add(share);
+                    }
                     
-                    Project__Share share = new Project__Share();
-                    share.ParentId     = projectId;
-                    share.UserOrGroupId = member.Assigned_To__c;
-                    share.AccessLevel  = ACCESS_LVL;
-                    share.RowCause     = ROW_CAUSE;
-                    
-                    sharesToInsert.add(share);
                 }
             }
             
@@ -68,7 +70,7 @@ public class ProjectSharingHandlerNew {
             
             Set<Id> projectIds = new Set<Id>();            
             for (Project_Team_Member__c ptm : listOfProjectTeamMember) {
-                if (ptm.Project__c != null && ptm.Assigned_To__c != null && oldMap.get(ptm.Id).Assigned_To__c != ptm.Assigned_To__c) {
+                if (ptm.Project__c != null && ptm.Is_Active__c && ptm.Assigned_To__c != null && oldMap.get(ptm.Id).Assigned_To__c != ptm.Assigned_To__c) {
                     projectIds.add(ptm.Project__c);
                 } 
             }
@@ -80,7 +82,7 @@ public class ProjectSharingHandlerNew {
             Map<Id, List<Project_Team_Member__c>> projectToMembers = new Map<Id, List<Project_Team_Member__c>>();
             
             List<Project_Team_Member__c> listOfProjectTeamMembers =
-                [SELECT Id, Project__c, Assigned_To__c, Assigned_To__r.Name
+                [SELECT Id, Project__c, Assigned_To__c, Assigned_To__r.Name,Is_Active__c
                  FROM Project_Team_Member__c
                  WHERE Project__c IN :projectIds];
             
@@ -99,13 +101,14 @@ public class ProjectSharingHandlerNew {
             
             for (Id projectId : projectToMembers.keySet()) {
                 for (Project_Team_Member__c member : projectToMembers.get(projectId)) {
-                    
-                    Project__Share share = new Project__Share();
-                    share.ParentId = projectId;
-                    share.UserOrGroupId = member.Assigned_To__c;
-                    share.AccessLevel = ACCESS_LVL;
-                    share.RowCause = ROW_CAUSE;
-                    sharesToInsert.add(share);
+                    if(member.Is_Active__c == true){
+                        Project__Share share = new Project__Share();
+                        share.ParentId = projectId;
+                        share.UserOrGroupId = member.Assigned_To__c;
+                        share.AccessLevel = ACCESS_LVL;
+                        share.RowCause = ROW_CAUSE;
+                        sharesToInsert.add(share);    
+                    }
                 }
             }
             
@@ -119,7 +122,6 @@ public class ProjectSharingHandlerNew {
             System.debug('STACK TRACE => ' + e.getStackTraceString());
         }
     }
-    
     
     public static void removeVisibility(List<Project_Team_Member__c> deletedMembers) {
         try{
@@ -146,8 +148,6 @@ public class ProjectSharingHandlerNew {
         } catch (Exception e) {
             System.debug('Error ===> ' + e.getMessage() + ' | Line ===> ' + e.getLineNumber());
         }
-        
-        
     }
     
     

@@ -174,7 +174,6 @@
     <relatedLists>
         <fields>NAME</fields>
         <fields>Billable_Type__c</fields>
-        <fields>Issue_Bug__c</fields>
         <fields>Tasks__c</fields>
         <fields>User__c</fields>
         <relatedList>Time_Log__c.Milestone__c</relatedList>

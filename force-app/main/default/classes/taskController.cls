@@ -116,6 +116,163 @@ public with sharing class taskController {
         return message;
     }
     
+    /* ---------- PROJECT TEAM MEMBERS WITH DETAILS ---------- */
+    @AuraEnabled(cacheable=true)
+    public static List<UserDetailsWrapper> getUserDetails(List<Id> userIds) {
+        if (userIds == null || userIds.isEmpty()) {
+            return new List<UserDetailsWrapper>();
+        }
+
+        List<UserDetailsWrapper> results = new List<UserDetailsWrapper>();
+
+        for (User u : [
+            SELECT Id, Name, Rate_Per_Hour__c, Role__c
+            FROM User
+            WHERE Id IN :userIds
+        ]) {
+            UserDetailsWrapper w = new UserDetailsWrapper();
+            w.userId = u.Id;
+            w.name = u.Name;
+            w.ratePerHour = u.Rate_Per_Hour__c;
+            w.role = u.Role__c;
+            w.allocationPercent = 0;
+            w.isActive = true;
+            results.add(w);
+        }
+
+        return results;
+    }
+
+    @AuraEnabled(cacheable=true)
+    public static List<UserDetailsWrapper> getProjectTeamMembers(Id projectId) {
+        if (projectId == null) {
+            return new List<UserDetailsWrapper>();
+        }
+
+        List<UserDetailsWrapper> results = new List<UserDetailsWrapper>();
+
+        for (Project_Team_Member__c ptm : [
+            SELECT Id, Project__c, Assigned_To__c, Assigned_To__r.Name,
+                   Role__c, Rate_Per_Hour__c, Allocation__c, Is_Active__c
+            FROM Project_Team_Member__c
+            WHERE Project__c = :projectId
+        ]) {
+            UserDetailsWrapper w = new UserDetailsWrapper();
+            w.userId = ptm.Assigned_To__c;
+            w.name = ptm.Assigned_To__r != null ? ptm.Assigned_To__r.Name : null;
+            w.ratePerHour = ptm.Rate_Per_Hour__c;
+            w.role = ptm.Role__c;
+            w.allocationPercent = ptm.Allocation__c;
+            w.isActive = ptm.Is_Active__c;
+            results.add(w);
+        }
+
+        return results;
+    }
+
+    @AuraEnabled
+    public static String assignProjectMembersWithDetails(Id projectId, List<UserAllocationWrapper> allocations) {
+        if (projectId == null || allocations == null || allocations.isEmpty()) {
+            throw new AuraHandledException('Project Id or allocations are missing');
+        }
+
+        Set<Id> userIds = new Set<Id>();
+        for (UserAllocationWrapper w : allocations) {
+            if (w != null && w.userId != null) {
+                userIds.add(w.userId);
+            }
+        }
+
+        if (userIds.isEmpty()) {
+            throw new AuraHandledException('No users provided in allocations');
+        }
+
+        Map<Id, User> userMap = new Map<Id, User>([
+            SELECT Id, Rate_Per_Hour__c, Role__c
+            FROM User
+            WHERE Id IN :userIds
+        ]);
+
+        // Existing project team members so we can UPDATE them instead of skipping
+        Map<Id, Project_Team_Member__c> existingByUser = new Map<Id, Project_Team_Member__c>();
+        for (Project_Team_Member__c rec : [
+            SELECT Id, Assigned_To__c, Rate_Per_Hour__c, Role__c, Allocation__c, Is_Active__c
+            FROM Project_Team_Member__c
+            WHERE Project__c = :projectId
+        ]) {
+            existingByUser.put(rec.Assigned_To__c, rec);
+        }
+
+        List<Project_Team_Member__c> toInsert = new List<Project_Team_Member__c>();
+        List<Project_Team_Member__c> toUpdate = new List<Project_Team_Member__c>();
+
+        for (UserAllocationWrapper w : allocations) {
+            if (w == null || w.userId == null) {
+                continue;
+            }
+
+            User u = userMap.get(w.userId);
+            Project_Team_Member__c ptm;
+
+            if (existingByUser.containsKey(w.userId)) {
+                // UPDATE existing project team member
+                ptm = existingByUser.get(w.userId);
+            } else {
+                // INSERT new project team member
+                ptm = new Project_Team_Member__c();
+                ptm.Project__c = projectId;
+                ptm.Assigned_To__c = w.userId;
+                toInsert.add(ptm);
+            }
+
+            // Apply rate (explicit value wins, otherwise default from User)
+            if (w.ratePerHour != null) {
+                ptm.Rate_Per_Hour__c = w.ratePerHour;
+            } else if (u != null) {
+                ptm.Rate_Per_Hour__c = u.Rate_Per_Hour__c;
+            }
+
+            // Apply role (explicit value wins, otherwise default from User)
+            if (String.isNotBlank(w.role)) {
+                ptm.Role__c = w.role;
+            } else if (u != null) {
+                ptm.Role__c = u.Role__c;
+            }
+
+            // Allocation and Active flag always come from the wrapper
+            ptm.Allocation__c = w.allocationPercent;
+            ptm.Is_Active__c = (w.isActive == null) ? true : w.isActive;
+
+            if (ptm.Id != null && !toUpdate.contains(ptm)) {
+                toUpdate.add(ptm);
+            }
+        }
+
+        if (!toInsert.isEmpty()) {
+            insert toInsert;
+        }
+        if (!toUpdate.isEmpty()) {
+            update toUpdate;
+        }
+
+        String message = '';
+        if(!toInsert.isEmpty() && !toUpdate.isEmpty()){
+            message = 'Records Created and Updated Successfully';
+            return message;
+        }
+        if (!toInsert.isEmpty()) {
+            message  = 'Records Created Successfully';
+            return message;
+        }
+        if (!toUpdate.isEmpty()) {
+            message  = 'Records Updated Successfully';
+            return message;
+        }
+        if (message == '') message = 'No users selected';
+
+        return message;
+    }
+    
     /* ---------- ASSIGN PROJECT TEAM MEMBERS ---------- */
     @AuraEnabled
     public static String assignProjectMembers(Id projectId, List<Id> userIds) {
@@ -259,7 +416,8 @@ public with sharing class taskController {
                 End_Date__c = wrapper.endDate,
                 Work_Hours__c = wrapper.workHours,
                 Comment__c = wrapper.comments,
-                Issue_Bug__c = wrapper.issueBug
+                Issue_Bug__c = wrapper.issueBug,
+                Status__c = 'Assigned'
             ));
         }
         
@@ -417,5 +575,42 @@ public with sharing class taskController {
         @AuraEnabled public Id userId { get; set; }
         @AuraEnabled public Date allocationDate { get; set; }
         @AuraEnabled public Decimal hours { get; set; }
+    }
+
+    public class UserDetailsWrapper {
+        @AuraEnabled public Id userId { get; set; }
+        @AuraEnabled public String name { get; set; }
+        @AuraEnabled public Decimal ratePerHour { get; set; }
+        @AuraEnabled public String role { get; set; }
+        @AuraEnabled public Decimal allocationPercent { get; set; }
+        @AuraEnabled public Boolean isActive { get; set; }
+    }
+
+    public class UserAllocationWrapper {
+        @AuraEnabled public Id userId { get; set; }
+        @AuraEnabled public Decimal allocationPercent { get; set; }
+        @AuraEnabled public Decimal ratePerHour { get; set; }
+        @AuraEnabled public String role { get; set; }
+        @AuraEnabled public Boolean isActive { get; set; }
+    }
+
+    public class PicklistOption {
+        @AuraEnabled public String label { get; set; }
+        @AuraEnabled public String value { get; set; }
+    }
+
+    @AuraEnabled(cacheable=true)
+    public static List<PicklistOption> getUserRoleOptions() {
+        List<PicklistOption> options = new List<PicklistOption>();
+
+        Schema.DescribeFieldResult describe = User.Role__c.getDescribe();
+        for (Schema.PicklistEntry entry : describe.getPicklistValues()) {
+            PicklistOption opt = new PicklistOption();
+            opt.label = entry.getLabel();
+            opt.value = entry.getValue();
+            options.add(opt);
+        }
+
+        return options;
     }
 }

@@ -19,12 +19,72 @@ export default class ProjectGanttChart extends NavigationMixin(LightningElement)
     @track filterEndDate;
     @track isInternalUser = false;
     @track allData;
+    @track selectedProjectId = '';
+    @track selectedMilestoneId = '';
+    @track selectedTaskListId = '';
 
     dateFilterOptions = [
         { label: 'Day', value: 'day' },
         { label: 'Month', value: 'month' },
         { label: 'Year', value: 'year' }
     ];
+
+    get isProjectNotSelected() {
+        return !this.selectedProjectId;
+    }
+
+    get projectOptions() {
+        const options = (this.allData || []).map(project => ({
+            label: project.Name,
+            value: project.Id
+        }));
+        return [{ label: 'All Projects', value: '' }, ...options];
+    }
+
+    get milestoneOptions() {
+        if (!this.selectedProjectId) {
+            return [{ label: 'All Milestones', value: '' }];
+        }
+
+        const project = (this.allData || []).find(p => p.Id === this.selectedProjectId);
+        const milestones = (project && project.Milestones__r) ? project.Milestones__r : [];
+
+        const options = milestones.map(ms => ({
+            label: ms.Name,
+            value: ms.Id
+        }));
+
+        return [{ label: 'All Milestones', value: '' }, ...options];
+    }
+
+    get taskListOptions() {
+        if (!this.selectedProjectId) {
+            return [{ label: 'All Task Lists', value: '' }];
+        }
+
+        const project = (this.allData || []).find(p => p.Id === this.selectedProjectId);
+        const milestones = (project && project.Milestones__r) ? project.Milestones__r : [];
+
+        let taskLists = [];
+
+        if (this.selectedMilestoneId) {
+            const milestone = milestones.find(ms => ms.Id === this.selectedMilestoneId);
+            taskLists = (milestone && milestone.Task_Lists__r) ? milestone.Task_Lists__r : [];
+        } else {
+            milestones.forEach(ms => {
+                if (ms.Task_Lists__r && ms.Task_Lists__r.length) {
+                    taskLists = taskLists.concat(ms.Task_Lists__r);
+                }
+            });
+        }
+
+        const options = taskLists.map(tl => ({
+            label: tl.Name,
+            value: tl.Id
+        }));
+
+        return [{ label: 'All Task Lists', value: '' }, ...options];
+    }
 
     connectedCallback() {
         this.checkUserType();
@@ -49,53 +109,7 @@ export default class ProjectGanttChart extends NavigationMixin(LightningElement)
             .then(result => {
                 debugger;
                 this.allData = result;
-                this.gridData = result.map((project, pIndex) => ({
-                    Id: project.Id,
-                    Name: project.Name,
-                    StartDate: project.Start_Date__c,
-                    EndDate: project.End_Date__c,
-                    Status: project.Status__c || '',
-                    completion: project.Completion__c || '',
-                    EstimatedHours: project.Planned_Hours__c,
-                    LoggedHours: project.Actual_Hours__c,
-                    sequence: `${pIndex + 1}`,
-
-                    _children: (project.Milestones__r || []).map((ms, mIndex) => ({
-                        Id: ms.Id,
-                        Name: ms.Name,
-                        StartDate: ms.Start_Date__c,
-                        EndDate: ms.End_Date__c,
-                        Status: ms.Status__c || '',
-                        completion: ms.Completion__c || '',
-                        EstimatedHours: ms.Planned_Hours__c,
-                        LoggedHours: ms.Actual_Work_Hours__c,
-                        sequence: `${pIndex + 1}.${mIndex + 1}`,
-
-                        _children: (ms.Task_Lists__r || []).map((tl, tIndex) => ({
-                            Id: tl.Id,
-                            Name: tl.Name,
-                            StartDate: tl.Start_Date__c,
-                            EndDate: tl.End_Date__c,
-                            Status: tl.Status__c || '',
-                            completion: tl.Completion__c || '',
-                            EstimatedHours: tl.Planned_Hours__c,
-                            LoggedHours: tl.Actual_Hours__c,
-                            sequence: `${pIndex + 1}.${mIndex + 1}.${tIndex + 1}`,
-
-                            _children: (tl.Tasks__r || []).map((task, taskIndex) => ({
-                                Id: task.Id,
-                                Name: task.Name,
-                                StartDate: task.Start_Date__c,
-                                EndDate: task.End_Date__c,
-                                Status: task.Status__c || '',
-                                completion: task.Completion__c || '',
-                                EstimatedHours: task.Work_Hours__c,
-                                LoggedHours: task.Actual_Work_Hours__c,
-                                sequence: `${pIndex + 1}.${mIndex + 1}.${tIndex + 1}.${taskIndex + 1}`
-                            }))
-                        }))
-                    }))
-                }));
+                this.gridData = this.buildGridData(result);
 
                 this.calculateTimelineRange();
                 this.initializeDateFilter();
@@ -115,6 +129,56 @@ export default class ProjectGanttChart extends NavigationMixin(LightningElement)
             });
     }
 
+    buildGridData(projects) {
+        return (projects || []).map((project, pIndex) => ({
+            Id: project.Id,
+            Name: project.Name,
+            StartDate: project.Start_Date__c,
+            EndDate: project.End_Date__c,
+            Status: project.Status__c || '',
+            completion: project.Completion__c || '',
+            EstimatedHours: project.Planned_Hours__c,
+            LoggedHours: project.Actual_Hours__c,
+            sequence: `${pIndex + 1}`,
+
+            _children: (project.Milestones__r || []).map((ms, mIndex) => ({
+                Id: ms.Id,
+                Name: ms.Name,
+                StartDate: ms.Start_Date__c,
+                EndDate: ms.End_Date__c,
+                Status: ms.Status__c || '',
+                completion: ms.Completion__c || '',
+                EstimatedHours: ms.Planned_Hours__c,
+                LoggedHours: ms.Actual_Work_Hours__c,
+                sequence: `${pIndex + 1}.${mIndex + 1}`,
+
+                _children: (ms.Task_Lists__r || []).map((tl, tIndex) => ({
+                    Id: tl.Id,
+                    Name: tl.Name,
+                    StartDate: tl.Start_Date__c,
+                    EndDate: tl.End_Date__c,
+                    Status: tl.Status__c || '',
+                    completion: tl.Completion__c || '',
+                    EstimatedHours: tl.Planned_Hours__c,
+                    LoggedHours: tl.Actual_Hours__c,
+                    sequence: `${pIndex + 1}.${mIndex + 1}.${tIndex + 1}`,
+
+                    _children: (tl.Tasks__r || []).map((task, taskIndex) => ({
+                        Id: task.Id,
+                        Name: task.Name,
+                        StartDate: task.Start_Date__c,
+                        EndDate: task.End_Date__c,
+                        Status: task.Status__c || '',
+                        completion: task.Completion__c || '',
+                        EstimatedHours: task.Work_Hours__c,
+                        LoggedHours: task.Actual_Work_Hours__c,
+                        sequence: `${pIndex + 1}.${mIndex + 1}.${tIndex + 1}.${taskIndex + 1}`
+                    }))
+                }))
+            }))
+        }));
+    }
+
     initializeDateFilter() {
         this.selectedDateFilter = 'month';
         this.updateDateRange();
@@ -122,6 +186,70 @@ export default class ProjectGanttChart extends NavigationMixin(LightningElement)
 
     handleDateFilterChange(event) {
         this.selectedDateFilter = event.target.value;
+        this.updateDateRange();
+    }
+
+    handleProjectFilterChange(event) {
+        this.selectedProjectId = event.detail.value;
+        this.selectedMilestoneId = '';
+        this.selectedTaskListId = '';
+        this.applyHierarchyFilter();
+    }
+
+    handleMilestoneFilterChange(event) {
+        this.selectedMilestoneId = event.detail.value;
+        this.selectedTaskListId = '';
+        this.applyHierarchyFilter();
+    }
+
+    handleTaskListFilterChange(event) {
+        this.selectedTaskListId = event.detail.value;
+        this.applyHierarchyFilter();
+    }
+
+    handleResetFilters() {
+        this.selectedProjectId = '';
+        this.selectedMilestoneId = '';
+        this.selectedTaskListId = '';
+        this.selectedDateFilter = 'month';
+
+        this.gridData = this.buildGridData(this.allData || []);
+        this.updateDateRange();
+    }
+
+    applyHierarchyFilter() {
+        let projectsToUse = this.allData || [];
+
+        if (this.selectedProjectId) {
+            const project = (this.allData || []).find(p => p.Id === this.selectedProjectId);
+
+            if (project) {
+                const filteredProject = { ...project };
+
+                let milestones = (project.Milestones__r || []);
+
+                if (this.selectedMilestoneId) {
+                    milestones = milestones.filter(ms => ms.Id === this.selectedMilestoneId);
+                }
+
+                if (this.selectedTaskListId) {
+                    milestones = milestones
+                        .map(ms => {
+                            const msCopy = { ...ms };
+                            msCopy.Task_Lists__r = (ms.Task_Lists__r || []).filter(
+                                tl => tl.Id === this.selectedTaskListId
+                            );
+                            return msCopy;
+                        })
+                        .filter(ms => (ms.Task_Lists__r && ms.Task_Lists__r.length));
+                }
+
+                filteredProject.Milestones__r = milestones;
+                projectsToUse = [filteredProject];
+            }
+        }
+
+        this.gridData = this.buildGridData(projectsToUse);
         this.updateDateRange();
     }
 

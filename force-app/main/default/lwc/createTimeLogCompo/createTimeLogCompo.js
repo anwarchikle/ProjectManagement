@@ -10,7 +10,8 @@ import getTaskWithProject from '@salesforce/apex/TimeLogHelper.getTaskWithProjec
 import getProjects from '@salesforce/apex/TimeLogHelper.getProjects';
 import getTasksByProject from '@salesforce/apex/TimeLogHelper.getTasksByProject';
 import getBillablePicklistValues from '@salesforce/apex/TimeLogHelper.getBillablePicklistValues';
-import getIssueBugPicklistValues from '@salesforce/apex/TimeLogHelper.getIssueBugPicklistValues';
+// Commented by Harsh: Issue_Bug__c picklist no longer used
+// import getIssueBugPicklistValues from '@salesforce/apex/TimeLogHelper.getIssueBugPicklistValues';
 import getActiveUsers from '@salesforce/apex/TimeLogHelper.getActiveUsers';
 import getDailyCapacityValue from '@salesforce/apex/TimeLogHelper.getDailyCapacityValue';
 import createTimeLog from '@salesforce/apex/TimeLogHelper.createTimeLog';
@@ -27,9 +28,10 @@ export default class CreateTimeLogCompo extends NavigationMixin(LightningElement
     @track taskValue = '';
     @track dateValue = '';
     @track dailyHours = '';
-    @track issueBugValue = '';
+    // Commented by Harsh: Issue_Bug__c field removed
+    // @track issueBugValue = '';
     @track userValue = '';
-    @track generalLogValue = '';
+  //  @track generalLogValue = '';
     @track billableTypeValue = '';
     @track notesValue = '';
 
@@ -37,7 +39,8 @@ export default class CreateTimeLogCompo extends NavigationMixin(LightningElement
     @track projectOptions = [];
     @track taskOptions = [];
     @track userOptions = [];
-    @track issueBugOptions = [];
+    // Commented by Harsh: Issue_Bug__c options removed
+    // @track issueBugOptions = [];
     @track billableTypeOptions = [];
 
     // State variables
@@ -192,17 +195,15 @@ export default class CreateTimeLogCompo extends NavigationMixin(LightningElement
         }
     }
 
+    // Commented by Harsh: Issue_Bug__c picklist loading removed; only Billable_Type__c is used
     async loadPicklistValues() {
         try {
-            const issueBugResult = await getIssueBugPicklistValues();
-            this.issueBugOptions = issueBugResult.map(value => ({ label: value, value: value }));
-
             const billableResult = await getBillablePicklistValues();
             this.billableTypeOptions = billableResult.map(value => ({ label: value, value: value }));
 
             if (!this.billableTypeValue && billableResult.includes('Billable')) {
-            this.billableTypeValue = 'Billable';
-        }
+                this.billableTypeValue = 'Billable';
+            }
 
         } catch (error) {
             console.error('Error loading picklist values:', error);
@@ -302,17 +303,18 @@ export default class CreateTimeLogCompo extends NavigationMixin(LightningElement
         }
     }
 
-    handleIssueBugChange(event) {
-        this.issueBugValue = event.detail.value;
-    }
+    // Commented by Harsh: Issue_Bug__c change handler no longer needed
+    // handleIssueBugChange(event) {
+    //     this.issueBugValue = event.detail.value;
+    // }
 
     handleUserChange(event) {
         this.userValue = event.detail.value;
     }
 
-    handleGeneralLogChange(event) {
-        this.generalLogValue = event.target.value;
-    }
+    // handleGeneralLogChange(event) {
+    //     this.generalLogValue = event.target.value;
+    // }
 
     handleBillableTypeChange(event) {
         this.billableTypeValue = event.detail.value;
@@ -488,8 +490,9 @@ export default class CreateTimeLogCompo extends NavigationMixin(LightningElement
                 Daily_Logs__c: parseFloat(this.dailyHours),
                 User__c: this.userValue,
                 Notes__c: this.notesValue || null,
-                Issue_Bug__c: this.issueBugValue || null,
-                General_Log__c: this.generalLogValue || null,
+                // Commented by Harsh: Issue_Bug__c removed from payload
+                // Issue_Bug__c: this.issueBugValue || null,
+               // General_Log__c: this.generalLogValue || null,
                 Billable_Type__c: this.billableTypeValue || null
             };
 
@@ -537,7 +540,8 @@ export default class CreateTimeLogCompo extends NavigationMixin(LightningElement
 
     resetForm() {
         this.dailyHours = '';
-        this.issueBugValue = '';
+        // Commented by Harsh: Issue_Bug__c reset removed
+        // this.issueBugValue = '';
         this.generalLogValue = '';
         this.billableTypeValue = '';
         this.notesValue = '';

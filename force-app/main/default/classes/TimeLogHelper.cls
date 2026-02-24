@@ -1,3 +1,4 @@
+// Commented by Harsh: Removed Issue_Bug__c dependency
 public with sharing class TimeLogHelper {   
     // Get daily capacity from custom label
     private static Decimal getDailyCapacity() {
@@ -47,6 +48,7 @@ public with sharing class TimeLogHelper {
         return options;
     }
     
+    /* Commented by Harsh: Issue_Bug__c picklist access removed as field/relationship is being deleted.
     @AuraEnabled(cacheable=true)
     public static List<String> getIssueBugPicklistValues() {
         Schema.DescribeFieldResult fieldDescribe = Time_Log__c.Issue_Bug__c.getDescribe();
@@ -57,6 +59,7 @@ public with sharing class TimeLogHelper {
         }
         return options;
     }
+    */
     
     @AuraEnabled(cacheable=true)
     public static String getUserName(Id userId) {

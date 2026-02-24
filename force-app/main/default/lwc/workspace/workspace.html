@@ -2,7 +2,7 @@
     <div class="full-screen">
         <br/>
         <lightning-layout multiple-rows>
-            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="10"
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="3"
                 padding="horizontal-small">
                 <div>
                     <lightning-button variant="Brand" label="New Project" title="titleName" onclick={createNewProject}>
@@ -13,13 +13,41 @@
             <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="2"
                 padding="horizontal-small">
                 <div>
+                    <lightning-combobox name="projectFilter" label="Project" value={selectedProjectId}
+                        options={projectOptions} onchange={handleProjectFilterChange}>
+                    </lightning-combobox>
+                </div>
+            </lightning-layout-item>
+
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="2"
+                padding="horizontal-small">
+                <div>
+                    <lightning-combobox name="milestoneFilter" label="Milestone" value={selectedMilestoneId}
+                        options={milestoneOptions} onchange={handleMilestoneFilterChange} disabled={isProjectNotSelected}>
+                    </lightning-combobox>
+                </div>
+            </lightning-layout-item>
+
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="2"
+                padding="horizontal-small">
+                <div>
+                    <lightning-combobox name="taskListFilter" label="Task List" value={selectedTaskListId}
+                        options={taskListOptions} onchange={handleTaskListFilterChange} disabled={isProjectNotSelected}>
+                    </lightning-combobox>
+                </div>
+            </lightning-layout-item>
+
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="2"
+                padding="horizontal-small">
+                <div>
                     <lightning-combobox name="dateFilter" label="View" value={selectedDateFilter}
                         options={dateFilterOptions} onchange={handleDateFilterChange} variant="label-hidden">
                     </lightning-combobox>
+                    <lightning-button-icon icon-name="utility:refresh" variant="bare" alternative-text="Reset filters"
+                        title="Reset filters" onclick={handleResetFilters} class="slds-m-left_x-small">
+                    </lightning-button-icon>
                 </div>
-
             </lightning-layout-item>
-
 
         </lightning-layout>
 

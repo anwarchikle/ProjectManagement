@@ -362,11 +362,6 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>Issue_Bug__c.Issue_Bug__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
         <field>Issue_Bug__c.Release_Milestone__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -752,6 +747,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
+        <field>Tasks__c.Issue_Bug__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
         <field>Tasks__c.Milestone__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -828,11 +828,6 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>Time_Log__c.Is_Current__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Time_Log__c.Issue_Bug__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>

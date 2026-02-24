@@ -54,36 +54,38 @@
         <recaptchaScoreThreshold>0.0</recaptchaScoreThreshold>
     </networkAuthApiSettings>
     <networkMemberGroups>
+        <permissionSet>Util_Project_Manager_Access</permissionSet>
+        <permissionSet>Util_Senior_Developer_Access</permissionSet>
         <permissionSet>Util_QA_Access</permissionSet>
         <permissionSet>Util_Admin_Access</permissionSet>
-        <permissionSet>Util_Project_Manager_Access</permissionSet>
         <permissionSet>Util_Developer_Access</permissionSet>
-        <permissionSet>Util_Senior_Developer_Access</permissionSet>
         <permissionSet>CCP_Admin_Access</permissionSet>
+        <permissionSet>CCP_Senior_Developer_Access</permissionSet>
         <permissionSet>CCP_Project_Manager_Access</permissionSet>
         <permissionSet>CCP_Developer_Access</permissionSet>
-        <permissionSet>CCP_Senior_Developer_Access</permissionSet>
         <permissionSet>CCP_QA_Access</permissionSet>
-        <permissionSet>sfdcInternalInt__sfdc_scrt2</permissionSet>
         <permissionSet>Experience_Profile_Manager</permissionSet>
         <permissionSet>devedapp__Developer_Edition</permissionSet>
         <permissionSet>Util_System_Admin_Access</permissionSet>
         <permissionSet>sfdc_aiplanner_service_permset</permissionSet>
         <permissionSet>sfdcInternalInt__sfdc_chatbot</permissionSet>
+        <permissionSet>sfdcInternalInt__sfdc_scrt2</permissionSet>
         <permissionSet>CCP_Consultant_Access</permissionSet>
+        <permissionSet>CCP_Customer_Access</permissionSet>
+        <permissionSet>sfdcInternalInt__sfdc_nc_constraints_engine_deploy</permissionSet>
         <profile>Admin</profile>
         <profile>UTIL Senior Developer</profile>
+        <profile>UTIL QA</profile>
         <profile>UTIL Developer</profile>
         <profile>Customer Community User</profile>
         <profile>UTIL Admin</profile>
         <profile>UTIL Project Manager</profile>
-        <profile>UTIL QA</profile>
         <profile>Customer Community Plus User</profile>
+        <profile>PMT Developer</profile>
+        <profile>PMT QA</profile>
         <profile>PMT Project Manager</profile>
         <profile>PMT Admin</profile>
         <profile>PMT Senior Developer</profile>
-        <profile>PMT Developer</profile>
-        <profile>PMT QA</profile>
         <profile>Partner Community User</profile>
         <profile>Partner Community Login User</profile>
         <profile>Force%2Ecom - Free User</profile>
@@ -123,6 +125,7 @@
         <profile>Customer Community Plus Login User</profile>
         <profile>Partner App Subscription User</profile>
         <profile>External Identity User</profile>
+        <profile>PMT Customer Profile</profile>
     </networkMemberGroups>
     <networkPageOverrides>
         <changePasswordPageOverrideSetting>Standard</changePasswordPageOverrideSetting>

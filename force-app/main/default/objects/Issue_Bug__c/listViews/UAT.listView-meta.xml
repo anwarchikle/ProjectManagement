@@ -8,11 +8,16 @@
     <columns>Project__c</columns>
     <columns>Retest_Result__c</columns>
     <columns>Classification__c</columns>
+    <columns>Decision__c</columns>
     <filterScope>Everything</filterScope>
     <filters>
         <field>Environment__c</field>
         <operation>equals</operation>
         <value>UAT</value>
+    </filters>
+    <filters>
+        <field>Decision__c</field>
+        <operation>equals</operation>
     </filters>
     <label>UAT</label>
 </ListView>

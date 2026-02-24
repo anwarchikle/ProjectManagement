@@ -93,10 +93,10 @@
 /* ========== SCROLLABLE TASKS AREA ========== */
 .scrollable-tasks {
     flex: 1;
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow-y: visible;
+    /* overflow-x: hidden;
     padding: var(--spacing-lg);
-    padding-bottom: 100px;
+    padding-bottom: 100px; */
 }
 
 /* Custom Scrollbar */

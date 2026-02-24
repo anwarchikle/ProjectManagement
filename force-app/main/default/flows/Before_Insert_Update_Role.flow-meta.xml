@@ -169,6 +169,14 @@
         <connector>
             <targetReference>new_or_old_record</targetReference>
         </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Role__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
         <object>Project_Team_Member__c</object>
         <recordTriggerType>CreateAndUpdate</recordTriggerType>
         <triggerType>RecordBeforeSave</triggerType>

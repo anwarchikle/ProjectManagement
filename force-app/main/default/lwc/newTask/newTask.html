@@ -54,15 +54,7 @@
                     <template if:true={task.isExpanded}>
                         <div class="slds-grid slds-wrap slds-gutters_large slds-m-around_medium">
 
-                            <!-- Row 1 -->
-                            <div class="slds-col slds-size_1-of-5">
-                                <lightning-input label="Task Name" name="taskName" data-index={index}
-                                    value={task.taskName} onchange={handleInputChange} required>
-                                </lightning-input>
-                            </div>
-
-
-                            <div class="filter-item">
+                            <!-- <div class="slds-col slds-size_1-of-4">
                                 <c-lwc-custom-lookup 
                                     unique-name="Project" 
                                     object-a-p-i-name="Project__c"
@@ -70,11 +62,11 @@
                                     onprogressvaluechange={handleLookupSelection}
                                     oncustomlookupupdateevent={handleLookupUpdate} 
                                     label-for-component="Project"
-                                    place-holder="Select Project">
+                                    place-holder="Select Project">Project
                                 </c-lwc-custom-lookup>
                             </div>
 
-                            <div class="filter-item">
+                            <div class="slds-col slds-size_1-of-4">
                                 <c-lwc-custom-lookup 
                                     unique-name="Milestone" 
                                     object-a-p-i-name="Milestone__c"
@@ -83,8 +75,28 @@
                                     where={mileStoneCondition} 
                                     oncustomlookupupdateevent={handleLookupUpdate}
                                     label-for-component="Milestone" 
-                                    place-holder="Select Milestone">
+                                    place-holder="Select Milestone">Milestone
                                 </c-lwc-custom-lookup>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-4">
+                                <c-lwc-custom-lookup 
+                                    unique-name="TaskList" 
+                                    object-a-p-i-name="Task_List__c"
+                                    icon-name="standard:action_list_component" 
+                                    onprogressvaluechange={handleLookupSelection}
+                                    where={taskListCondition} 
+                                    oncustomlookupupdateevent={handleLookupUpdate}
+                                    label-for-component="TaskList" 
+                                    place-holder="Select Task List"> TaskList
+                                </c-lwc-custom-lookup>
+                            </div> -->
+
+                            <!-- Row 1 -->
+                            <div class="slds-col slds-size_1-of-5">
+                                <lightning-input label="Task Name" name="taskName" data-index={index}
+                                    value={task.taskName} onchange={handleInputChange} required>
+                                </lightning-input>
                             </div>
 
                             <div class="slds-col slds-size_1-of-5">
@@ -107,10 +119,20 @@
                                 </lightning-combobox>
                             </div>
                             <!-- **************************************************** -->
-                            <div class="slds-col slds-size_1-of-5">
-                                <lightning-record-picker label="Issue Bugs" object-api-name="Issue_Bug__c"
-                                    data-index={index} value={task.issueBug} onchange={handleIssueChange} required>
-                                </lightning-record-picker>
+                            <div class="slds-col slds-size_1-of-5 issue-bugs-field">
+                                <!-- <label class="custom-field-label"><span class="billing-required">*</span>Issue Bugs</label> -->
+                                <c-lwc-custom-lookup
+                                    data-index={index}
+                                    unique-name="IssueBug"
+                                    object-a-p-i-name="Issue_Bug__c"
+                                    icon-name="action:bug"
+                                    where={task.issueBugCondition}
+                                    onprogressvaluechange={handleIssueLookupSelection}
+                                    oncustomlookupupdateevent={handleIssueLookupUpdate}
+                                    label-for-component="Issue Bugs"
+                                    place-holder="Select Issue Bug"
+                                    required>
+                                </c-lwc-custom-lookup>
                             </div>
                             
 

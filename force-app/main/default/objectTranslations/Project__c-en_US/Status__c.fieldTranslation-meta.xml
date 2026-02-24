@@ -50,8 +50,4 @@
         <masterLabel>Support</masterLabel>
         <translation><!-- Support --></translation>
     </picklistValues>
-    <picklistValues>
-        <masterLabel>T&amp;M</masterLabel>
-        <translation><!-- T&amp;M --></translation>
-    </picklistValues>
 </CustomFieldTranslation>

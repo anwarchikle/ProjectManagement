@@ -8,11 +8,13 @@ export default class DragAndDropCard extends NavigationMixin(LightningElement) {
         return this.stage === this.record.Status__c
     }
     navigateTaskHandler(event) {
+        debugger;
         event.preventDefault()
         this.navigateHandler(event.target.dataset.id, 'Tasks__c')
     }
 
     handleLinkKeyDown(event) {
+        debugger;
         if (event.key === 'Enter' || event.key === ' ') {
             event.preventDefault();
             this.navigateHandler(this.record?.Id, 'Tasks__c');

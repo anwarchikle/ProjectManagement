@@ -66,6 +66,11 @@
         <visible>false</visible>
     </applicationVisibilities>
     <applicationVisibilities>
+        <application>standard__Integration</application>
+        <default>false</default>
+        <visible>false</visible>
+    </applicationVisibilities>
+    <applicationVisibilities>
         <application>standard__LightningBolt</application>
         <default>false</default>
         <visible>false</visible>
@@ -146,6 +151,11 @@
         <visible>false</visible>
     </applicationVisibilities>
     <applicationVisibilities>
+        <application>standard__Shield</application>
+        <default>false</default>
+        <visible>false</visible>
+    </applicationVisibilities>
+    <applicationVisibilities>
         <application>standard__Sites</application>
         <default>false</default>
         <visible>false</visible>
@@ -203,6 +213,10 @@
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
+        <apexClass>IssueBugHandler</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
         <apexClass>LightningForgotPasswordController</apexClass>
         <enabled>false</enabled>
     </classAccesses>
@@ -252,6 +266,10 @@
     </classAccesses>
     <classAccesses>
         <apexClass>NewTaskController</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>ProjectDashboardService</apexClass>
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
@@ -457,6 +475,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>Issue_Bug__c.Decision__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>Issue_Bug__c.Description__c</field>
         <readable>false</readable>
     </fieldPermissions>
@@ -497,17 +520,17 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>Issue_Bug__c.Issue_Bug__c</field>
-        <readable>false</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
         <field>Issue_Bug__c.Issue_Id__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
         <field>Issue_Bug__c.Issue_Iteration__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Issue_Bug__c.Reason_For_Rejected__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -522,12 +545,22 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>Issue_Bug__c.Retest_Fixed_Count__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>Issue_Bug__c.Retest_Result__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
         <field>Issue_Bug__c.Retest_Status__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Issue_Bug__c.Retesting_Count__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -548,6 +581,11 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Issue_Bug__c.Steps_To_Reproduce__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Issue_Bug__c.Task_List__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -702,6 +740,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>Project_Team_Member__c.Rate_Per_Hour__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>Project_Team_Member__c.Rate__c</field>
         <readable>false</readable>
     </fieldPermissions>
@@ -713,6 +756,11 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Project_Team_Member__c.Start_Date__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Project__c.Actual_Complete__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -732,6 +780,16 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>Project__c.Baseline_Effort_Hours__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Project__c.Baseline_Start_Date__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>Project__c.Billable_Hours__c</field>
         <readable>false</readable>
     </fieldPermissions>
@@ -743,6 +801,16 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Project__c.Budget_Balance__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Project__c.Budget_Creep__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Project__c.Budget_Health_Indication__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -772,12 +840,27 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>Project__c.Cost_Budget__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>Project__c.Customer__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
         <field>Project__c.End_Date__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Project__c.Forecast_End_Date__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Project__c.Forecasted_Cost_EAC__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -798,6 +881,11 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Project__c.Non_Billable_Hours__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Project__c.Planned_Complete__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -837,12 +925,37 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>Project__c.Remaining_Planned_Cost__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Project__c.Retesting_Fixed_Count__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Project__c.Scope_Creep__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Project__c.Scope_Health__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>Project__c.Start_Date__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
         <field>Project__c.Status__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Project__c.Unapproved_Extra_Effort__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -1148,11 +1261,6 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Time_Log__c.Is_Current__c</field>
-        <readable>false</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>Time_Log__c.Issue_Bug__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -1650,23 +1758,23 @@
         <layout>Task_Owner__c-Task Owner Layout</layout>
     </layoutAssignments>
     <layoutAssignments>
-        <layout>Tasks__c-Experience Site%27s Task Layout</layout>
-        <recordType>Tasks__c.Project_Manager</recordType>
-    </layoutAssignments>
-    <layoutAssignments>
-        <layout>Tasks__c-Experience Site%27s Task Layout</layout>
-        <recordType>Tasks__c.Quality_Assurance</recordType>
-    </layoutAssignments>
-    <layoutAssignments>
-        <layout>Tasks__c-Experience Site%27s Task Layout</layout>
-        <recordType>Tasks__c.Senior_Developer</recordType>
-    </layoutAssignments>
-    <layoutAssignments>
         <layout>Tasks__c-Task Layout</layout>
     </layoutAssignments>
     <layoutAssignments>
         <layout>Tasks__c-Task Layout</layout>
         <recordType>Tasks__c.Admin</recordType>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Tasks__c-Task Layout</layout>
+        <recordType>Tasks__c.Project_Manager</recordType>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Tasks__c-Task Layout</layout>
+        <recordType>Tasks__c.Quality_Assurance</recordType>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Tasks__c-Task Layout</layout>
+        <recordType>Tasks__c.Senior_Developer</recordType>
     </layoutAssignments>
     <layoutAssignments>
         <layout>Team_User__c-Team User Layout</layout>
@@ -1886,6 +1994,10 @@
     </tabVisibilities>
     <tabVisibilities>
         <tab>New_Bug_Entry</tab>
+        <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Project_Dashboard</tab>
         <visibility>Hidden</visibility>
     </tabVisibilities>
     <tabVisibilities>

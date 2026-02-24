@@ -66,11 +66,18 @@
     background: var(--bg-tertiary);
     overflow: hidden; */
 
+    /* display: flex;
+    flex-direction: column; */
+    /* This calculates the height minus the global Salesforce header/tabs */
+    /* height: calc(100vh - 150px); 
+    border: 1px solid #dddbda;
+    background: white; */
+
     display: flex;
     flex-direction: column;
-    /* This calculates the height minus the global Salesforce header/tabs */
-    height: calc(100vh - 150px); 
-    border: 1px solid #dddbda;
+    height: auto;        /* instead of calc(100vh - 150px) */
+    max-height: 100%;    /* let the modal control total height */
+    border: none;        /* optional – remove extra border inside modal */
     background: white;
 }
 
@@ -618,7 +625,7 @@ lightning-input-rich-text {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    align-items: flex-start;
+    align-items: center;
     padding: 0;
     margin: 0;
 }
@@ -631,6 +638,20 @@ lightning-input-rich-text {
 .billing-required {
     color: var(--color-error);
     margin-right: 2px;
+}
+
+.custom-field-label {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-xs);
+    display: block;
+}
+
+.issue-bugs-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
 }
 
 /* ========== BUTTON ENHANCEMENTS ========== */
@@ -664,7 +685,7 @@ lightning-button-stateful {
 
 /* ========== FIXED FOOTER ========== */
 .fixed-footer {
-    position: fixed;
+    position: sticky;
     bottom: 0;
     left: 0;
     right: 0;
@@ -973,4 +994,10 @@ lightning-icon {
     .task-row {
         border: 2px solid #000;
     }
+}
+
+.slds-modal__container {
+    margin: 0 auto;
+    width: 80%;
+    max-width: 80% !important;
 }

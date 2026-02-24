@@ -61,6 +61,10 @@ export default class DragAndDropLwc extends LightningElement {
     }
     @wire(getObjectInfo, { objectApiName: TASKS_OBJECT })
     objectInfo;
+    get canCreateTask() {
+        debugger;
+        return this.objectInfo?.data?.createable;
+    }
     @wire(getPicklistValues, {
         recordTypeId: '$objectInfo.data.defaultRecordTypeId',
         fieldApiName: STATUS_FIELD

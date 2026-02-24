@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Layout xmlns="http://soap.sforce.com/2006/04/metadata">
+    <excludeButtons>OpenSlackRecordChannel</excludeButtons>
     <excludeButtons>Submit</excludeButtons>
     <layoutSections>
         <customLabel>true</customLabel>
@@ -156,15 +157,11 @@
         <relatedList>Issue_Bug__c.Affected_Milestone__c</relatedList>
     </relatedLists>
     <relatedLists>
-        <relatedList>RelatedNoteList</relatedList>
-    </relatedLists>
-    <relatedLists>
         <relatedList>RelatedEntityHistoryList</relatedList>
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
         <fields>Billable_Type__c</fields>
-        <fields>Issue_Bug__c</fields>
         <fields>Tasks__c</fields>
         <fields>User__c</fields>
         <relatedList>Time_Log__c.Milestone__c</relatedList>
@@ -172,6 +169,9 @@
     <relatedLists>
         <fields>NAME</fields>
         <relatedList>Tasks__c.Milestone__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <relatedList>RelatedNoteList</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>

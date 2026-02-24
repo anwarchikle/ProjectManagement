@@ -32,9 +32,11 @@ export default class NewTask extends NavigationMixin(LightningElement) {
 
     @api
     get recordId() {
+        debugger;
         return this._parentId;
     }
     set recordId(val) {
+        debugger;
         this._parentId = val;
         if (val && this._parentObject) {
             this.resolveFromAura(val, this._parentObject);
@@ -112,6 +114,21 @@ export default class NewTask extends NavigationMixin(LightningElement) {
 
             this.billableValue = billable ? billable.value : (data.values[0] && data.values[0].value);
             this.nonBillableValue = nonBillable ? nonBillable.value : this.billableValue;
+
+            // Ensure existing tasks have a billingType set in sync with isBillable
+            if (this.tasks && this.tasks.length) {
+                this.tasks = this.tasks.map(task => {
+                    // If billingType already set, keep it. Otherwise derive from isBillable.
+                    if (task.billingType) {
+                        return task;
+                    }
+                    const isBillable = task.isBillable !== false; // default true when undefined
+                    return {
+                        ...task,
+                        billingType: isBillable ? this.billableValue : this.nonBillableValue
+                    };
+                });
+            }
         }
     }
 
@@ -157,6 +174,7 @@ export default class NewTask extends NavigationMixin(LightningElement) {
             endDate: '',
             comments: '',
             issueBug: null,
+            issueBugCondition: base.projectId ? `Project__c = '${base.projectId}'` : null,
             files: [],              // *** ADD THIS ***
             hasFiles: false,        // *** ADD THIS ***
             fileCount: 0,           // *** ADD THIS ***
@@ -201,6 +219,8 @@ export default class NewTask extends NavigationMixin(LightningElement) {
             taskList: null,
             taskListOptions: [],
             taskListDisabled: true,
+            issueBug: null,
+            issueBugCondition: null,
             startDate: '',
             endDate: '',
             workHours: '',
@@ -443,7 +463,9 @@ getFileIcon(fileType) {
                 milestoneOptions: [],
                 taskListOptions: [],
                 milestoneDisabled: false,
-                taskListDisabled: true
+                taskListDisabled: true,
+                issueBug: null,
+                issueBugCondition: projectId ? `Project__c = '${projectId}'` : null
             };
         });
 
@@ -497,7 +519,9 @@ getFileIcon(fileType) {
                     milestone: milestoneId,
                     taskList: '',
                     taskListOptions: [],
-                    taskListDisabled: !milestoneId
+                    taskListDisabled: !milestoneId,
+                    issueBug: null,
+                    issueBugCondition: null
                 };
             }
             return task;
@@ -546,7 +570,10 @@ getFileIcon(fileType) {
 
         this.tasks = this.tasks.map((task, idx) => {
             if (idx === index) {
-                return { ...task, taskList: taskListId };
+                return {
+                    ...task,
+                    taskList: taskListId
+                };
             }
             return task;
         });
@@ -792,6 +819,7 @@ getFileIcon(fileType) {
     }
 
     navigateToTaskListView() {
+        debugger;
         this[NavigationMixin.Navigate]({
             type: 'standard__objectPage',
             attributes: {
@@ -812,6 +840,38 @@ getFileIcon(fileType) {
         this.tasks = this.tasks.map((task, idx) => {
             if (idx === index) {
                 return { ...task, issueBug: issueBugId };
+            }
+            return task;
+        });
+    }
+
+    handleIssueLookupSelection(event) {
+        const index = parseInt(event.currentTarget.dataset.index, 10);
+        const { name, selectedRecord } = event.detail || {};
+
+        if (name !== 'IssueBug') {
+            return;
+        }
+
+        this.tasks = this.tasks.map((task, idx) => {
+            if (idx === index) {
+                return { ...task, issueBug: selectedRecord };
+            }
+            return task;
+        });
+    }
+
+    handleIssueLookupUpdate(event) {
+        const index = parseInt(event.currentTarget.dataset.index, 10);
+        const { name } = event.detail || {};
+
+        if (name !== 'IssueBug') {
+            return;
+        }
+
+        this.tasks = this.tasks.map((task, idx) => {
+            if (idx === index) {
+                return { ...task, issueBug: null };
             }
             return task;
         });
@@ -916,6 +976,7 @@ getFileIcon(fileType) {
     }
 
     handleCancel() {
+        debugger;
         this.tasks = [];
         this.addRow();
         window.close();
@@ -1371,6 +1432,30 @@ getFileIcon(fileType) {
                 el.addEventListener('scroll', el.__syncScrollHandler, { passive: true });
             });
         });
+    }
+
+
+
+    // ********************************************************************************************************
+
+    handleLookupSelection(event) {
+        const { name, selectedRecord } = event.detail;
+
+        switch (name) {
+            case 'Issue':
+                this.data.projectId = selectedRecord;
+                this.mileStoneCondition = `Project__c = '${this.data.projectId}'`;
+                break;
+        }
+    }
+
+    handleLookupUpdate(event) {
+        const { name, selectedRecord } = event.detail;
+        switch (name) {
+            case 'Project':
+                this.projectId = null;
+                break;
+        }
     }
 
     // ************************************************** UPLOAD FILE *******************************************

@@ -63,6 +63,14 @@
         </sections>
     </layouts>
     <quickActions>
+        <label><!-- Dashboard --></label>
+        <name>Dashboard</name>
+    </quickActions>
+    <quickActions>
+        <label><!-- Project Dashboard --></label>
+        <name>Project_Dashboard</name>
+    </quickActions>
+    <quickActions>
         <label><!-- Project Status Report --></label>
         <name>Project_Status_Report</name>
     </quickActions>

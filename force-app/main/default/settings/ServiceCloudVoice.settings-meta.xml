@@ -3,7 +3,6 @@
     <disableSCVTaskCreationForHVS>false</disableSCVTaskCreationForHVS>
     <enableAmazonQueueManagement>false</enableAmazonQueueManagement>
     <enableDefaultChannelForSCV>false</enableDefaultChannelForSCV>
-    <enableDigitalVoiceWhatsapp>false</enableDigitalVoiceWhatsapp>
     <enableEndUserForSCV>false</enableEndUserForSCV>
     <enableOmniCapacityForSCV>false</enableOmniCapacityForSCV>
     <enablePTQueueManagement>false</enablePTQueueManagement>

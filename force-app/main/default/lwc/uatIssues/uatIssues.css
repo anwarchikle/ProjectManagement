@@ -284,3 +284,10 @@ lightning-spinner {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: box-shadow 0.2s ease;
 }
+
+
+.slds-modal__container {
+    margin: 0 auto;
+    width: 80%;
+    max-width: 80% !important;
+}

@@ -184,6 +184,76 @@
             <field>Non_Billable_Hours__c</field>
             <table>Project__c</table>
         </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Retesting_Fixed_Count__c</field>
+            <table>Project__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Baseline_Effort_Hours__c</field>
+            <table>Project__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Baseline_Start_Date__c</field>
+            <table>Project__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Forecast_End_Date__c</field>
+            <table>Project__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Planned_Complete__c</field>
+            <table>Project__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Actual_Complete__c</field>
+            <table>Project__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Unapproved_Extra_Effort__c</field>
+            <table>Project__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Remaining_Planned_Cost__c</field>
+            <table>Project__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Forecasted_Cost_EAC__c</field>
+            <table>Project__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Cost_Budget__c</field>
+            <table>Project__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Budget_Creep__c</field>
+            <table>Project__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Budget_Health_Indication__c</field>
+            <table>Project__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Scope_Creep__c</field>
+            <table>Project__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Scope_Health__c</field>
+            <table>Project__c</table>
+        </columns>
         <masterLabel>Projects</masterLabel>
     </sections>
     <sections>
@@ -383,11 +453,6 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>Projects__c</field>
-            <table>Project__c.Tasks__r.Time_Logs__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Issue_Bug__c</field>
             <table>Project__c.Tasks__r.Time_Logs__r</table>
         </columns>
         <columns>
