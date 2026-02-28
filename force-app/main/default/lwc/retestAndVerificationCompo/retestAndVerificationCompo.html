@@ -68,6 +68,7 @@
                 <table class="slds-table slds-table_cell-buffer slds-table_bordered">
                     <thead>
                         <tr>
+                            <th>Actions</th>
                             <template for:each={Newcolumns} for:item="col">
                                 <th key={col.fieldApiName}>
                                     {col.label}
@@ -80,6 +81,15 @@
                     <tbody>
                         <template for:each={visibleRecords} for:item="row">
                             <tr key={row.Id}>
+
+                                <td>
+                                    <lightning-button
+                                        variant="brand-outline"
+                                        label="Create Task"
+                                        data-id={row.Id}
+                                        onclick={handleCreateTaskClick}>
+                                    </lightning-button>
+                                </td>
 
                                 <template for:each={row.cells} for:item="cell">
                                     <td key={cell.fieldApiName}>

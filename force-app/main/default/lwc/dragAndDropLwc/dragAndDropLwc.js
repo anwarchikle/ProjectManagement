@@ -1,32 +1,60 @@
 import { LightningElement, wire, track } from 'lwc';
-import { getListUi } from 'lightning/uiListApi';
-import { updateRecord } from 'lightning/uiRecordApi';
+import { getRecord } from 'lightning/uiRecordApi';
 import { refreshApex } from '@salesforce/apex';
 import { getPicklistValues, getObjectInfo } from 'lightning/uiObjectInfoApi';
 import TASKS_OBJECT from '@salesforce/schema/Tasks__c';
 import STATUS_FIELD from '@salesforce/schema/Tasks__c.Status__c';
 import ID_FIELD from '@salesforce/schema/Tasks__c.Id';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
-import getTaskListViews from '@salesforce/apex/taskController.getTaskListViews';
 import isInternalUser from '@salesforce/apex/taskController.isInternalUser'
+import updateTaskStatusWithChecks from '@salesforce/apex/taskController.updateTaskStatusWithChecks';
+import getKanbanTasks from '@salesforce/apex/taskController.getKanbanTasks';
+import USER_ID from '@salesforce/user/Id';
 export default class DragAndDropLwc extends LightningElement {
     records;
     pickVals;
+    allStatuses;
     recordId;
     searchKey = '';
-    @track selectedListView = 'All';
-    listViewOptions = [];
+    viewType = 'My_Tasks';
     viewMode = 'kanban';
     wiredData;
     @track showExportDialog = false;
     @track selectedExportStatus = 'All';
     @track isInternalUser = false;
+    @wire(getRecord, { recordId: USER_ID, fields: ['User.Profile.Name'] })
+    currentUser;
     /* ============================
        FETCH TASKS
     ============================ */
 
     connectedCallback() {
+        debugger;
         this.checkUserType();
+    }
+    updateStagesForView() {
+        if (!Array.isArray(this.allStatuses) || this.allStatuses.length === 0) {
+            this.pickVals = this.allStatuses;
+            return;
+        }
+        if (this.viewType === 'All_Tasks') {
+            // All Tasks: show all statuses for everyone
+            this.pickVals = this.allStatuses;
+            return;
+        }
+
+        const profile = this.userProfileName;
+        if (profile === 'PMT Developer') {
+            // Developer in My Tasks / My Today Tasks:
+            // Open, Assigned, In Progress, Testing
+            const allowedDev = ['Open', 'Assigned', 'In Progress', 'Testing'];
+            this.pickVals = this.allStatuses.filter(s => allowedDev.includes(s));
+        } else {
+            // Other profiles in My Tasks / My Today Tasks:
+            // Open, In Progress, Completed
+            const allowed = ['Open', 'In Progress', 'Completed'];
+            this.pickVals = this.allStatuses.filter(s => allowed.includes(s));
+        }
     }
 
     checkUserType() {
@@ -44,23 +72,22 @@ export default class DragAndDropLwc extends LightningElement {
 
 
 
-    @wire(getTaskListViews)
-    wiredTaskListViews({ data, error }) {
-        debugger;
-        if (data) {
-            this.listViewOptions = data;
-            if (!this.selectedListView) {
-                this.selectedListView = 'All';
-            }
+    get viewTypeOptions() {
+        const opts = [
+            { label: 'My Tasks', value: 'My_Tasks' },
+            { label: 'My Today Tasks', value: 'My_Today_Tasks' }
+        ];
+        const profile = this.userProfileName;
+        if (profile !== 'PMT Developer') {
+            opts.splice(1, 0, { label: 'All Tasks', value: 'All_Tasks' });
         }
-        if (error) {
-            console.error(error);
-            this.listViewOptions = [{ label: 'All', value: 'All' }];
-            this.selectedListView = 'All';
-        }
+        return opts;
     }
     @wire(getObjectInfo, { objectApiName: TASKS_OBJECT })
     objectInfo;
+    get userProfileName() {
+        return this.currentUser?.data?.fields?.Profile?.value?.fields?.Name?.value || '';
+    }
     get canCreateTask() {
         debugger;
         return this.objectInfo?.data?.createable;
@@ -71,42 +98,37 @@ export default class DragAndDropLwc extends LightningElement {
     })
     statusPicklistValues({ data, error }) {
         if (data) {
-            this.pickVals = data.values.map(item => item.value);
+            this.allStatuses = data.values.map(item => item.value);
+            this.updateStagesForView();
         }
         if (error) {
             console.error(error);
         }
     }
-    @wire(getListUi, { objectApiName: TASKS_OBJECT, listViewApiName: '$selectedListView' })
-    wiredListView(result) {
+    @wire(getKanbanTasks, { viewType: '$viewType' })
+    wiredKanbanTasks(result) {
         debugger;
         this.wiredData = result;
-        const { error, data } = result;
+        const { data, error } = result;
         if (data) {
-            this.records = data.records.records
-                .filter(item => {
-                    let field = item.fields;
-                    return field.Status__c?.value;
-                })
-                .map(item => {
-                    let field = item.fields;
-                    return {
-                        Id: field.Id?.value,
-                        Name: field.Name?.value || '',
-                        recordUrl: field.Id?.value ? '/' + field.Id.value : '',
-                        Status__c: field.Status__c?.value || '',
-                        Priority__c: field.Priority__c?.value || '',
-                        Start_Date__c: field.Start_Date__c?.value || '',
-                        End_Date__c: field.End_Date__c?.value || ''
-                    };
-                });
+            this.records = data
+                .filter(item => item.Status__c)
+                .map(item => ({
+                    Id: item.Id,
+                    Name: item.Name || '',
+                    recordUrl: item.Id ? '/' + item.Id : '',
+                    Status__c: item.Status__c || '',
+                    Priority__c: item.Priority__c || '',
+                    Start_Date__c: item.Start_Date__c || '',
+                    End_Date__c: item.End_Date__c || ''
+                }));
         }
         if (error) {
             console.error(error);
             this.dispatchEvent(
                 new ShowToastEvent({
                     title: 'Error',
-                    message: 'Failed to load tasks for the selected list view',
+                    message: 'Failed to load tasks for the selected view',
                     variant: 'error'
                 })
             );
@@ -138,14 +160,15 @@ export default class DragAndDropLwc extends LightningElement {
     showList() {
         this.viewMode = 'list';
     }
-    handleListViewChange(event) {
-        debugger;
-       this.selectedListView = event.detail.value; // this.listViewOptions.find(opt => opt.value === event.detail.value)?.label || 'All';
+    handleViewTypeChange(event) {
+        this.viewType = event.detail.value;
+        this.updateStagesForView();
     }
     handleSearchChange(event) {
         this.searchKey = event.target.value;
     }
     get visibleRecords() {
+        debugger;
         if (!Array.isArray(this.records)) {
             return this.records;
         }
@@ -409,11 +432,7 @@ export default class DragAndDropLwc extends LightningElement {
        UPDATE RECORD
     ============================ */
     updateHandler(status) {
-        const fields = {};
-        fields[ID_FIELD.fieldApiName] = this.recordId;
-        fields[STATUS_FIELD.fieldApiName] = status;
-        const recordInput = { fields };
-        updateRecord(recordInput)
+        updateTaskStatusWithChecks({ taskId: this.recordId, newStatus: status })
             .then(() => {
                 this.showToast();
                 return refreshApex(this.wiredData);
@@ -421,14 +440,9 @@ export default class DragAndDropLwc extends LightningElement {
             .catch(error => {
                 console.error(error);
                 let message = 'Something went wrong';
-                if (error?.body?.output?.errors?.length) {
-                    message = error.body.output.errors[0].errorCode +
-                        ' : ' + error.body.output.errors[0].message;
-                } else if (error?.body?.message) {
+                if (error && error.body && error.body.message) {
                     message = error.body.message;
-                } else if (Array.isArray(error.body)) {
-                    message = error.body.map(e => e.message).join(', ');
-                } else if (error?.message) {
+                } else if (error && error.message) {
                     message = error.message;
                 }
                 this.dispatchEvent(

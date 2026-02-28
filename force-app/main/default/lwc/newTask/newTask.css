@@ -92,7 +92,7 @@
 
     flex: 0 0 auto;
     position: sticky; /* Double protection */
-    top: 0;
+    top: 85px;
     z-index: 4; /* Higher z-index to beat SLDS layers */
     /* background: white; */
 }
@@ -162,7 +162,7 @@
 /* ========== TASK ROW GRID LAYOUT ========== */
 .task-row .slds-grid {
     gap: var(--spacing-md);
-    justify-content: space-around;
+    justify-content: space-between;
 }
 
 .task-row .slds-col {
@@ -685,7 +685,7 @@ lightning-button-stateful {
 
 /* ========== FIXED FOOTER ========== */
 .fixed-footer {
-    position: sticky;
+    position: fixed;
     bottom: 0;
     left: 0;
     right: 0;

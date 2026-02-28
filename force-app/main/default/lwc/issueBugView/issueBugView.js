@@ -4,7 +4,7 @@ export default class IssueBugView extends LightningElement {
     selectedListView = '';
     showMyBugs = true;
     showUATIssues = false;
-    showTriage = false;
+    showCRLists = false;
     showQAValidation = false;
     showRetest = false;
 
@@ -14,7 +14,7 @@ export default class IssueBugView extends LightningElement {
         if(event.target.value === 'My_Bugs'){
             this.showMyBugs = true;
             this.showUATIssues = false;
-            this.showTriage = false;
+            this.showCRLists = false;
             this.showQAValidation = false;
             this.showRetest = false;
             this.selectedListView = event.target.value || 'All';
@@ -22,13 +22,13 @@ export default class IssueBugView extends LightningElement {
         else if(event.target.value === 'UAT_Issues'){
             this.showUATIssues = true;
             this.showMyBugs = false;
-            this.showTriage = false;
+            this.showCRLists = false;
             this.showQAValidation = false;
             this.showRetest = false;
             this.selectedListView = 'UAT' || 'All';
         }
-        else if(event.target.value === 'Triage'){
-            this.showTriage = true;
+        else if(event.target.value === 'CR_List'){
+            this.showCRLists = true;
             this.showMyBugs = false;
             this.showUATIssues = false;
             this.showQAValidation = false;
@@ -39,7 +39,7 @@ export default class IssueBugView extends LightningElement {
             this.showQAValidation = true;
             this.showMyBugs = false;
             this.showUATIssues = false;
-            this.showTriage = false;
+            this.showCRLists = false;
             this.showRetest = false;
             this.selectedListView = event.target.value || 'All';
         }
@@ -47,7 +47,7 @@ export default class IssueBugView extends LightningElement {
             this.showRetest = true;
             this.showMyBugs = false;
             this.showUATIssues = false;
-            this.showTriage = false;
+            this.showCRLists = false;
             this.showQAValidation = false;
             this.selectedListView = event.target.value || 'All';
         }

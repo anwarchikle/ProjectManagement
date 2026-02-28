@@ -3,51 +3,35 @@
     <label><!-- Status --></label>
     <name>Status__c</name>
     <picklistValues>
-        <masterLabel>Active</masterLabel>
-        <translation><!-- Active --></translation>
+        <masterLabel>BRG</masterLabel>
+        <translation><!-- BRG --></translation>
     </picklistValues>
     <picklistValues>
-        <masterLabel>Approved</masterLabel>
-        <translation><!-- Approved --></translation>
+        <masterLabel>Development</masterLabel>
+        <translation><!-- Development --></translation>
     </picklistValues>
     <picklistValues>
-        <masterLabel>Cancelled</masterLabel>
-        <translation><!-- Cancelled --></translation>
+        <masterLabel>Go-Live</masterLabel>
+        <translation><!-- Go-Live --></translation>
     </picklistValues>
     <picklistValues>
-        <masterLabel>Completed</masterLabel>
-        <translation><!-- Completed --></translation>
+        <masterLabel>Hypercare Support</masterLabel>
+        <translation><!-- Hypercare Support --></translation>
     </picklistValues>
     <picklistValues>
-        <masterLabel>Delayed</masterLabel>
-        <translation><!-- Delayed --></translation>
+        <masterLabel>Kick off</masterLabel>
+        <translation><!-- Kick off --></translation>
     </picklistValues>
     <picklistValues>
-        <masterLabel>In Progress</masterLabel>
-        <translation><!-- In Progress --></translation>
+        <masterLabel>Pre Kick off</masterLabel>
+        <translation><!-- Pre Kick off --></translation>
     </picklistValues>
     <picklistValues>
-        <masterLabel>In Testing</masterLabel>
-        <translation><!-- In Testing --></translation>
+        <masterLabel>Sign-off</masterLabel>
+        <translation><!-- Sign-off --></translation>
     </picklistValues>
     <picklistValues>
-        <masterLabel>Invoiced</masterLabel>
-        <translation><!-- Invoiced --></translation>
-    </picklistValues>
-    <picklistValues>
-        <masterLabel>On Hold</masterLabel>
-        <translation><!-- On Hold --></translation>
-    </picklistValues>
-    <picklistValues>
-        <masterLabel>On Track</masterLabel>
-        <translation><!-- On Track --></translation>
-    </picklistValues>
-    <picklistValues>
-        <masterLabel>Planning</masterLabel>
-        <translation><!-- Planning --></translation>
-    </picklistValues>
-    <picklistValues>
-        <masterLabel>Support</masterLabel>
-        <translation><!-- Support --></translation>
+        <masterLabel>UAT</masterLabel>
+        <translation><!-- UAT --></translation>
     </picklistValues>
 </CustomFieldTranslation>

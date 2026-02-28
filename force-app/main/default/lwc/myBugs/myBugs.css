@@ -12,9 +12,9 @@
 }
 
 /* Content Section */
-.content-section {
+/* .content-section {
     padding: 16px;
-}
+} */
 
 /* Metrics Cards Container */
 .metrics-container {
@@ -113,6 +113,8 @@
 /* Table Wrapper */
 .table-wrapper {
     overflow-x: auto;
+    overflow-y: auto;
+    max-height: 490px;
     border: 1px solid #e5e5e5;
     border-radius: 4px;
     background: #ffffff;
@@ -292,4 +294,60 @@ lightning-spinner {
 .metric-card:hover {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: box-shadow 0.2s ease;
+}
+
+/* ==============================
+   STATUS CARD (shared look with Retest component)
+============================== */
+
+.status-card {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 1rem;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.2s ease;
+}
+
+.status-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+.status-label {
+    display: block;
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+    color: #555;
+}
+
+.status-count {
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin-top: 0.4rem;
+}
+
+/* Color Indicators */
+.pending { border-left: 4px solid #ff9800; }
+.fixed { border-left: 4px solid #4caf50; }
+.retest { border-left: 4px solid #2196f3; }
+.atrisk { border-left: 4px solid #f44336; }
+
+.pagination-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    justify-content: flex-end;
+    padding: 12px 8px 4px 8px;
+    flex-wrap: wrap;
+}
+
+.page-info {
+    font-size: 13px;
+    color: #3e3e3c;
+    white-space: nowrap;
+}
+
+.page-size-wrapper {
+    width: 120px;   /* fixed width so combobox renders properly */
 }

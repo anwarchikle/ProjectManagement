@@ -3,6 +3,8 @@
     <fullName>Retest_Result__c</fullName>
     <label>Retest Result</label>
     <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>true</trackHistory>
     <trackTrending>false</trackTrending>
     <type>Picklist</type>
     <valueSet>

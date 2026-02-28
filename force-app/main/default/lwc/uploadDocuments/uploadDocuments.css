@@ -1,54 +1,209 @@
-.folder {
-    cursor: pointer;
-    margin-bottom: 10px;
+/* ============================================================
+   UPLOAD DOCUMENTS — Premium LWC Styles v3
+   Aesthetic: Warm Editorial · Forest Green + Amber
+   ============================================================ */
+
+:host {
+    --green: #1e4d3b;
+    --green-mid: #2d6a52;
+    --green-light: rgba(30, 77, 59, 0.07);
+    --green-glow: rgba(30, 77, 59, 0.18);
+    --amber: #c9872a;
+    --amber-glow: rgba(201, 135, 42, 0.28);
+    --danger: #b94040;
+    --danger-light: rgba(185, 64, 64, 0.09);
+    --surface: #ffffff;
+    --surface-alt: #faf8f5;
+    --border: #e4ddd3;
+    --border-dark: #cec5b8;
+    --text: #1a1612;
+    --text-soft: #6b6358;
+    --text-muted: #a09890;
+    --r-sm: 6px;
+    --r-md: 12px;
+    --r-lg: 18px;
+    --shadow-sm: 0 1px 4px rgba(26,22,18,0.08);
+    --shadow-md: 0 4px 20px rgba(26,22,18,0.1);
+    --ease: cubic-bezier(0.4, 0, 0.2, 1);
+    --t: all 0.2s var(--ease);
+
+    font-family: 'Jost', 'Segoe UI', system-ui, sans-serif;
+    color: var(--text);
+}
+
+/* Card styling */
+.slds-card {
+    background: var(--surface) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: var(--r-lg) !important;
+    box-shadow: var(--shadow-md) !important;
+    overflow: hidden;
+}
+
+.slds-card__header {
+    background: var(--green) !important;
+    border-bottom: none !important;
+    padding: 1.35rem 2rem !important;
+}
+
+.slds-card__header-title,
+.slds-card__header-title * {
+    font-family: 'Playfair Display', Georgia, serif !important;
+    font-weight: 600 !important;
+    font-size: 1.1rem !important;
+    letter-spacing: 0.01em !important;
+    color: #f7f4ef !important;
+}
+
+.slds-card__body {
+    padding: 0 !important;
+}
+
+/* Table refinements */
+.slds-table {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.slds-table thead th {
+    background: var(--surface-alt);
+    border-bottom: 1px solid var(--border);
+    font-size: 0.67rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 0.6rem 1.75rem;
+}
+
+.slds-table tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: var(--t);
+}
+
+.slds-table tbody tr:hover {
+    background: var(--green-light);
+}
+
+.slds-table td {
+    padding: 0.9rem 1.75rem;
+    vertical-align: middle;
+}
+
+/* Upload column wrapper */
+.upload-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+/* Hide the default lightning-file-upload button */
+.hidden-upload lightning-button,
+.hidden-upload .slds-button {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+/* Custom upload icon button */
+.upload-icon-btn {
     display: flex;
     align-items: center;
-}
-
-.folder span {
-    margin-left: 10px;
-}
-
-.slds-modal__container {
-    width: 50%;
-    max-width: 40rem;
-}
-
-.slds-backdrop_open {
-    display: block;
-}
-
-.slds-list_dotted {
-    list-style: dotted;
-    padding-left: 20px;
-}
-
-.slds-item {
+    gap: 0.45rem;
+    padding: 0.42rem 0.9rem;
+    border-radius: var(--r-sm);
+    border: 1.5px dashed var(--border-dark);
+    background: transparent;
+    color: var(--text-soft);
     cursor: pointer;
-    margin: 5px 0;
+    font-family: inherit;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    transition: var(--t);
+    white-space: nowrap;
+}
+
+.upload-icon-btn:hover {
+    border-color: var(--green);
+    background: var(--green-light);
+    color: var(--green);
+    box-shadow: 0 0 0 3px var(--green-glow);
+}
+
+.upload-icon-btn:active {
+    transform: scale(0.97);
+}
+
+.upload-svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    transition: transform 0.2s var(--ease);
+}
+
+.upload-icon-btn:hover .upload-svg {
+    transform: translateY(-2px);
+}
+
+/* Files column - clickable file count */
+.view-files-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    font-family: inherit;
+    font-size: 0.91rem;
+    font-weight: 500;
+    color: var(--green);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    transition: var(--t);
+}
+
+.view-files-btn:hover {
+    color: var(--green-mid);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.file-count {
+    background: var(--green-light);
+    border-radius: 999px;
+    padding: 0.2rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--green);
+    border: 1px solid var(--green-glow);
+    line-height: 1;
+}
+
+/* Count column (optional styling) */
+.slds-table td:last-child {
+    font-weight: 500;
+    color: var(--text-soft);
+}
+
+/* Modal adjustments (keep original) */
+.slds-modal__header {
+    background: var(--surface-alt);
+    border-bottom: 1px solid var(--border);
 }
 
 .slds-modal__footer {
-    display: flex;
-    justify-content: flex-end;
+    border-top: 1px solid var(--border);
+    background: var(--surface-alt);
 }
 
-.slds-button_neutral,
-.slds-button_brand,
-.slds-button_destructive {
-    margin-left: 10px;
-}
-
-.slds-modal__container {
-    max-width: 80%;
-}
-
-iframe {
-    border: none;
-}
-
-.uploaded-image {
-    max-width: 100%;
-    display: block;
-    margin: 0 auto; /* Center the image horizontally */
+.error-msg {
+    font-size: 0.82rem;
+    color: var(--danger);
+    background: var(--danger-light);
+    border: 1px solid rgba(185, 64, 64, 0.2);
+    border-radius: var(--r-sm);
+    padding: 0.75rem 1.1rem;
+    margin: 1.25rem 1.75rem;
 }

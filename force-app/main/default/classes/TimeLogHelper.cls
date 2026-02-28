@@ -32,7 +32,7 @@ public with sharing class TimeLogHelper {
         }
         return [SELECT Id, Name, Associated_Project__c 
                 FROM Tasks__c 
-                WHERE Associated_Project__c = :projectId 
+                WHERE Associated_Project__c = :projectId AND Status__c NOT IN ('Testing', 'Completed')
                 ORDER BY Name 
                 LIMIT 200];
     }

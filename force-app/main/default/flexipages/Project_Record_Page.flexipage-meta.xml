@@ -103,12 +103,6 @@
         </itemInstances>
         <itemInstances>
             <componentInstance>
-                <componentName>projectAnalytics</componentName>
-                <identifier>c_projectAnalytics</identifier>
-            </componentInstance>
-        </itemInstances>
-        <itemInstances>
-            <componentInstance>
                 <componentInstanceProperties>
                     <name>hideUpdateButton</name>
                     <value>false</value>
@@ -123,12 +117,8 @@
         </itemInstances>
         <itemInstances>
             <componentInstance>
-                <componentInstanceProperties>
-                    <name>hideHeader</name>
-                    <value>true</value>
-                </componentInstanceProperties>
-                <componentName>force:relatedListQuickLinksContainer</componentName>
-                <identifier>force_relatedListQuickLinksContainer</identifier>
+                <componentName>projectAnalytics</componentName>
+                <identifier>c_projectAnalytics</identifier>
             </componentInstance>
         </itemInstances>
         <name>header</name>
@@ -181,8 +171,8 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Project_Description__c</fieldItem>
-                <identifier>RecordProject_Description_cField</identifier>
+                <fieldItem>Record.End_Date__c</fieldItem>
+                <identifier>RecordEnd_Date_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -191,89 +181,11 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Retesting_Fixed_Count__c</fieldItem>
-                <identifier>RecordRetesting_Fixed_Count__cField</identifier>
+                <fieldItem>Record.Project_Description__c</fieldItem>
+                <identifier>RecordProject_Description_cField</identifier>
             </fieldInstance>
         </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Baseline_Effort_Hours__c</fieldItem>
-                <identifier>RecordBaseline_Effort_Hours__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Baseline_Start_Date__c</fieldItem>
-                <identifier>RecordBaseline_Start_Date__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Forecast_End_Date__c</fieldItem>
-                <identifier>RecordForecast_End_Date__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Planned_Complete__c</fieldItem>
-                <identifier>RecordPlanned_Complete__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Actual_Complete__c</fieldItem>
-                <identifier>RecordActual_Complete__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Unapproved_Extra_Effort__c</fieldItem>
-                <identifier>RecordUnapproved_Extra_Effort__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Remaining_Planned_Cost__c</fieldItem>
-                <identifier>RecordRemaining_Planned_Cost__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Forecasted_Cost_EAC__c</fieldItem>
-                <identifier>RecordForecasted_Cost_EAC__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Cost_Budget__c</fieldItem>
-                <identifier>RecordCost_Budget__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Budget_Creep__c</fieldItem>
-                <identifier>RecordBudget_Creep__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Budget_Health_Indication__c</fieldItem>
-                <identifier>RecordBudget_Health_Indication__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Scope_Creep__c</fieldItem>
-                <identifier>RecordScope_Creep__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Scope_Health__c</fieldItem>
-                <identifier>RecordScope_Health__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <name>Facet-54cd7a50-16ef-4fb7-9e79-7077f74aab26</name>
+        <name>Facet-c95ff639-00e0-4340-a4e5-ef158d05317d</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -293,8 +205,8 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Status__c</fieldItem>
-                <identifier>RecordStatus_cField</identifier>
+                <fieldItem>Record.Type__c</fieldItem>
+                <identifier>RecordType__cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -303,8 +215,8 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Project_Group__c</fieldItem>
-                <identifier>RecordProject_Group_cField</identifier>
+                <fieldItem>Record.Status__c</fieldItem>
+                <identifier>RecordStatus_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -323,8 +235,290 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.End_Date__c</fieldItem>
-                <identifier>RecordEnd_Date_cField</identifier>
+                <fieldItem>Record.Project_Group__c</fieldItem>
+                <identifier>RecordProject_Group_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <name>Facet-492cb7bc-e02a-4360-a2d1-11421e37c2be</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-c95ff639-00e0-4340-a4e5-ef158d05317d</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:column</componentName>
+                <identifier>flexipage_column10</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-492cb7bc-e02a-4360-a2d1-11421e37c2be</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:column</componentName>
+                <identifier>flexipage_column11</identifier>
+            </componentInstance>
+        </itemInstances>
+        <name>Facet-c6a18443-92d7-4fc0-97a0-bb3e54de9214</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Baseline_Start_Date__c</fieldItem>
+                <identifier>RecordBaseline_Start_Date__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Baseline_End_Date__c</fieldItem>
+                <identifier>RecordBaseline_End_Date__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Baseline_Effort_Hours__c</fieldItem>
+                <identifier>RecordBaseline_Effort_Hours__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Total_Logged_Hours__c</fieldItem>
+                <identifier>RecordTotal_Logged_Hours__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Unapproved_Extra_Effort__c</fieldItem>
+                <identifier>RecordUnapproved_Extra_Effort__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Budget_Creep__c</fieldItem>
+                <identifier>RecordBudget_Creep__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Scope_Health__c</fieldItem>
+                <identifier>RecordScope_Health__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Baseline_Duration_Days__c</fieldItem>
+                <identifier>RecordBaseline_Duration_Days__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Schedule_Creep__c</fieldItem>
+                <identifier>RecordSchedule_Creep__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Schedule_Health__c</fieldItem>
+                <identifier>RecordSchedule_Health__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.EAC__c</fieldItem>
+                <identifier>RecordEAC__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.CPI__c</fieldItem>
+                <identifier>RecordCPI__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.SPI__c</fieldItem>
+                <identifier>RecordSPI__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <name>Facet-54cd7a50-16ef-4fb7-9e79-7077f74aab26</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Budget_Health_Indication__c</fieldItem>
+                <identifier>RecordBudget_Health_Indication__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Forecast_End_Date__c</fieldItem>
+                <identifier>RecordForecast_End_Date__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Planned_Value_PV__c</fieldItem>
+                <identifier>RecordPlanned_Value_PV__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Actual_Complete__c</fieldItem>
+                <identifier>RecordActual_Complete__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Planned_Complete__c</fieldItem>
+                <identifier>RecordPlanned_Complete__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Remaining_Planned_Cost__c</fieldItem>
+                <identifier>RecordRemaining_Planned_Cost__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Forecasted_Cost_EAC__c</fieldItem>
+                <identifier>RecordForecasted_Cost_EAC__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Cost_Budget__c</fieldItem>
+                <identifier>RecordCost_Budget__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Scope_Creep__c</fieldItem>
+                <identifier>RecordScope_Creep__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Earned_Value_EV__c</fieldItem>
+                <identifier>RecordEarned_Value_EV__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Schedule_Variance__c</fieldItem>
+                <identifier>RecordSchedule_Variance__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Cost_Variance_CV__c</fieldItem>
+                <identifier>RecordCost_Variance_CV__cField</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-51a4b88d-c421-4d87-a94b-fa638bbd6ccd</name>
@@ -489,6 +683,16 @@
                 <identifier>RecordNon_Billable_Hours__cField</identifier>
             </fieldInstance>
         </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Retesting_Fixed_Count__c</fieldItem>
+                <identifier>RecordRetesting_Fixed_Count__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
         <name>Facet-f087d971-c7fb-476b-9293-be1a7da7ec40</name>
         <type>Facet</type>
     </flexiPageRegions>
@@ -559,16 +763,6 @@
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Is_Current__c</fieldItem>
-                <identifier>RecordIs_Current_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
         <itemInstances>
             <fieldInstance>
                 <fieldInstanceProperties>
@@ -673,6 +867,24 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>columns</name>
+                    <value>Facet-c6a18443-92d7-4fc0-97a0-bb3e54de9214</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>horizontalAlignment</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>label</name>
+                    <value>Basic Details</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:fieldSection</componentName>
+                <identifier>flexipage_fieldSection6</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>columns</name>
                     <value>Facet-13eb9282-7cde-4c58-8284-c9b084294395</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
@@ -767,87 +979,6 @@
             <componentInstance>
                 <componentName>tagProjectTeamMember</componentName>
                 <identifier>c_tagProjectTeamMember</identifier>
-            </componentInstance>
-        </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>actionNames</name>
-                    <valueList>
-                        <valueListItems>
-                            <value>New</value>
-                        </valueListItems>
-                    </valueList>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>adminFilters</name>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>maxRecordsToDisplay</name>
-                    <value>10</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>parentFieldApiName</name>
-                    <value>Project__c.Id</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>relatedListApiName</name>
-                    <value>Project_Teams__r</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>relatedListDisplayType</name>
-                    <value>ADVGRID</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>relatedListFieldAliases</name>
-                    <valueList>
-                        <valueListItems>
-                            <value>NAME</value>
-                        </valueListItems>
-                        <valueListItems>
-                            <value>Is_Active__c</value>
-                        </valueListItems>
-                        <valueListItems>
-                            <value>Allocation__c</value>
-                        </valueListItems>
-                        <valueListItems>
-                            <value>Assigned_To__c</value>
-                        </valueListItems>
-                        <valueListItems>
-                            <value>Role__c</value>
-                        </valueListItems>
-                        <valueListItems>
-                            <value>Rate_Per_Hour__c</value>
-                        </valueListItems>
-                        <valueListItems>
-                            <value>Employee_Cost__c</value>
-                        </valueListItems>
-                        <valueListItems>
-                            <value>Start_Date__c</value>
-                        </valueListItems>
-                        <valueListItems>
-                            <value>End_Date__c</value>
-                        </valueListItems>
-                    </valueList>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>relatedListLabel</name>
-                    <value>Project Team Members</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>showActionBar</name>
-                    <value>true</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>sortFieldAlias</name>
-                    <value>__DEFAULT__</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>sortFieldOrder</name>
-                    <value>Default</value>
-                </componentInstanceProperties>
-                <componentName>lst:dynamicRelatedList</componentName>
-                <identifier>lst_dynamicRelatedList4</identifier>
             </componentInstance>
         </itemInstances>
         <name>Facet-22a2e1a6-56de-4977-9afd-2c46e738f913</name>
@@ -1096,17 +1227,27 @@
     <flexiPageRegions>
         <itemInstances>
             <componentInstance>
+                <componentName>uploadDocuments</componentName>
+                <identifier>c_uploadDocuments</identifier>
+            </componentInstance>
+        </itemInstances>
+        <name>Facet-420443d2-a5c6-46df-8383-46ed644a338f</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <componentInstance>
                 <componentInstanceProperties>
                     <name>parentFieldApiName</name>
                     <value>Project__c.Id</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>relatedListApiName</name>
-                    <value>CombinedAttachments</value>
+                    <value>Histories</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>relatedListComponentOverride</name>
-                    <value>NONE</value>
+                    <value>ADVGRID</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>rowsToDisplay</name>
@@ -1117,10 +1258,10 @@
                     <value>true</value>
                 </componentInstanceProperties>
                 <componentName>force:relatedListSingleContainer</componentName>
-                <identifier>force_relatedListSingleContainer</identifier>
+                <identifier>force_relatedListSingleContainer2</identifier>
             </componentInstance>
         </itemInstances>
-        <name>Facet-420443d2-a5c6-46df-8383-46ed644a338f</name>
+        <name>Facet-4cf4d696-c841-4a48-8c33-e4dc0fe3b39f</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -1206,10 +1347,24 @@
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>title</name>
-                    <value>Notes &amp; Attachments</value>
+                    <value>Documents</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:tab</componentName>
                 <identifier>flexipage_tab6</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-4cf4d696-c841-4a48-8c33-e4dc0fe3b39f</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>title</name>
+                    <value>Project Change History</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:tab</componentName>
+                <identifier>flexipage_tab8</identifier>
             </componentInstance>
         </itemInstances>
         <name>Facet-dc648677-fb8b-49ff-af53-37b722845c49</name>
@@ -1234,6 +1389,16 @@
         <type>Region</type>
     </flexiPageRegions>
     <flexiPageRegions>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>showLegacyActivityComposer</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentName>runtime_sales_activities:activityPanel</componentName>
+                <identifier>runtime_sales_activities_activityPanel</identifier>
+            </componentInstance>
+        </itemInstances>
         <name>sidebar</name>
         <type>Region</type>
     </flexiPageRegions>

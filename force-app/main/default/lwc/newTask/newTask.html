@@ -120,13 +120,13 @@
                             </div>
                             <!-- **************************************************** -->
                             <div class="slds-col slds-size_1-of-5 issue-bugs-field">
-                                <!-- <label class="custom-field-label"><span class="billing-required">*</span>Issue Bugs</label> -->
                                 <c-lwc-custom-lookup
                                     data-index={index}
                                     unique-name="IssueBug"
                                     object-a-p-i-name="Issue_Bug__c"
                                     icon-name="action:bug"
                                     where={task.issueBugCondition}
+                                    initial-lookup-value={task.issueBug}
                                     onprogressvaluechange={handleIssueLookupSelection}
                                     oncustomlookupupdateevent={handleIssueLookupUpdate}
                                     label-for-component="Issue Bugs"
@@ -152,7 +152,22 @@
                                     onchange={handleBillableToggle} >
                                 </lightning-input>
                             </div>
- 
+
+                            <div class="slds-col slds-size_1-of-5">
+                                <c-lwc-custom-lookup
+                                    data-index={index}
+                                    unique-name="ChangeRequest"
+                                    object-a-p-i-name="Change_Request__c"
+                                    icon-name="standard:change_request"
+                                    where={task.changeRequestCondition}
+                                    initial-lookup-value={task.changeRequest}
+                                    onprogressvaluechange={handleChangeRequestLookupSelection}
+                                    oncustomlookupupdateevent={handleChangeRequestLookupUpdate}
+                                    label-for-component="Change Request"
+                                    place-holder="Select Change Request">
+                                </c-lwc-custom-lookup>
+                            </div>
+
                             <div class="slds-col slds-size_1-of-5">
                                 <c-lwc-multi-lookup label="Team Members" object-name="User" field-name="Email"
                                     data-index={index} selected-contact-list={task.teamMembersForChild}
@@ -160,20 +175,20 @@
                                 </c-lwc-multi-lookup>
                             </div>
 
-                            <div class="slds-col slds-size_1-of-10">
+                            <div class="slds-col slds-size_1-of-12">
                                 <lightning-input type="date" label="Start Date" name="startDate" data-index={index}
                                     value={task.startDate} onchange={handleStartDateChange} min={todayDate} required>
                                 </lightning-input>
                             </div>
 
-                            <div class="slds-col slds-size_1-of-10">
+                            <div class="slds-col slds-size_1-of-12">
                                 <lightning-input type="date" label="End Date" name="endDate" data-index={index}
                                     value={task.endDate} onchange={handleEndDateChange} min={task.minEndDate}
                                     disabled={task.endDateDisabled} required>
                                 </lightning-input>
                             </div>
 
-                            <div class="slds-col slds-size_1-of-10">
+                            <div class="slds-col slds-size_1-of-12">
                                 <lightning-input type="number" label="Work Hours" name="workHours" data-index={index}
                                     value={task.workHours} disabled={task.workHoursDisabled}
                                     readonly={task.workHoursReadOnly} onchange={handleWorkHoursManualChange}

@@ -1,135 +1,249 @@
 /* ============================================
-   PROJECT GANTT CHART - ELEGANT UI/UX STYLES
+   ENHANCED PROJECT GANTT CHART - ELEGANT & PROFESSIONAL
+   Modern, Clean, and Sophisticated Design System
    ============================================ */
 
 /* ============================================
-   CSS VARIABLES - DESIGN SYSTEM
+   CSS VARIABLES - REFINED DESIGN TOKENS
    ============================================ */
 :host {
-    /* Color Palette - Sophisticated & Professional */
-    --color-primary: #2563eb;
-    --color-primary-dark: #1e40af;
+    /* Primary Color Palette - Sophisticated Blues */
+    --color-primary: #1e40af;
+    --color-primary-dark: #1e3a8a;
     --color-primary-light: #3b82f6;
+    --color-primary-ultra-light: #dbeafe;
     
-    --color-success: #10b981;
-    --color-success-dark: #059669;
-    --color-warning: #f59e0b;
-    --color-warning-dark: #d97706;
-    --color-danger: #ef4444;
-    --color-danger-dark: #dc2626;
+    /* Status Colors */
+    --color-success: #059669;
+    --color-success-light: #d1fae5;
+    --color-warning: #d97706;
+    --color-warning-light: #fef3c7;
+    --color-danger: #dc2626;
+    --color-danger-light: #fee2e2;
+    --color-info: #0891b2;
+    --color-info-light: #cffafe;
     
-    --color-overdue: #dc2626;
-    --color-complete: #10b981;
-    --color-in-progress: #f59e0b;
-    
-    /* Neutral Palette */
-    --color-gray-50: #f9fafb;
-    --color-gray-100: #f3f4f6;
-    --color-gray-200: #e5e7eb;
-    --color-gray-300: #d1d5db;
-    --color-gray-400: #9ca3af;
-    --color-gray-500: #6b7280;
-    --color-gray-600: #4b5563;
-    --color-gray-700: #374151;
-    --color-gray-800: #1f2937;
-    --color-gray-900: #111827;
+    /* Neutral Palette - Professional Grays */
+    --color-gray-50: #fafafa;
+    --color-gray-100: #f4f4f5;
+    --color-gray-200: #e4e4e7;
+    --color-gray-300: #d4d4d8;
+    --color-gray-400: #a1a1aa;
+    --color-gray-500: #71717a;
+    --color-gray-600: #52525b;
+    --color-gray-700: #3f3f46;
+    --color-gray-800: #27272a;
+    --color-gray-900: #18181b;
     
     /* Background Colors */
     --bg-primary: #ffffff;
-    --bg-secondary: #f9fafb;
-    --bg-tertiary: #f3f4f6;
-    --bg-hover: #f0f7ff;
-    --bg-active: #e0f2fe;
+    --bg-secondary: #fafafa;
+    --bg-tertiary: #f4f4f5;
+    --bg-hover: #f0f9ff;
+    --bg-selected: #e0f2fe;
     
-    /* Border Colors */
-    --border-light: #e5e7eb;
-    --border-medium: #d1d5db;
-    --border-dark: #9ca3af;
+    /* Border & Divider Colors */
+    --border-light: #e4e4e7;
+    --border-medium: #d4d4d8;
+    --border-dark: #a1a1aa;
+    --divider: #e4e4e7;
     
-    /* Shadow System */
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    /* Shadows - Subtle and Elegant */
+    --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+    --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.06), 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
     
     /* Typography */
-    --font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-    --font-mono: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+    --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-mono: 'JetBrains Mono', 'SF Mono', Monaco, 'Courier New', monospace;
     
     /* Spacing Scale */
-    --spacing-xs: 0.25rem;
-    --spacing-sm: 0.5rem;
-    --spacing-md: 1rem;
-    --spacing-lg: 1.5rem;
-    --spacing-xl: 2rem;
-    --spacing-2xl: 3rem;
+    --spacing-xs: 0.25rem;    /* 4px */
+    --spacing-sm: 0.5rem;     /* 8px */
+    --spacing-md: 0.75rem;    /* 12px */
+    --spacing-lg: 1rem;       /* 16px */
+    --spacing-xl: 1.5rem;     /* 24px */
+    --spacing-2xl: 2rem;      /* 32px */
     
     /* Border Radius */
-    --radius-sm: 0.25rem;
-    --radius-md: 0.5rem;
-    --radius-lg: 0.75rem;
-    --radius-xl: 1rem;
+    --radius-sm: 0.375rem;    /* 6px */
+    --radius-md: 0.5rem;      /* 8px */
+    --radius-lg: 0.75rem;     /* 12px */
+    --radius-xl: 1rem;        /* 16px */
+    --radius-full: 9999px;
     
     /* Transitions */
-    --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-fast: 120ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-base: 180ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: 250ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* ============================================
-   GLOBAL STYLES
+   GLOBAL STYLES & BASE
    ============================================ */
 .full-screen {
     font-family: var(--font-primary);
-    background: linear-gradient(135deg, var(--color-gray-50) 0%, var(--bg-secondary) 100%);
+    background: var(--bg-secondary);
     min-height: 100vh;
-    /* padding: var(--spacing-md) var(--spacing-lg); */
     color: var(--color-gray-800);
-    line-height: 1.6;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    position: relative; /* ADDED: For proper stacking context */
+    overflow: visible; /* ADDED: Allow dropdowns to overflow */
 }
 
 /* ============================================
-   HEADER SECTION
+   HEADER CONTAINER - NEW LAYOUT
    ============================================ */
-lightning-layout {
-    /* margin-bottom: var(--spacing-md); */
-    background: var(--bg-primary);
-    padding: var(--spacing-md) var(--spacing-lg);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-md);
-    border: 1px solid var(--border-light);
-}
-
-lightning-layout-item {
+.header-container {
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-xl);
+    background: linear-gradient(to bottom, #ffffff 0%, #fafafa 100%); /* Subtle gradient */
+    padding: 18px var(--spacing-xl); /* Slightly more padding for breathing room */
+    margin-bottom: var(--spacing-lg);
+    border-radius: 12px; /* More rounded for modern look */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 
+                0 1px 2px rgba(0, 0, 0, 0.03); /* Softer shadow */
+    border: 1px solid var(--border-light);
+    position: relative;
+    overflow: visible; /* CHANGED: Allow dropdowns to overflow */
+    z-index: 4; /* ADDED: Ensure header stays on top */
 }
 
-/* New Project Button Styling */
-lightning-button {
-    --slds-c-button-brand-color-background: var(--color-primary);
-    --slds-c-button-brand-color-border: var(--color-primary);
-    --slds-c-button-brand-text-color: white;
+/* Subtle accent line at top - More refined */
+.header-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, 
+        rgba(30, 64, 175, 0.6) 0%, 
+        rgba(59, 130, 246, 0.6) 50%,
+        rgba(30, 64, 175, 0.6) 100%);
+    z-index: -1; /* ADDED: Keep accent line behind content */
+    border-radius: 12px 12px 0 0; /* Match container radius */
 }
 
-lightning-button::part(button) {
-    border-radius: var(--radius-md);
-    font-weight: 600;
-    letter-spacing: 0.01em;
-    padding: 0.625rem 1.5rem;
-    transition: all var(--transition-base);
-    box-shadow: var(--shadow-sm);
+/* Left Side: Filters */
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    flex: 1;
+    z-index: 4; /* ADDED: Ensure dropdowns appear above other content */
 }
 
-lightning-button::part(button):hover {
-    background: var(--color-primary-dark);
-    box-shadow: var(--shadow-md);
-    transform: translateY(-1px);
+/* Right Side: Actions */
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    z-index: 4; /* ADDED: Ensure dropdowns appear above other content */
 }
 
-/* Date Filter Combobox */
-lightning-combobox {
+.filter-group {
+    min-width: 180px;
+    position: relative; /* ADDED: For proper stacking context */
+    z-index: 1; /* ADDED: Ensure dropdown menus appear */
+}
+
+.view-filter {
+    min-width: 140px;
+    position: relative; /* ADDED: For proper stacking context */
+    z-index: 1; /* ADDED: Ensure dropdown menus appear */
+}
+
+/* Filter Combobox Styling */
+.filter-combo {
     --slds-c-combobox-radius: var(--radius-md);
+}
+
+/* ADDED: Ensure Lightning combobox dropdowns appear on top */
+lightning-combobox {
+    position: relative;
+    z-index: 4;
+}
+
+/* Refresh Button Styling - Modern & Elegant */
+.refresh-btn {
+    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%) !important;
+    border-radius: 8px !important;
+    padding: 10px !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    border: 1px solid #d1d5db !important;
+    width: 40px !important;
+    height: 40px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin-top: 20px;
+}
+
+.refresh-btn:hover {
+    background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%) !important;
+    transform: rotate(180deg) !important; /* Full rotation on hover */
+    border-color: #9ca3af !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+.refresh-btn:active {
+    transform: rotate(180deg) scale(0.95) !important;
+}
+
+/* New Project Button - Beautiful & Modern */
+.new-project-btn {
+    background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 10px 24px !important;
+    font-weight: 600 !important;
+    font-size: 0.875rem !important;
+    letter-spacing: 0.025em !important;
+    box-shadow: 0 2px 8px rgba(30, 64, 175, 0.25), 
+                0 1px 3px rgba(30, 64, 175, 0.15) !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    position: relative !important;
+    overflow: hidden !important;
+    text-transform: none !important;
+}
+
+/* Subtle shine effect */
+.new-project-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.2), 
+        transparent);
+    transition: left 0.5s ease;
+}
+
+.new-project-btn:hover {
+    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%) !important;
+    box-shadow: 0 4px 12px rgba(30, 64, 175, 0.35), 
+                0 2px 6px rgba(30, 64, 175, 0.2) !important;
+    transform: translateY(-1px) !important;
+}
+
+.new-project-btn:hover::before {
+    left: 100%;
+}
+
+.new-project-btn:active {
+    transform: translateY(0) !important;
+    box-shadow: 0 2px 4px rgba(30, 64, 175, 0.2) !important;
 }
 
 /* ============================================
@@ -140,12 +254,13 @@ lightning-combobox {
     gap: 0;
     background: var(--bg-primary);
     border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--shadow-md);
     overflow: hidden;
     border: 1px solid var(--border-light);
     position: relative;
 }
 
+/* Subtle top accent */
 .table-container::before {
     content: '';
     position: absolute;
@@ -154,8 +269,7 @@ lightning-combobox {
     right: 0;
     height: 2px;
     background: linear-gradient(90deg, var(--color-primary), var(--color-primary-light));
-    z-index: 4;
-
+    z-index: 3;
 }
 
 /* ============================================
@@ -165,7 +279,7 @@ lightning-combobox {
     flex: 0 0 65%;
     overflow-x: auto;
     overflow-y: hidden;
-    border-right: 2px solid var(--border-medium);
+    border-right: 1px solid var(--divider);
     background: var(--bg-primary);
 }
 
@@ -176,7 +290,7 @@ lightning-combobox {
     flex: 1;
     overflow-x: auto;
     overflow-y: hidden;
-    background: linear-gradient(to bottom, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+    background: var(--bg-primary);
 }
 
 .gantt-scroll-wrapper {
@@ -185,21 +299,22 @@ lightning-combobox {
 }
 
 /* ============================================
-   TABLE STYLES - TREE TABLE
+   TABLE STYLES - TREE TABLE (REFINED)
    ============================================ */
 .tree-table {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0;
     font-size: 0.875rem;
-    table-layout: auto; /* Changed from fixed to auto for resizable columns */
+    table-layout: auto;
 }
 
+/* Table Header */
 .tree-table thead {
     position: sticky;
     top: 0;
-    z-index: 4;
-    background: linear-gradient(180deg, var(--color-gray-800) 0%, var(--color-gray-700) 100%);
+    z-index: 2;
+    background: var(--color-gray-50);
 }
 
 .tree-table thead th {
@@ -208,107 +323,39 @@ lightning-combobox {
     font-weight: 600;
     font-size: 0.75rem;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--bg-primary);
-    border-bottom: 2px solid var(--color-primary);
+    letter-spacing: 0.06em;
+    color: var(--color-gray-700);
+    border-bottom: 2px solid var(--border-medium);
     white-space: nowrap;
-    position: relative;
-    height: 56px; /* Fixed header height */
+    background: var(--color-gray-50);
+    height: 56px; /* CHANGED: Match original header height exactly */
     box-sizing: border-box;
     vertical-align: middle;
-    min-width: 60px; /* Minimum column width */
-}
-
-/* Column Resize Handle */
-.tree-table thead th .resize-handle {
-    position: absolute;
-    top: 0;
-    right: -3px; /* Adjusted for better hit area */
-    width: 6px; /* Wider hit area */
-    height: 100%;
-    cursor: col-resize;
-    background: transparent;
-    transition: background var(--transition-fast);
-    z-index: 20;
-    user-select: none;
-}
-
-.tree-table thead th .resize-handle::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 2px;
-    height: 70%;
-    background: rgba(255, 255, 255, 0.25);
-    border-radius: 1px;
-    transition: all var(--transition-fast);
-}
-
-.tree-table thead th .resize-handle:hover {
-    background: rgba(37, 99, 235, 0.15);
-}
-
-.tree-table thead th .resize-handle:hover::after {
-    background: rgba(255, 255, 255, 0.6);
-    width: 3px;
-    box-shadow: 0 0 4px rgba(37, 99, 235, 0.5);
-}
-
-.tree-table thead th .resize-handle.resizing {
-    background: rgba(37, 99, 235, 0.25);
-}
-
-.tree-table thead th .resize-handle.resizing::after {
-    background: var(--color-primary-light);
-    width: 3px;
-    box-shadow: 0 0 8px rgba(37, 99, 235, 0.8);
-}
-
-.tree-table thead th::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--color-primary-light), transparent);
-    opacity: 0.5;
 }
 
 /* Column Widths */
 .tree-table th.actions,
 .tree-table td.actions {
     width: 100px;
-    /* text-align: center; */
 }
 
 .tree-table th.sequence,
 .tree-table td.sequence {
     width: 60px;
-    /* text-align: center; */
     font-family: var(--font-mono);
     font-size: 0.75rem;
-    font-weight: 500;
-    color: var(--color-gray-600);
+    color: var(--color-gray-500);
 }
 
 .tree-table th.icon,
 .tree-table td.icon {
-    width: 32px; /* Reduced from 40px */
-    padding: 0 var(--spacing-xs); /* Tighter padding */
+    width: 32px;
+    padding: 0 var(--spacing-xs);
 }
 
 .tree-table th.name,
 .tree-table td.name {
     min-width: 250px;
-    padding-left: var(--spacing-xs); /* Reduced padding */
-}
-
-.tree-table th:not(.actions):not(.sequence):not(.icon):not(.name),
-.tree-table td:not(.actions):not(.sequence):not(.icon):not(.name) {
-    min-width: 120px;
 }
 
 /* Table Body Rows */
@@ -316,16 +363,14 @@ lightning-combobox {
     transition: all var(--transition-fast);
     border-bottom: 1px solid var(--border-light);
     background: var(--bg-primary);
-        height: 44px !important; /* Force exact height */
-    max-height: 44px !important;
-    min-height: 44px !important;
-    line-height: 1; /* Fixed line-height for consistency */
-
+    height: 44px;
+    max-height: 44px;
+    min-height: 44px;
 }
 
 .tree-table tbody tr:hover {
     background: var(--bg-hover);
-    box-shadow: inset 3px 0 0 var(--color-primary);
+    box-shadow: inset 2px 0 0 var(--color-primary);
 }
 
 .tree-table tbody tr:nth-child(even) {
@@ -337,33 +382,35 @@ lightning-combobox {
 }
 
 .tree-table tbody td {
-    padding: 0.625rem var(--spacing-sm); /* Exact padding for 44px row height */
+    padding: var(--spacing-sm);
     border-bottom: 1px solid var(--border-light);
     vertical-align: middle;
     font-size: 0.875rem;
     color: var(--color-gray-700);
-    height: 44px; /* Match gantt row height */
+    height: 44px;
     box-sizing: border-box;
+    max-width:44px;
 }
 
 /* ============================================
-   ACTION BUTTONS
+   ACTION BUTTONS (REFINED)
    ============================================ */
 .tree-table td.actions {
     display: flex;
-    gap: 2px; /* Reduced gap */
-    justify-content: center;
+    gap: 4px;
+    justify-content: flex-start;
     align-items: center;
-    padding: var(--spacing-xs);
+    padding: var(--spacing-xs) var(--spacing-sm);
 }
 
 lightning-button-icon {
     transition: all var(--transition-fast);
-    --sds-c-icon-radius-border: var(--radius-sm);
+    border-radius: var(--radius-sm);
 }
 
 lightning-button-icon:hover {
-    transform: scale(1.15);
+    transform: scale(1.1);
+    background: var(--bg-tertiary);
 }
 
 lightning-button-icon[icon-name="utility:edit"]:hover {
@@ -375,11 +422,11 @@ lightning-button-icon[icon-name="utility:add"]:hover {
 }
 
 lightning-button-icon[icon-name="utility:adduser"]:hover {
-    color: var(--color-warning);
+    color: var(--color-info);
 }
 
 /* ============================================
-   NAME COLUMN WITH LINKS
+   NAME COLUMN WITH LINKS (ELEGANT)
    ============================================ */
 .tree-table td.name a {
     color: var(--color-primary);
@@ -387,12 +434,11 @@ lightning-button-icon[icon-name="utility:adduser"]:hover {
     font-weight: 500;
     position: relative;
     transition: all var(--transition-base);
-    display: block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    max-width: 220px;
-
+    display: inline-block; /* KEPT: As specified */
+    max-width: 100%; /* KEPT: As specified */
+    overflow: hidden; /* KEPT: As specified */
+    text-overflow: ellipsis; /* KEPT: As specified */
+    white-space: nowrap; /* KEPT: As specified */
 }
 
 .tree-table td.name a::after {
@@ -401,7 +447,7 @@ lightning-button-icon[icon-name="utility:adduser"]:hover {
     bottom: -2px;
     left: 0;
     width: 0;
-    height: 2px;
+    height: 1px;
     background: var(--color-primary);
     transition: width var(--transition-base);
 }
@@ -415,52 +461,76 @@ lightning-button-icon[icon-name="utility:adduser"]:hover {
 }
 
 /* ============================================
-   STATUS BADGES
+   COMPLETION & HOURS CELLS
    ============================================ */
-.tree-table tbody td:nth-child(5) { /* Status column */
-    font-weight: 500;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-/* Status color coding - can be enhanced with dynamic classes */
-.tree-table tbody tr td:nth-child(5):not(:empty) {
-    position: relative;
-}
-
-/* .tree-table tbody tr td:nth-child(5):not(:empty)::before {
-    content: '';
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    margin-right: var(--spacing-xs);
-    background: var(--color-gray-400);
-} */
-
-/* ============================================
-   COMPLETION PERCENTAGE
-   ============================================ */
-.tree-table tbody td:nth-child(6) { /* Completion column */
-    font-family: var(--font-mono);
-    font-weight: 600;
-    font-size: 0.875rem;
-}
-
-/* ============================================
-   HOURS COLUMNS
-   ============================================ */
-.tree-table tbody td:nth-child(7),
-.tree-table tbody td:nth-child(8) {
+.completion-cell,
+.hours-cell {
     font-family: var(--font-mono);
     font-size: 0.8125rem;
-    /* text-align: center; */ /* Center align to match headers */
+    font-weight: 500;
     color: var(--color-gray-600);
 }
 
 /* ============================================
-   GANTT CHART TABLE
+   STATUS BADGES (REFINED & ELEGANT)
+   ============================================ */
+[class*="status-"] {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.625rem;
+    border-radius: var(--radius-full);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.status-completed {
+    background: var(--color-success-light);
+    color: var(--color-success);
+}
+
+.status-inprogress {
+    background: var(--color-warning-light);
+    color: var(--color-warning);
+}
+
+.status-active {
+    background: var(--color-info-light);
+    color: var(--color-info);
+}
+
+.status-deferred {
+    background: var(--color-gray-200);
+    color: var(--color-gray-600);
+}
+
+.status-cancelled {
+    background: var(--color-danger-light);
+    color: var(--color-danger);
+}
+
+.status-assigned {
+    background: var(--color-primary-ultra-light);
+    color: var(--color-primary);
+}
+
+.status-open {
+    background: var(--color-info-light);
+    color: var(--color-info);
+}
+
+.status-default {
+    background: var(--color-gray-100);
+    color: var(--color-gray-600);
+}
+
+/* ============================================
+   GANTT CHART TABLE (REFINED)
    ============================================ */
 .gantt-table {
     width: 100%;
@@ -472,23 +542,23 @@ lightning-button-icon[icon-name="utility:adduser"]:hover {
 .gantt-table thead {
     position: sticky;
     top: 0;
-    z-index: 4;
+    z-index:2
 }
 
 .gantt-table thead th {
     padding: 0;
-    background: linear-gradient(180deg, var(--color-gray-800) 0%, var(--color-gray-700) 100%);
-    border-bottom: 2px solid var(--color-primary);
-    height: 48px; /* Match tree table header height */
+    background: var(--color-gray-50);
+    border-bottom: 2px solid var(--border-medium);
+    height: 56px; /* CHANGED: Match tree-table header height exactly */
     box-sizing: border-box;
 }
 
 /* ============================================
-   TIMELINE HEADER
+   TIMELINE HEADER (ELEGANT)
    ============================================ */
 .timeline-header {
     position: relative;
-    height: 48px; /* Match tree table header height */
+    height: 56px; /* CHANGED: Match tree-table header height exactly */
 }
 
 .timeline-header-container {
@@ -509,28 +579,19 @@ lightning-button-icon[icon-name="utility:adduser"]:hover {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.75rem;
+    font-size: 0.6875rem;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--bg-primary);
-    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    letter-spacing: 0.06em;
+    color: var(--color-gray-600);
+    border-right: 1px solid var(--border-light);
     padding: var(--spacing-sm);
     position: relative;
-}
-
-.timeline-month::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    background: var(--color-gray-50);
 }
 
 /* ============================================
-   TODAY MARKER
+   TODAY MARKER (REFINED)
    ============================================ */
 .timeline-today-marker {
     position: absolute;
@@ -538,63 +599,48 @@ lightning-button-icon[icon-name="utility:adduser"]:hover {
     bottom: 0;
     width: 100%;
     pointer-events: none;
-    z-index: 5;
+    z-index: 6;
 }
 
 .today-line {
     position: absolute;
     top: 0;
     bottom: 0;
-    width: 2px;
-    background: linear-gradient(180deg, var(--color-danger) 0%, var(--color-danger-dark) 100%);
-    box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
+    width: 1.5px;
+    background: var(--color-danger);
+    box-shadow: 0 0 4px rgba(220, 38, 38, 0.4);
     transform: translateX(-50%);
-    animation: pulse-line 2s ease-in-out infinite;
 }
 
 .today-label {
     position: absolute;
-    top: 4px;
+    top: 6px;
     transform: translateX(-50%);
     background: var(--color-danger);
     color: white;
-    padding: 2px 8px;
+    padding: 0.125rem 0.5rem;
     border-radius: var(--radius-sm);
     font-size: 0.625rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    box-shadow: var(--shadow-md);
+    box-shadow: var(--shadow-sm);
     white-space: nowrap;
 }
 
-@keyframes pulse-line {
-    0%, 100% {
-        opacity: 1;
-        box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
-    }
-    50% {
-        opacity: 0.85;
-        box-shadow: 0 0 16px rgba(239, 68, 68, 0.8);
-    }
-}
-
 /* ============================================
-   TIMELINE ROWS
+   TIMELINE ROWS (MATCHED HEIGHT)
    ============================================ */
 .gantt-table tbody tr {
     transition: all var(--transition-fast);
     border-bottom: 1px solid var(--border-light);
-
-        height: 44px !important; /* Force exact height */
-    max-height: 44px !important;
-    min-height: 44px !important;
-    line-height: 1; /* Fixed line-height for consistency */
-
+    height: 44px;
+    max-height: 44px;
+    min-height: 44px;
 }
 
 .gantt-table tbody tr:hover {
-    background: rgba(37, 99, 235, 0.03);
+    background: var(--bg-hover);
 }
 
 .gantt-table tbody tr:nth-child(even) {
@@ -602,185 +648,122 @@ lightning-button-icon[icon-name="utility:adduser"]:hover {
 }
 
 .gantt-table tbody tr:nth-child(even):hover {
-    background: rgba(37, 99, 235, 0.05);
+    background: var(--bg-hover);
 }
 
 .gantt-table tbody td {
-        padding: 0 !important;
-    margin: 0;
+    padding: 0;
     border-bottom: 1px solid var(--border-light);
     position: relative;
-        height: 44px !important; /* Force exact height */
-    max-height: 44px !important;
-
+    height: 44px;
+    max-height: 44px;
     box-sizing: border-box;
-        line-height: 44px; /* Match height for vertical centering */
-
 }
 
 .gantt-table tbody td.timeline {
-    height: 44px;
     background-image: 
         repeating-linear-gradient(
             90deg,
             var(--border-light) 0px,
             var(--border-light) 1px,
             transparent 1px,
-            transparent calc(100% / var(--month-count, 12))
+            transparent calc(100% / var(--month-count, 13))
         );
 }
 
 /* ============================================
-   TIMELINE BARS
+   TIMELINE BARS (BEAUTIFUL PROFESSIONAL DESIGN)
+   Inspired by modern project management tools
    ============================================ */
 .timeline-container {
     position: relative;
     width: 100%;
-    height: 30px;
-    padding: var(--spacing-xs) 0;
+    height: 44px; /* CRITICAL: Must match tbody tr height */
+    display: flex;
+    align-items: center; /* CRITICAL: Center the bar vertically */
+    padding: 0 var(--spacing-xs);
+    box-sizing: border-box; /* ADDED: Ensure padding doesn't affect height */
 }
 
 .timeline-bar {
     position: absolute;
-    height: 24px;
-    border-radius: var(--radius-md);
+    height: 20px; /* Slightly thicker for better visibility - 20px instead of 16px */
+    border-radius: 12px; /* More rounded for softer look */
     display: flex;
     align-items: center;
     justify-content: center;
     transition: all var(--transition-base);
     cursor: pointer;
-    box-shadow: var(--shadow-sm);
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    overflow: hidden;
+    box-shadow: none; /* Remove shadow for cleaner look */
+    border: none; /* Remove border */
+    overflow: visible; /* Changed from hidden to show percentage label */
+    backdrop-filter: none; /* Remove blur */
+    top: 50%; /* ADDED: Center vertically */
+    transform: translateY(-50%); /* ADDED: Perfect centering */
+    
+    /* Light gray background - represents total timeline */
+    background: #e5e7eb !important; /* Light gray background for the full bar */
+    min-width: 75px
 }
 
+/* Progress bar overlay - This is the colored part showing completion */
 .timeline-bar::after {
     content: '';
     position: absolute;
-    inset: 0;
+    left: 0;
+    top: 0;
+    bottom: 0;
     width: var(--progress, 0%);
-    background: var(--progress-color, var(--color-success));
-    transition: width var(--transition-base);
+    background: var(--progress-color, #10b981); /* Default green */
+    transition: width var(--transition-slow);
+    border-radius: 12px; /* Match parent radius */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08); /* Subtle shadow only on progress */
 }
 
 .timeline-bar:hover {
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: var(--shadow-md);
+    transform: translateY(-50%) translateY(-2px); /* FIXED: Maintain vertical centering while lifting */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow on hover */
     z-index: 3;
 }
 
+/* Remove the gradient overlay for cleaner look */
 .timeline-bar::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, transparent 100%);
-    pointer-events: none;
+    display: none; /* Remove the gradient overlay */
 }
 
-/* Timeline Label */
+/* Timeline Label (Beautiful Typography) */
 .timeline-label {
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    color: white;
-    font-size: 11px;
-    font-weight: 600;
+    color: #374151; /* Dark gray for better readability on light background */
+    font-size: 0.6875rem;
+    font-weight: 700; /* Bolder for better visibility */
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 95%;
+    overflow: visible;
+    text-overflow: clip;
     pointer-events: none;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-    z-index: 1;
+    text-shadow: none; /* Remove shadow for cleaner look */
+    z-index: 2;
+    letter-spacing: 0.02em;
+    mix-blend-mode: normal; /* Ensure text is always readable */
+}
+
+/* When progress is > 50%, make text white for better contrast */
+.timeline-bar[data-progress="high"] .timeline-label {
+    color: white;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 /* ============================================
-   STATUS BADGES
-   ============================================ */
-.status-completed {
-    background: #e8f8f0;
-    color: #1b7a4a;
-    padding: 2px 8px;
-    border-radius: 999px;
-    font-weight: 600;
-    font-size: 0.75rem;
-}
-
-.status-inprogress {
-    background: #fff4e5;
-    color: #b35c00;
-    padding: 2px 8px;
-    border-radius: 999px;
-    font-weight: 600;
-    font-size: 0.75rem;
-}
-
-.status-active {
-    background: #e7f1ff;
-    color: #1d4ed8;
-    padding: 2px 8px;
-    border-radius: 999px;
-    font-weight: 600;
-    font-size: 0.75rem;
-}
-
-.status-deferred {
-    background: #f5f3ff;
-    color: #6b21a8;
-    padding: 2px 8px;
-    border-radius: 999px;
-    font-weight: 600;
-    font-size: 0.75rem;
-}
-
-.status-cancelled {
-    background: #fee2e2;
-    color: #b91c1c;
-    padding: 2px 8px;
-    border-radius: 999px;
-    font-weight: 600;
-    font-size: 0.75rem;
-}
-
-.status-assigned {
-    background: #eef2ff;
-    color: #4338ca;
-    padding: 2px 8px;
-    border-radius: 999px;
-    font-weight: 600;
-    font-size: 0.75rem;
-}
-
-.status-open {
-    background: #ecfeff;
-    color: #0e7490;
-    padding: 2px 8px;
-    border-radius: 999px;
-    font-weight: 600;
-    font-size: 0.75rem;
-}
-
-.status-default {
-    background: #f3f4f6;
-    color: #374151;
-    padding: 2px 8px;
-    border-radius: 999px;
-    font-weight: 600;
-    font-size: 0.75rem;
-}
-
-/* ============================================
-   SCROLLBAR STYLING
+   SCROLLBAR STYLING (ELEGANT)
    ============================================ */
 .fixed-columns::-webkit-scrollbar,
 .gantt-scroll-wrapper::-webkit-scrollbar,
 .gantt-container::-webkit-scrollbar {
-    height: 10px;
-    width: 10px;
+    height: 8px;
+    width: 8px;
 }
 
 .fixed-columns::-webkit-scrollbar-track,
@@ -793,7 +776,7 @@ lightning-button-icon[icon-name="utility:adduser"]:hover {
 .fixed-columns::-webkit-scrollbar-thumb,
 .gantt-scroll-wrapper::-webkit-scrollbar-thumb,
 .gantt-container::-webkit-scrollbar-thumb {
-    background: var(--color-gray-400);
+    background: var(--color-gray-300);
     border-radius: var(--radius-sm);
     transition: background var(--transition-base);
 }
@@ -801,12 +784,31 @@ lightning-button-icon[icon-name="utility:adduser"]:hover {
 .fixed-columns::-webkit-scrollbar-thumb:hover,
 .gantt-scroll-wrapper::-webkit-scrollbar-thumb:hover,
 .gantt-container::-webkit-scrollbar-thumb:hover {
-    background: var(--color-gray-500);
+    background: var(--color-gray-400);
 }
 
 /* ============================================
    RESPONSIVE DESIGN
    ============================================ */
+@media (max-width: 1200px) {
+    .header-container {
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--spacing-lg);
+    }
+    
+    .header-left,
+    .header-right {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .filter-group,
+    .view-filter {
+        width: 100%;
+    }
+}
+
 @media (max-width: 1024px) {
     .table-container {
         flex-direction: column;
@@ -815,7 +817,7 @@ lightning-button-icon[icon-name="utility:adduser"]:hover {
     .fixed-columns {
         flex: 1;
         border-right: none;
-        border-bottom: 2px solid var(--border-medium);
+        border-bottom: 1px solid var(--divider);
         overflow-x: auto;
     }
     
@@ -830,7 +832,7 @@ lightning-button-icon[icon-name="utility:adduser"]:hover {
         padding: var(--spacing-sm);
     }
     
-    lightning-layout {
+    .header-container {
         padding: var(--spacing-md);
     }
     
@@ -845,38 +847,6 @@ lightning-button-icon[icon-name="utility:adduser"]:hover {
     
     .tree-table tbody td {
         padding: var(--spacing-xs) var(--spacing-sm);
-    }
-}
-
-/* ============================================
-   LOADING STATE
-   ============================================ */
-.loading-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(255, 255, 255, 0.9);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 100;
-    backdrop-filter: blur(4px);
-}
-
-.loading-spinner {
-    width: 48px;
-    height: 48px;
-    border: 4px solid var(--color-gray-200);
-    border-top-color: var(--color-primary);
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-}
-
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
     }
 }
 
@@ -898,21 +868,7 @@ button:focus-visible,
 a:focus-visible {
     outline: 2px solid var(--color-primary);
     outline-offset: 2px;
-}
-
-/* High Contrast Mode Support */
-@media (prefers-contrast: high) {
-    .tree-table thead th {
-        border-bottom: 3px solid var(--color-primary);
-    }
-    
-    .timeline-bar {
-        border: 2px solid currentColor;
-    }
-    
-    .today-line {
-        width: 3px;
-    }
+    border-radius: var(--radius-sm);
 }
 
 /* ============================================
@@ -924,11 +880,7 @@ a:focus-visible {
         padding: 0;
     }
     
-    lightning-layout {
-        box-shadow: none;
-        border: 1px solid var(--color-gray-300);
-    }
-    
+    .header-container,
     .table-container {
         box-shadow: none;
         border: 1px solid var(--color-gray-300);
@@ -945,37 +897,12 @@ a:focus-visible {
 }
 
 /* ============================================
-   UTILITY CLASSES
-   ============================================ */
-.text-center {
-    /* text-align: center; */
-}
-
-.text-right {
-    text-align: right;
-}
-
-.font-mono {
-    font-family: var(--font-mono);
-}
-
-.font-bold {
-    font-weight: 600;
-}
-
-.truncate {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-/* ============================================
    ANIMATION LIBRARY
    ============================================ */
 @keyframes fadeIn {
     from {
         opacity: 0;
-        transform: translateY(10px);
+        transform: translateY(8px);
     }
     to {
         opacity: 1;
@@ -983,59 +910,102 @@ a:focus-visible {
     }
 }
 
-@keyframes slideInRight {
-    from {
-        opacity: 0;
-        transform: translateX(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-.animate-fadeIn {
-    animation: fadeIn var(--transition-slow) ease-out;
-}
-
-.animate-slideInRight {
-    animation: slideInRight var(--transition-slow) ease-out;
-}
-
-/* Staggered animation for table rows */
+/* Staggered animation for smooth loading */
 .tree-table tbody tr {
     animation: fadeIn 0.3s ease-out backwards;
 }
 
-.tree-table tbody tr:nth-child(1) { animation-delay: 0.05s; }
-.tree-table tbody tr:nth-child(2) { animation-delay: 0.1s; }
-.tree-table tbody tr:nth-child(3) { animation-delay: 0.15s; }
-.tree-table tbody tr:nth-child(4) { animation-delay: 0.2s; }
-.tree-table tbody tr:nth-child(5) { animation-delay: 0.25s; }
+.tree-table tbody tr:nth-child(n+1):nth-child(-n+10) {
+    animation-delay: calc(0.03s * (var(--row-index, 0)));
+}
 
 /* ============================================
-   CUSTOM STATUS CLASSES (Add to JS dynamically)
+   UTILITY CLASSES
    ============================================ */
-.status-active::before {
-    background: var(--color-success) !important;
+.truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
-.status-in-progress::before {
-    background: var(--color-warning) !important;
+.font-mono {
+    font-family: var(--font-mono);
 }
 
-.status-completed::before {
-    background: var(--color-complete) !important;
+.font-semibold {
+    font-weight: 600;
 }
 
-.status-deferred::before {
-    background: var(--color-gray-400) !important;
+/* Custom New Project Button - NO Salesforce Styling */
+.custom-new-project-btn {
+    all: unset; /* Reset ALL inherited styles */
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.025em;
+    box-shadow: 0 2px 8px rgba(30, 64, 175, 0.25), 
+                0 1px 3px rgba(30, 64, 175, 0.15);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    white-space: nowrap;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin-top: 20px;
 }
 
-.status-open::before {
-    background: var(--color-primary) !important;
+.custom-new-project-btn .btn-icon {
+    font-size: 20px;
+    font-weight: 300;
+    line-height: 1;
 }
 
-.status-assigned::before {
-    background: var(--color-primary-light) !important;
+.custom-new-project-btn .btn-text {
+    line-height: 1;
+}
+
+/* Shine effect */
+.custom-new-project-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.2), 
+        transparent);
+    transition: left 0.5s ease;
+}
+
+.custom-new-project-btn:hover {
+    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+    box-shadow: 0 4px 12px rgba(30, 64, 175, 0.35), 
+                0 2px 6px rgba(30, 64, 175, 0.2);
+    transform: translateY(-1px);
+}
+
+.custom-new-project-btn:hover::before {
+    left: 100%;
+}
+
+.custom-new-project-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(30, 64, 175, 0.2);
+}
+
+.custom-new-project-btn:focus {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
 }

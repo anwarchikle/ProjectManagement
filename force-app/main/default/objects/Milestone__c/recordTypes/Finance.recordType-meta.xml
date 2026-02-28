@@ -4,17 +4,6 @@
     <active>true</active>
     <label>Finance</label>
     <picklistValues>
-        <picklist>Flag__c</picklist>
-        <values>
-            <fullName>External</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Internal</fullName>
-            <default>false</default>
-        </values>
-    </picklistValues>
-    <picklistValues>
         <picklist>Status__c</picklist>
         <values>
             <fullName>Active</fullName>

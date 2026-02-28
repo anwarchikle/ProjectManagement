@@ -17,6 +17,10 @@
                 <behavior>Edit</behavior>
                 <field>Form_Reference_FileUpload__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>FolderIdentifier__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns/>
         <style>TwoColumnsTopToBottom</style>

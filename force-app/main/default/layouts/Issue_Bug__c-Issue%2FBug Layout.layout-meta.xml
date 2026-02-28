@@ -51,6 +51,10 @@
                 <behavior>Edit</behavior>
                 <field>Retest_Fixed_Count__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Estimated_no_of_hours__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>

@@ -1,0 +1,142 @@
+.dashboard-container {
+    background-color: #f3f5f9;
+}
+
+.dashboard-header {
+    background-color: #ffffff;
+    border-radius: 0.25rem;
+}
+
+.header-title-row {
+    border-bottom: 1px solid #e5e9f2;
+    padding-bottom: 0.25rem;
+}
+
+.app-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    background-color: #1b96ff;
+}
+
+.header-view-switch .view-pill {
+    margin-left: 0.5rem;
+}
+
+.view-pill {
+    padding: 0.2rem 0.7rem;
+    border-radius: 1rem;
+    border: 1px solid transparent;
+    font-size: 0.75rem;
+    color: #4e5665;
+}
+
+.view-pill-active {
+    background-color: #eef5ff;
+    border-color: #1b96ff;
+    color: #1b96ff;
+}
+
+.pill-group {
+    display: inline-flex;
+    gap: 0.25rem;
+}
+
+.pill {
+    padding: 0.15rem 0.6rem;
+    border-radius: 1rem;
+    border: 1px solid #d8dde6;
+    font-size: 0.75rem;
+    cursor: default;
+    background-color: #ffffff;
+}
+
+.pill-active {
+    background-color: #0176d3;
+    color: #ffffff;
+    border-color: #0176d3;
+}
+
+.summary-card {
+    border-radius: 0.25rem;
+    border: 1px solid #e5e9f2;
+}
+
+.summary-value {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.chart-card {
+    min-height: 220px;
+}
+
+.summary-card-header {
+    font-size: 0.7rem;
+    letter-spacing: 0.03em;
+}
+
+.summary-card-icon {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 1px solid #d8dde6;
+}
+
+.summary-card-icon-clock::before,
+.summary-card-icon-warning::before,
+.summary-card-icon-settings::before {
+    content: '';
+}
+
+/* Colored variants for the four summary cards */
+.summary-card-today {
+    border-left: 4px solid #f7a928;
+}
+
+.summary-card-today .summary-value {
+    color: #f7a928;
+}
+
+.summary-card-week {
+    border-left: 4px solid #1b96ff;
+}
+
+.summary-card-week .summary-value {
+    color: #1b96ff;
+}
+
+.summary-card-overdue {
+    border-left: 4px solid #e03131;
+}
+
+.summary-card-overdue .summary-value {
+    color: #e03131;
+}
+
+.summary-card-bugs {
+    border-left: 4px solid #e03131;
+}
+
+.summary-card-bugs .summary-value {
+    color: #e03131;
+}
+
+.dashboard-tabs {
+    background-color: #f3f5f9;
+}
+
+.chart-placeholder,
+.table-placeholder,
+.tab-placeholder {
+    border: 1px dashed #d8dde6;
+    border-radius: 0.25rem;
+    padding: 1.5rem;
+    text-align: center;
+    color: #9e9e9e;
+    font-size: 0.8rem;
+}
+
+.filters-panel .slds-card {
+    height: 100%;
+}

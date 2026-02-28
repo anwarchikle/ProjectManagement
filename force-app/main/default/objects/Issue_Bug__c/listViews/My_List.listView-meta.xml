@@ -7,11 +7,11 @@
     <columns>Assignee__c</columns>
     <columns>Classification__c</columns>
     <columns>Project__c</columns>
+    <columns>Status__c</columns>
+    <columns>Severity__c</columns>
     <columns>Commnets__c</columns>
-    <columns>CREATEDBY_USER</columns>
-    <columns>CREATEDBY_USER.ALIAS</columns>
     <columns>CREATED_DATE</columns>
-    <columns>Description__c</columns>
+    <columns>CREATEDBY_USER</columns>
     <columns>Due_Date__c</columns>
     <filterScope>Everything</filterScope>
     <label>My List</label>

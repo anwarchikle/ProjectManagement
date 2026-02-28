@@ -159,7 +159,7 @@
     <label>Project.</label>
     <nameField>
         <label>Project Title</label>
-        <trackHistory>false</trackHistory>
+        <trackHistory>true</trackHistory>
         <type>Text</type>
     </nameField>
     <pluralLabel>Projects</pluralLabel>

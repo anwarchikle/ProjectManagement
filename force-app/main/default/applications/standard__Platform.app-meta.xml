@@ -22,4 +22,7 @@
     <tabs>Resource_Allocation__c</tabs>
     <tabs>Holiday__c</tabs>
     <tabs>Time_Log__c</tabs>
+    <tabs>POC__c</tabs>
+    <tabs>Calendar__c</tabs>
+    <tabs>Change_Request__c</tabs>
 </CustomApplication>

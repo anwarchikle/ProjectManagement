@@ -6,7 +6,7 @@
     <referenceTo>Account</referenceTo>
     <relationshipName>Projects</relationshipName>
     <required>false</required>
-    <trackHistory>false</trackHistory>
+    <trackHistory>true</trackHistory>
     <trackTrending>false</trackTrending>
     <type>Lookup</type>
 </CustomField>

@@ -2,70 +2,76 @@ import { LightningElement, api, track, wire } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { getListUi } from 'lightning/uiListApi';
 import ISSUES_OBJECT from '@salesforce/schema/Issue_Bug__c';
-import getBugs from '@salesforce/apex/Mybugscontroller.getBugs';
 import getMetrics from '@salesforce/apex/Mybugscontroller.getMetrics';
 import getFilterOptions from '@salesforce/apex/Mybugscontroller.getFilterOptions';
 import Id from '@salesforce/user/Id';
+import { getRecord } from 'lightning/uiRecordApi';
+import USER_ID from '@salesforce/user/Id';
+import USER_ROLE_FIELD from '@salesforce/schema/User.Role__c';
 
 export default class MyBugs extends LightningElement {
-    // List View Properties
     @track records = [];
     @track Newcolumns = [];
     @api selectedListView = 'All';
-    wiredData;
-    
-    // Metrics
+
     @track totalRaised = 0;
     @track openCount = 0;
     @track criticalBlockerOpen = 0;
-    @track slaBreached = 0;
     @track avgAging = '0d';
-    
-    // Filters
+
     @track projectOptions = [];
     @track statusOptions = [];
     @track severityOptions = [];
+    @track classificationOptions = [];
     @track selectedProject = '';
     @track selectedStatus = '';
     @track selectedSeverity = '';
-    
-    // Search
-    searchKey = '';
-    
-    // Other
+    @track selectedClassification = '';
+
+    @track searchKey = '';
+
     @track isLoading = true;
     userId = Id;
 
-    // Pagination
     @track pageSize = 10;
-    pageToken = null;
-    nextPageToken = null;
-    previousPageToken = null;
+    @track currentPage = 1;
+
+    _wirePageSize = 200;
+
+    currentUserRole;
+    isSeniorDeveloper = false;
+
+    @track showTaskModal = false;
+    @track selectedIssueId;
 
     connectedCallback() {
         this.loadInitialData();
     }
 
-    // Wire List View Data
-    @wire(getListUi, { 
-        objectApiName: ISSUES_OBJECT, 
-        listViewApiName: 'My_List',
-        pageSize: '$pageSize',
-        pageToken: '$pageToken'
-    })
-    wiredListView(result) {
-        debugger;
-        this.wiredData = result;
-        const { error, data } = result;
+    @wire(getRecord, { recordId: USER_ID, fields: [USER_ROLE_FIELD] })
+    wiredUser({ data, error }) {
+        if (data) {
+            this.currentUserRole = data.fields.Role__c?.value;
+            this.isSeniorDeveloper = this.currentUserRole === 'Senior Developer';
+        } else if (error) {
+            // if role can't be fetched, keep button hidden
+            this.isSeniorDeveloper = false;
+            // optional: log error
+            // console.error('Error fetching user role', error);
+        }
+    }
 
+    @wire(getListUi, {
+        objectApiName: ISSUES_OBJECT,
+        listViewApiName: 'My_List',
+        pageSize: 200// fetch only first 20 records from the list view
+    })
+    wiredListView({ error, data }) {
         if (data) {
             this.Newcolumns = data.info.displayColumns || [];
-            this.nextPageToken = data.records.nextPageToken;
-            this.previousPageToken = data.records.previousPageToken;
             this.processListViewRecords(data.records.records);
             this.isLoading = false;
         }
-
         if (error) {
             console.error('List View Error:', error);
             this.showError('Error', 'Failed to load list view');
@@ -74,61 +80,35 @@ export default class MyBugs extends LightningElement {
     }
 
     processListViewRecords(records) {
-        debugger;
         this.records = records.map(record => {
-            let row = {
-                Id: record.id,
-                cells: [],
-                rawFields: {}
-            };
+            let row = { Id: record.id, cells: [], rawFields: {} };
 
             this.Newcolumns.forEach(col => {
                 let fieldApi = col.fieldApiName;
-                let cell = {
-                    fieldApiName: fieldApi,
-                    value: '',
-                    isLink: false,
-                    url: null
-                };
+                let cell = { fieldApiName: fieldApi, value: '', isLink: false, url: null };
 
-                // Handle relationship fields (e.g., Project__r.Name)
                 if (fieldApi.includes('.')) {
                     let relationshipField = fieldApi.split('.')[0];
                     let parentField = record.fields[relationshipField];
                     if (parentField?.value) {
-                        cell.value =
-                            parentField.displayValue ||
-                            parentField.value.fields?.Name?.value ||
-                            '';
+                        cell.value = parentField.displayValue || parentField.value.fields?.Name?.value || '';
                         cell.isLink = true;
                         cell.url = '/' + parentField.value.id;
                     }
-                }
-                // Handle regular fields
-                else {
+                } else {
                     let fieldData = record.fields[fieldApi];
-                    cell.value =
-                        fieldData?.displayValue ||
-                        fieldData?.value ||
-                        '';
-                    
-                    // Store raw field values for metrics calculation
+                    cell.value = fieldData?.displayValue || fieldData?.value || '';
                     row.rawFields[fieldApi] = cell.value;
-                    
-                    // Make Name field a link
+
                     if (fieldApi === 'Name') {
                         cell.isLink = true;
                         cell.url = '/' + record.id;
                     }
 
-                    // Handle lookup fields
                     if (fieldData?.value?.id) {
                         cell.isLink = true;
                         cell.url = '/' + fieldData.value.id;
-                        cell.value =
-                            fieldData.displayValue ||
-                            fieldData.value.fields?.Name?.value ||
-                            '';
+                        cell.value = fieldData.displayValue || fieldData.value.fields?.Name?.value || '';
                     }
                 }
 
@@ -137,255 +117,125 @@ export default class MyBugs extends LightningElement {
 
             return row;
         });
-
-        // Calculate metrics after records are loaded
-        this.calculateMetrics();
     }
 
     async loadInitialData() {
-        debugger;
+        this.isLoading = true;
         try {
-            this.isLoading = true;
-            
-            // Load filter options
             const filterData = await getFilterOptions();
             this.processFilterOptions(filterData);
-            
+
+            const metrics = await getMetrics({
+                userId: this.userId,
+                projectFilter: this.selectedProject,
+                statusFilter: this.selectedStatus,
+                severityFilter: this.selectedSeverity
+            });
+
+            this.totalRaised = metrics.totalRaised || 0;
+            this.openCount = metrics.openCount || 0;
+            this.criticalBlockerOpen = metrics.criticalBlockerOpen || 0;
+
+            const avgDays = metrics.avgAging || 0;
+            this.avgAging = avgDays > 0
+                ? (avgDays < 1 ? `${Math.round(avgDays * 10) / 10}d` : `${Math.floor(avgDays)}d`)
+                : '0d';
+
         } catch (error) {
             console.error('Error loading initial data:', error);
             this.showError('Error loading data', error.body?.message || error.message);
+        } finally {
+            // Ensure loading spinner is cleared once metrics & filters are loaded
+            this.isLoading = false;
         }
     }
 
     processFilterOptions(data) {
-        debugger;
-        // Project options
         this.projectOptions = [
             { label: 'All Projects', value: '' },
             ...data.projects.map(p => ({ label: p, value: p }))
         ];
-        
-        // Status options
         this.statusOptions = [
             { label: 'All Status', value: '' },
             ...data.statuses.map(s => ({ label: s, value: s }))
         ];
-        
-        // Severity options
         this.severityOptions = [
             { label: 'All Severity', value: '' },
             ...data.severities.map(s => ({ label: s, value: s }))
         ];
+        this.classificationOptions = [
+            { label: 'All Classification', value: '' },
+            { label: 'None', value: 'None' },
+            { label: 'Security', value: 'Security' },
+            { label: 'Crash/Hang', value: 'Crash/Hang' },
+            { label: 'Data Loss', value: 'Data Loss' },
+            { label: 'Performance', value: 'Performance' },
+            { label: 'UI/Usability', value: 'UI/Usability' },
+            { label: 'Other bug', value: 'Other bug' },
+            { label: 'Feature(New)', value: 'Feature(New)' },
+            { label: 'Enhancement', value: 'Enhancement' }
+        ];
     }
 
-    calculateMetrics() {
-        debugger;
-        if (!this.records || this.records.length === 0) {
-            this.totalRaised = 0;
-            this.openCount = 0;
-            this.criticalBlockerOpen = 0;
-            this.slaBreached = 0;
-            this.avgAging = '0d';
-            return;
-        }
-
-        let totalRaised = this.records.length;
-        let openCount = 0;
-        let criticalBlockerOpen = 0;
-        let slaBreached = 0;
-        let totalAgingDays = 0;
-        let openBugCount = 0;
-
-        // Define open statuses
-        const openStatuses = ['New', 'In Progress', 'Assigned', 'Reopened', 'Open'];
-        const criticalSeverities = ['Critical', 'Blocker'];
-
-        this.records.forEach(row => {
-            const statusCell = row.cells.find(c => 
-                c.fieldApiName === 'Status__c'
-            );
-            const severityCell = row.cells.find(c => 
-                c.fieldApiName === 'Severity__c'
-            );
-            const createdDateCell = row.cells.find(c => 
-                c.fieldApiName === 'CreatedDate'
-            );
-            const slaRiskCell = row.cells.find(c => 
-                c.fieldApiName === 'Is_SLA_At_Risk__c'
-            );
-
-            const status = statusCell?.value || '';
-            const severity = severityCell?.value || '';
-            
-            // Count Open bugs
-            if (openStatuses.includes(status)) {
-                openCount++;
-                
-                // Count Critical/Blocker Open
-                if (criticalSeverities.includes(severity)) {
-                    criticalBlockerOpen++;
-                }
-
-                // Calculate aging for open bugs
-                if (createdDateCell?.value) {
-                    const createdDate = new Date(createdDateCell.value);
-                    const today = new Date();
-                    const diffTime = Math.abs(today - createdDate);
-                    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-                    totalAgingDays += diffDays;
-                    openBugCount++;
-                }
-            }
-
-            // Count SLA Breached
-            if (slaRiskCell?.value === 'true' || 
-                slaRiskCell?.value === true ||
-                slaRiskCell?.value === 'Yes') {
-                slaBreached++;
-            }
-        });
-
-        // Calculate average aging
-        const avgAgingDays = openBugCount > 0 ? totalAgingDays / openBugCount : 0;
-
-        // Update metrics
-        this.totalRaised = totalRaised;
-        this.openCount = openCount;
-        this.criticalBlockerOpen = criticalBlockerOpen;
-        this.slaBreached = slaBreached;
-        this.avgAging = avgAgingDays > 0 ? 
-            (avgAgingDays < 1 ? 
-                `${Math.round(avgAgingDays * 10) / 10}d` : 
-                `${Math.floor(avgAgingDays)}d`) : 
-            '0d';
-    }
-
-    // Filter and Search Logic
-    get visibleRecords() {
+    get filteredRecords() {
         let filtered = [...this.records];
 
-        // Apply search filter
         if (this.searchKey) {
             const key = this.searchKey.toLowerCase();
             filtered = filtered.filter(row =>
-                row.cells.some(cell =>
-                    String(cell.value).toLowerCase().includes(key)
-                )
+                row.cells.some(cell => String(cell.value).toLowerCase().includes(key))
             );
         }
-
-        // Apply project filter
         if (this.selectedProject) {
             filtered = filtered.filter(row => {
-                const projectCell = row.cells.find(c => 
-                    c.fieldApiName === 'Project__r.Name' || 
-                    c.fieldApiName.includes('Project')
+                const c = row.cells.find(c =>
+                    c.fieldApiName === 'Project__r.Name' || c.fieldApiName.includes('Project')
                 );
-                return projectCell?.value === this.selectedProject;
+                return c?.value === this.selectedProject;
             });
         }
-
-        // Apply status filter
         if (this.selectedStatus) {
             filtered = filtered.filter(row => {
-                const statusCell = row.cells.find(c => 
-                    c.fieldApiName === 'Status__c'
-                );
-                return statusCell?.value === this.selectedStatus;
+                const c = row.cells.find(c => c.fieldApiName === 'Status__c');
+                return c?.value === this.selectedStatus;
             });
         }
-
-        // Apply severity filter
         if (this.selectedSeverity) {
             filtered = filtered.filter(row => {
-                const severityCell = row.cells.find(c => 
-                    c.fieldApiName === 'Severity__c'
-                );
-                return severityCell?.value === this.selectedSeverity;
+                const c = row.cells.find(c => c.fieldApiName === 'Severity__c');
+                return c?.value === this.selectedSeverity;
+            });
+        }
+        if (this.selectedClassification) {
+            filtered = filtered.filter(row => {
+                const c = row.cells.find(c => c.fieldApiName === 'Classification__c');
+                return c?.value === this.selectedClassification;
             });
         }
 
         return filtered;
     }
 
+    get visibleRecords() {
+        const start = (this.currentPage - 1) * this.pageSize;
+        const end = start + this.pageSize;
+        return this.filteredRecords.slice(start, end);
+    }
+
     get filteredBugCount() {
-        return this.visibleRecords.length;
+        return this.filteredRecords.length;
     }
 
-    // Event Handlers
-    handleSearchChange(event) {
-        debugger;
-        this.searchKey = event.target.value;
-        if(this.searchKey != ''){
-            this.pageSize = Number('200');
-        }else{
-            this.pageSize = Number('20');
-        }
-    }
-
-    handleProjectFilter(event) {
-        debugger;
-        this.selectedProject = event.detail.value;
-        if(this.selectedProject != ''){
-            this.pageSize = Number('200');
-        }else{
-            this.pageSize = Number('20');
-        }
-    }
-
-    handleStatusFilter(event) {
-        debugger;
-        this.selectedStatus = event.detail.value;
-        if(this.selectedStatus != ''){
-            this.pageSize = Number('200');
-        }else{
-            this.pageSize = Number('20');
-        }
-    }
-
-    handleSeverityFilter(event) {
-        debugger;
-        this.selectedSeverity = event.detail.value;
-        if(this.selectedSeverity != ''){
-            this.pageSize = Number('200');
-        }else{
-            this.pageSize = Number('20');
-        }
-    }
-
-    handlePageSizeChange(event) {
-        debugger;
-        this.pageSize = Number(event.detail.value);
-        this.pageToken = null;
-    }
-
-    handleNextPage() {
-        if (this.nextPageToken) {
-            this.pageToken = this.nextPageToken;
-        }
-    }
-
-    handlePreviousPage() {
-        if (this.previousPageToken) {
-            this.pageToken = this.previousPageToken;
-        }
-    }
-
-    handleReset() {
-        this.searchKey = '';
-        this.selectedProject = '';
-        this.selectedStatus = '';
-        this.selectedSeverity = '';
-        this.pageSize = 10;
-        this.pageToken = null;
-    }
-
-    get isNextDisabled() {
-        return !this.nextPageToken;
+    get totalPages() {
+        return Math.max(1, Math.ceil(this.filteredRecords.length / this.pageSize));
     }
 
     get isPreviousDisabled() {
-        return !this.previousPageToken;
+        return this.currentPage <= 1;
+    }
+
+    get isNextDisabled() {
+        return this.currentPage >= this.totalPages;
     }
 
     get pageSizeOptions() {
@@ -398,30 +248,96 @@ export default class MyBugs extends LightningElement {
         ];
     }
 
+    _resetPage() {
+        this.currentPage = 1;
+    }
+
+    handleSearchChange(event) {
+        this.searchKey = event.target.value;
+        this._resetPage();
+    }
+
+    handleProjectFilter(event) {
+        this.selectedProject = event.detail.value;
+        this._resetPage();
+    }
+
+    handleStatusFilter(event) {
+        this.selectedStatus = event.detail.value;
+        this._resetPage();
+    }
+
+    handleSeverityFilter(event) {
+        this.selectedSeverity = event.detail.value;
+        this._resetPage();
+    }
+
+    handleClassificationFilter(event) {
+        this.selectedClassification = event.detail.value;
+        this._resetPage();
+    }
+
+    handlePageSizeChange(event) {
+        this.pageSize = Number(event.detail.value);
+        this._resetPage();
+    }
+
+    handleNextPage() {
+        if (this.currentPage < this.totalPages) {
+            this.currentPage += 1;
+        }
+    }
+
+    handlePreviousPage() {
+        if (this.currentPage > 1) {
+            this.currentPage -= 1;
+        }
+    }
+
+    handleReset() {
+        this.searchKey = '';
+        this.selectedProject = '';
+        this.selectedStatus = '';
+        this.selectedSeverity = '';
+        this.selectedClassification = '';
+        this.pageSize = 10;
+        this._resetPage();
+    }
+
+    handleCreateTaskClick(event) {
+        const issueId = event.currentTarget.dataset.id;
+        if (!issueId) {
+            return;
+        }
+
+        // Open Experience Cloud new-task page in a new tab with recordId
+        const baseUrl = 'https://orgfarm-9291e137a3-dev-ed.develop.my.site.com/UtilPM/s/new-task';
+        const url = `${baseUrl}?recordId=${issueId}`;
+        try {
+            window.open(url, '_blank');
+        } catch (e) {
+            // Fallback: still store selection in case future behavior needs it
+            this.selectedIssueId = issueId;
+            this.showTaskModal = true;
+        }
+    }
+
+    handleTaskModalClose() {
+        this.showTaskModal = false;
+        this.selectedIssueId = undefined;
+    }
+
     handleExport() {
         try {
-            const recordsToExport = this.visibleRecords;
-            
+            const recordsToExport = this.filteredRecords;
             if (recordsToExport.length === 0) {
                 this.showError('Export failed', 'No records to export');
                 return;
             }
-
-            // Create CSV headers
             const headers = this.Newcolumns.map(col => col.label);
-            
-            // Create CSV rows
-            const rows = recordsToExport.map(row => 
-                row.cells.map(cell => cell.value || '')
-            );
-            
-            // Build CSV
+            const rows = recordsToExport.map(row => row.cells.map(cell => cell.value || ''));
             let csv = headers.join(',') + '\n';
-            rows.forEach(row => {
-                csv += row.map(cell => `"${cell}"`).join(',') + '\n';
-            });
-            
-            // Download
+            rows.forEach(row => { csv += row.map(cell => `"${cell}"`).join(',') + '\n'; });
             const blob = new Blob([csv], { type: 'text/csv' });
             const url = window.URL.createObjectURL(blob);
             const link = document.createElement('a');
@@ -429,10 +345,8 @@ export default class MyBugs extends LightningElement {
             link.download = `MyBugs_${new Date().toISOString().split('T')[0]}.csv`;
             link.click();
             window.URL.revokeObjectURL(url);
-            
-            this.showSuccess('Export successful', 'Bugs exported to Excel successfully');
+            this.showSuccess('Export successful', 'Bugs exported successfully');
         } catch (error) {
-            console.error('Export error:', error);
             this.showError('Export failed', error.message);
         }
     }
@@ -441,20 +355,11 @@ export default class MyBugs extends LightningElement {
         this.showSuccess('View saved', 'Your current view has been saved');
     }
 
-    // Utility Methods
     showSuccess(title, message) {
-        this.dispatchEvent(new ShowToastEvent({
-            title: title,
-            message: message,
-            variant: 'success'
-        }));
+        this.dispatchEvent(new ShowToastEvent({ title, message, variant: 'success' }));
     }
 
     showError(title, message) {
-        this.dispatchEvent(new ShowToastEvent({
-            title: title,
-            message: message,
-            variant: 'error'
-        }));
+        this.dispatchEvent(new ShowToastEvent({ title, message, variant: 'error' }));
     }
 }

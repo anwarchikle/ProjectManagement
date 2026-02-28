@@ -4,13 +4,13 @@
     <allowRecordsInChatterGroup>true</allowRecordsInChatterGroup>
     <enableCaseFeedRelativeTimestamps>true</enableCaseFeedRelativeTimestamps>
     <enableChatter>true</enableChatter>
-    <enableChatterEmoticons>false</enableChatterEmoticons>
+    <enableChatterEmoticons>true</enableChatterEmoticons>
     <enableFeedEdit>true</enableFeedEdit>
     <enableFeedPinning>true</enableFeedPinning>
     <enableFeedsDraftPosts>true</enableFeedsDraftPosts>
     <enableFeedsRichText>true</enableFeedsRichText>
     <enableInviteCsnUsers>true</enableInviteCsnUsers>
-    <enableOutOfOfficeEnabledPref>false</enableOutOfOfficeEnabledPref>
+    <enableOutOfOfficeEnabledPref>true</enableOutOfOfficeEnabledPref>
     <enableRichLinkPreviewsInFeed>true</enableRichLinkPreviewsInFeed>
     <enableTodayRecsInFeed>true</enableTodayRecsInFeed>
     <unlistedGroupsEnabled>false</unlistedGroupsEnabled>

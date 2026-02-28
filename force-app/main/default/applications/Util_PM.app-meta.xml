@@ -141,7 +141,6 @@
     <tabs>Team__c</tabs>
     <tabs>Milestone__c</tabs>
     <tabs>weekly</tabs>
-    <tabs>Project_Dashboard</tabs>
     <tabs>Task_List__c</tabs>
     <tabs>Tasks__c</tabs>
     <tabs>Issue_Bug__c</tabs>
@@ -152,6 +151,9 @@
     <tabs>Holiday__c</tabs>
     <tabs>Retest</tabs>
     <tabs>Time_Log__c</tabs>
+    <tabs>POC__c</tabs>
+    <tabs>Calendar__c</tabs>
+    <tabs>Change_Request__c</tabs>
     <uiType>Lightning</uiType>
     <utilityBar>Util_PM_UtilityBar</utilityBar>
 </CustomApplication>

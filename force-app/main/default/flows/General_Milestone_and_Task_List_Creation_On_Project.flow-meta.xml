@@ -26,12 +26,64 @@
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <recordCreates>
+        <name>Create_Cr_Milestone_Record</name>
+        <label>Create Cr Milestone Record</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Create_General_Task_List</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Name</field>
+            <value>
+                <stringValue>Change Request Milestone</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Project__c</field>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Milestone__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
+        <name>Create_Cr_Task_List</name>
+        <label>Create Cr Task List</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Create_General_Task</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Milestone__c</field>
+            <value>
+                <elementReference>Create_Cr_Milestone_Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Name</field>
+            <value>
+                <stringValue>Change Request Task List</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Project__c</field>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Task_List__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
         <name>Create_General_Milestone</name>
         <label>Create General Milestone</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Create_General_Task_List</targetReference>
+            <targetReference>Create_Cr_Milestone_Record</targetReference>
         </connector>
         <inputAssignments>
             <field>Name</field>
@@ -49,10 +101,45 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordCreates>
     <recordCreates>
+        <name>Create_General_Task</name>
+        <label>Create General Task</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <inputAssignments>
+            <field>Associated_Project__c</field>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Milestone__c</field>
+            <value>
+                <elementReference>Create_Cr_Milestone_Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Name</field>
+            <value>
+                <stringValue>General Task</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Task_List__c</field>
+            <value>
+                <elementReference>Create_General_Task_List.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Tasks__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
         <name>Create_General_Task_List</name>
         <label>Create General Task List</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
+        <connector>
+            <targetReference>Create_Cr_Task_List</targetReference>
+        </connector>
         <inputAssignments>
             <field>Milestone__c</field>
             <value>
@@ -62,7 +149,7 @@
         <inputAssignments>
             <field>Name</field>
             <value>
-                <stringValue>General Task</stringValue>
+                <stringValue>General Task List</stringValue>
             </value>
         </inputAssignments>
         <inputAssignments>

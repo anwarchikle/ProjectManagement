@@ -1,0 +1,174 @@
+<template>
+    <div class="command-center">
+
+        <!-- Loading Spinner -->
+        <template if:true={isLoading}>
+            <div class="spinner-wrapper">
+                <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+            </div>
+        </template>
+
+        <!-- Error State -->
+        <template if:true={hasError}>
+            <div class="error-banner">
+                <lightning-icon icon-name="utility:error" size="small" variant="error"></lightning-icon>
+                <span>{errorMessage}</span>
+            </div>
+        </template>
+
+        <!-- Main Content -->
+        <template if:true={isDataLoaded}>
+
+            <!-- KPI Cards Row -->
+            <div class="kpi-row">
+
+                <div class="kpi-card kpi-card--blue">
+                    <div class="kpi-card__header">
+                        <span class="kpi-card__title">BUGS PENDING QA VERIFICATION (MY QUEUE)</span>
+                        <lightning-icon icon-name="utility:bug" size="x-small" class="kpi-card__icon"></lightning-icon>
+                    </div>
+                    <div class="kpi-card__count kpi-count--blue">{kpiData.pendingQaCount}</div>
+                </div>
+
+                <div class="kpi-card kpi-card--orange">
+                    <div class="kpi-card__header">
+                        <span class="kpi-card__title">BUGS DUE TODAY (SLA)</span>
+                        <lightning-icon icon-name="utility:clock" size="x-small" class="kpi-card__icon"></lightning-icon>
+                    </div>
+                    <div class="kpi-card__count kpi-count--orange">{kpiData.dueTodayCount}</div>
+                </div>
+
+                <div class="kpi-card kpi-card--red">
+                    <div class="kpi-card__header">
+                        <span class="kpi-card__title">SLA BREACHED BUGS (CRITICAL)</span>
+                        <lightning-icon icon-name="utility:warning" size="x-small" class="kpi-card__icon"></lightning-icon>
+                    </div>
+                    <div class="kpi-card__count kpi-count--red">{kpiData.slaBreachedCount}</div>
+                </div>
+
+                <div class="kpi-card kpi-card--blue-dark">
+                    <div class="kpi-card__header">
+                        <span class="kpi-card__title">TEST EXECUTION DUE</span>
+                        <lightning-icon icon-name="utility:checkin" size="x-small" class="kpi-card__icon"></lightning-icon>
+                    </div>
+                    <div class="kpi-card__count kpi-count--blue-dark">{kpiData.testExecutionCount}</div>
+                </div>
+
+                <div class="kpi-card kpi-card--orange">
+                    <div class="kpi-card__header">
+                        <span class="kpi-card__title">STUCK BUGS (&gt;5 DAYS)</span>
+                        <lightning-icon icon-name="utility:warning" size="x-small" class="kpi-card__icon"></lightning-icon>
+                    </div>
+                    <div class="kpi-card__count kpi-count--orange">{kpiData.stuckCount}</div>
+                </div>
+
+            </div>
+
+            <!-- Tables Row -->
+            <div class="tables-row">
+
+                <!-- Test Execution Due Today Table -->
+                <div class="table-card">
+                    <div class="table-card__header">
+                        <h3 class="table-card__title">Test Execution Due Today</h3>
+                        <span class="view-all-link">
+                            View all ({kpiData.testExecutionCount}) &#8599;
+                        </span>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th class="col-title">Title</th>
+                                <th>Status</th>
+                                <th>Owner</th>
+                                <th>Project</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template if:true={hasTestExecRecords}>
+                                <template for:each={kpiData.testExecutionRecords} for:item="rec">
+                                    <tr key={rec.id}>
+                                        <td class="col-id">{rec.issueId}</td>
+                                        <td class="col-title">
+                                            <span>{rec.title}</span>
+                                        </td>
+                                        <td>
+                                            <span class="badge badge--qa">{rec.status}</span>
+                                        </td>
+                                        <td>{rec.owner}</td>
+                                        <td>
+                                            <span>{rec.projectName}</span>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </template>
+                            <template if:false={hasTestExecRecords}>
+                                <tr>
+                                    <td colspan="5" class="empty-row">No records found</td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Stuck Bugs Table -->
+                <div class="table-card">
+                    <div class="table-card__header">
+                        <h3 class="table-card__title">Stuck Bugs (No movement &gt; 5 days)</h3>
+                        <span class="view-all-link">
+                            View all ({kpiData.stuckCount}) &#8599;
+                        </span>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th class="col-title">Title</th>
+                                <th>Sev</th>
+                                <th>Status</th>
+                                <th>Assignee</th>
+                                <th>Project</th>
+                                <th>Age</th>
+                                <th>Stuck</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template if:true={hasStuckRecords}>
+                                <template for:each={kpiData.stuckBugRecords} for:item="rec">
+                                    <tr key={rec.id}>
+                                        <td class="col-id">{rec.issueId}</td>
+                                        <td class="col-title">
+                                            <span>{rec.title}</span>
+                                        </td>
+                                        <td>
+                                            <template if:true={rec.hasSeverity}>
+                                                <span class={rec.severityClass}>{rec.severity}</span>
+                                            </template>
+                                        </td>
+                                        <td>
+                                            <span class={rec.statusClass}>{rec.status}</span>
+                                        </td>
+                                        <td>{rec.assignee}</td>
+                                        <td>
+                                            <span>{rec.projectName}</span>
+                                        </td>
+                                        <td>{rec.ageDays}d</td>
+                                        <td>{rec.stuckDays}d</td>
+                                    </tr>
+                                </template>
+                            </template>
+                            <template if:false={hasStuckRecords}>
+                                <tr>
+                                    <td colspan="8" class="empty-row">No stuck bugs found</td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </template>
+
+    </div>
+</template>

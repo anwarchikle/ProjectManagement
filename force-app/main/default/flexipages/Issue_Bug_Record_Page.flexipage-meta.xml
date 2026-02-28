@@ -138,6 +138,12 @@
                 <identifier>RecordRetest_Fixed_Count__cField</identifier>
             </fieldInstance>
         </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.Estimated_no_of_hours__c</fieldItem>
+                <identifier>RecordEstimated_no_of_hours__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
         <name>Facet-44b8a1a8-f1f6-4a75-83ad-20ed2f87ae93</name>
         <type>Facet</type>
     </flexiPageRegions>

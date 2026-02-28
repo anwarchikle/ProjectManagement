@@ -1,0 +1,182 @@
+<template>
+    <lightning-card>
+        <div slot="title">
+            <h2 class="page-title">Change Requests</h2>
+        </div>
+
+        <div class="slds-card__body">
+            <div class="content-section">
+
+                <lightning-layout multiple-rows="true" class="slds-m-bottom_medium">
+
+                    <lightning-layout-item size="12" small-device-size="6" medium-device-size="3" large-device-size="3" padding="around-small">
+                        <div class="status-card pending">
+                            <lightning-icon icon-name="standard:record" size="small"></lightning-icon>
+                            <span class="status-label">Total Raised</span>
+                            <div class="status-count">{totalRaised}</div>
+                        </div>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="12" small-device-size="6" medium-device-size="3" large-device-size="3" padding="around-small">
+                        <div class="status-card fixed">
+                            <lightning-icon icon-name="standard:task2" size="small"></lightning-icon>
+                            <span class="status-label">On Hold</span>
+                            <div class="status-count">{onHoldCount}</div>
+                        </div>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="12" small-device-size="6" medium-device-size="3" large-device-size="3" padding="around-small">
+                        <div class="status-card retest">
+                            <lightning-icon icon-name="standard:approval" size="small"></lightning-icon>
+                            <span class="status-label">Accepted</span>
+                            <div class="status-count">{acceptedCount}</div>
+                        </div>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="12" small-device-size="6" medium-device-size="3" large-device-size="3" padding="around-small">
+                        <div class="status-card atrisk">
+                            <lightning-icon icon-name="standard:outage" size="small"></lightning-icon>
+                            <span class="status-label">Avg Aging</span>
+                            <div class="status-count">{avgAging}</div>
+                        </div>
+                    </lightning-layout-item>
+
+                </lightning-layout>
+
+                <div class="filter-search-container">
+                    <div class="filter-icon">
+                        <lightning-icon 
+                            icon-name="utility:filterList" 
+                            size="x-small" 
+                            alternative-text="Filter">
+                        </lightning-icon>
+                    </div>
+
+                    <div class="filters-wrapper">
+                        <lightning-combobox
+                            name="project"
+                            label="Project"
+                            value={selectedProject}
+                            placeholder="Select Project"
+                            options={projectOptions}
+                            onchange={handleProjectFilter}
+                            class="filter-input">
+                        </lightning-combobox>
+
+                        <lightning-combobox
+                            name="decision"
+                            label="CR Decision"
+                            value={selectedDecision}
+                            placeholder="Select Decision"
+                            options={decisionOptions}
+                            onchange={handleDecisionFilter}
+                            class="filter-input">
+                        </lightning-combobox>
+
+                        <lightning-input 
+                            type="search" 
+                            placeholder="Search..." 
+                            value={searchKey}
+                            onchange={handleSearchChange}
+                            class="search-input">
+                        </lightning-input>
+
+                        <lightning-button-icon
+                            icon-name="utility:refresh"
+                            alternative-text="Reset filters"
+                            class="reset-icon-button"
+                            onclick={handleReset}>
+                        </lightning-button-icon>
+                    </div>
+
+                    <div class="bug-count-display">
+                        <span class="bug-count-text">{filteredCRCount} change requests</span>
+                    </div>
+                </div>
+
+                <template if:true={isLoading}>
+                    <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+                </template>
+
+                <template if:false={isLoading}>
+                    <div class="slds-scrollable_x table-wrapper">
+                        <template if:true={visibleRecords.length}>
+                            <table class="slds-table slds-table_cell-buffer slds-table_bordered custom-table">
+                                <thead>
+                                    <tr>
+                                        <th class="slds-text-title_caps table-header">Actions</th>
+                                        <template for:each={Newcolumns} for:item="col">
+                                            <th key={col.fieldApiName} class="slds-text-title_caps table-header">
+                                                {col.label}
+                                            </th>
+                                        </template>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template for:each={visibleRecords} for:item="row">
+                                        <tr key={row.Id} class="table-row">
+                                            <td class="table-cell">
+                                                <lightning-button
+                                                    variant="brand-outline"
+                                                    label="Create Task"
+                                                    data-id={row.Id}
+                                                    onclick={handleCreateTaskClick}>
+                                                </lightning-button>
+                                            </td>
+                                            <template for:each={row.cells} for:item="cell">
+                                                <td key={cell.fieldApiName} class="table-cell">
+                                                    <template if:true={cell.isLink}>
+                                                        <a href={cell.url} class="record-link">
+                                                            {cell.value}
+                                                        </a>
+                                                    </template>
+                                                    <template if:false={cell.isLink}>
+                                                        <div class="cell-content">
+                                                            {cell.value}
+                                                        </div>
+                                                    </template>
+                                                </td>
+                                            </template>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </template>
+
+                        <template if:false={visibleRecords.length}>
+                            <div class="no-results">
+                                <lightning-icon icon-name="utility:search" size="large"></lightning-icon>
+                                <p>No change requests found matching your criteria.</p>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+
+                <div class="pagination-bar">
+                    <lightning-button
+                        label="Previous"
+                        onclick={handlePreviousPage}
+                        disabled={isPreviousDisabled}>
+                    </lightning-button>
+
+                    <span class="page-info">Page {currentPage} of {totalPages}</span>
+
+                    <lightning-button
+                        label="Next"
+                        onclick={handleNextPage}
+                        disabled={isNextDisabled}>
+                    </lightning-button>
+
+                    <div class="page-size-wrapper">
+                        <lightning-combobox
+                            label="Page Size"
+                            value={pageSize}
+                            options={pageSizeOptions}
+                            onchange={handlePageSizeChange}>
+                        </lightning-combobox>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </lightning-card>
+</template>

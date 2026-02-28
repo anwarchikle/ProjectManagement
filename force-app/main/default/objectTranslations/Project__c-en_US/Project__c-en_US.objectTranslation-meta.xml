@@ -76,6 +76,10 @@
     </quickActions>
     <startsWith>Consonant</startsWith>
     <validationRules>
+        <errorMessage><!-- You cannot move the Project back to a previous status and Skip also. --></errorMessage>
+        <name>Prevent_Back_AND_Skip</name>
+    </validationRules>
+    <validationRules>
         <errorMessage><!-- Start Date and End Date cannot be changed once set. --></errorMessage>
         <name>Restrict_Start_and_End_date_change</name>
     </validationRules>

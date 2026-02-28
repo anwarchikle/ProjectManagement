@@ -3,7 +3,7 @@
     <fullName>Billing_Method__c</fullName>
     <label>Billing Method</label>
     <required>false</required>
-    <trackHistory>false</trackHistory>
+    <trackHistory>true</trackHistory>
     <trackTrending>false</trackTrending>
     <type>Picklist</type>
     <valueSet>

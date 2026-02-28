@@ -55,6 +55,53 @@
                             </lightning-combobox>
                         </div>
 
+                        <!-- Issue Bugs lookup, filtered by Project -->
+                        <div class="slds-col slds-size_1-of-5 issue-bugs-field">
+                            <c-lwc-custom-lookup
+                                unique-name="IssueBug"
+                                object-a-p-i-name="Issue_Bug__c"
+                                icon-name="action:bug"
+                                where={task.issueBugCondition}
+                                initial-lookup-value={task.issueBug}
+                                onprogressvaluechange={handleIssueLookupSelection}
+                                oncustomlookupupdateevent={handleIssueLookupUpdate}
+                                label-for-component="Issue Bugs"
+                                place-holder="Select Issue Bug">
+                            </c-lwc-custom-lookup>
+                        </div>
+
+                        <!-- Row 2 (mirror New Task layout) -->
+
+                        <div class="slds-col slds-size_1-of-8">
+                            <lightning-combobox label="Priority" name="priority" options={priorityOptions}
+                                value={task.priority} onchange={handleComboboxChange} required>
+                            </lightning-combobox>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-12 billing-toggle">
+                            <label class="billing-element__label"><span class="billing-required">*</span>Billing Type</label>
+                            <lightning-input class="slds-grid" type="toggle" message-toggle-active="Billable"
+                                message-toggle-inactive="Non Billable" checked={task.isBillable}
+                                onchange={handleBillableToggle}>
+                            </lightning-input>
+                        </div>
+
+                        <!-- Change Request lookup, filtered by Project -->
+                        <div class="slds-col slds-size_1-of-5">
+                            <c-lwc-custom-lookup
+                                unique-name="ChangeRequest"
+                                object-a-p-i-name="Change_Request__c"
+                                icon-name="standard:change_request"
+                                where={task.changeRequestCondition}
+                                initial-lookup-value={task.changeRequest}
+                                onprogressvaluechange={handleChangeRequestLookupSelection}
+                                oncustomlookupupdateevent={handleChangeRequestLookupUpdate}
+                                label-for-component="Change Request"
+                                place-holder="Select Change Request">
+                            </c-lwc-custom-lookup>
+                        </div>
+
+                        <!-- Team Members moved here so Change Request appears before it -->
                         <div class="slds-col slds-size_1-of-5">
                             <c-lwc-multi-lookup 
                                 label="Team Members" 
@@ -66,34 +113,20 @@
                             </c-lwc-multi-lookup>
                         </div>
 
-                        <!-- Row 2 -->
-
-                        <div class="slds-col slds-size_1-of-5">
-                            <lightning-combobox label="Priority" name="priority" options={priorityOptions}
-                                value={task.priority} onchange={handleComboboxChange} required>
-                            </lightning-combobox>
-                        </div>
-
-                        <div class="slds-col slds-size_1-of-5">
-                            <lightning-combobox label="Billing Type" name="billingType" options={billingOptions}
-                                value={task.billingType} onchange={handleComboboxChange} required>
-                            </lightning-combobox>
-                        </div>
-
-                        <div class="slds-col slds-size_1-of-5">
+                        <div class="slds-col slds-size_1-of-12">
                             <lightning-input type="date" label="Start Date" name="startDate"
                                 value={task.startDate} onchange={handleStartDateChange} min={todayDate} required>
                             </lightning-input>
                         </div>
 
-                        <div class="slds-col slds-size_1-of-5">
+                        <div class="slds-col slds-size_1-of-12">
                             <lightning-input type="date" label="End Date" name="endDate"
                                 value={task.endDate} onchange={handleEndDateChange} min={task.minEndDate}
                                 disabled={task.endDateDisabled} required>
                             </lightning-input>
                         </div>
 
-                        <div class="slds-col slds-size_1-of-5">
+                        <div class="slds-col slds-size_1-of-12">
                             <lightning-input type="number" label="Work Hours" name="workHours"
                                 value={task.workHours} disabled={task.workHoursDisabled}
                                 readonly={task.workHoursReadOnly} onchange={handleWorkHoursManualChange}

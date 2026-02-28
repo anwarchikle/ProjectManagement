@@ -1,90 +1,116 @@
 public class TimelogTriggerHandler {
-    public static void aggregateTimelogOnTask(List<Time_Log__c> listOfTimeLog,Map<Id,Time_Log__c> oldMap){
+    public static void costRateOfUser(List<Time_Log__c> timeLogs,Map<Id, Time_Log__c> oldMap){
         try{
-            set<Id> setOfTasksId = new set<Id>();
-            for(Time_Log__c timeLogRec : listOfTimeLog){
-                if(oldMap == null){
-                    if(timeLogRec.Tasks__c != null){
-                        setOfTasksId.add(timeLogRec.Tasks__c);
+            
+            Set<Id> taskIds = new Set<Id>();
+            Set<Id> userIds = new Set<Id>();
+            
+            for(Time_Log__c log : timeLogs){
+                
+                if(oldMap != null){
+                    Time_Log__c oldRec = oldMap.get(log.Id);
+                    
+                    if(oldRec.Tasks__c == log.Tasks__c && oldRec.User__c == log.User__c && oldRec.Daily_Logs__c == log.Daily_Logs__c){
+                        continue;
                     }
-                }else{
-                    Time_Log__c oldRec = oldMap.get(timeLogRec.Id);
-                    if(timeLogRec.Tasks__c != null && (timeLogRec.Daily_Logs__c != oldRec.Daily_Logs__c || timeLogRec.Tasks__c != oldRec.Tasks__c)){
-                        setOfTasksId.add(timeLogRec.Tasks__c);
-                    }
-                    if(oldRec.Tasks__c != null &&
-                       timeLogRec.Tasks__c != oldRec.Tasks__c){
-                           
-                           setOfTasksId.add(oldRec.Tasks__c);
-                       }
                 }
+                
+                if(log.Tasks__c != null)
+                    taskIds.add(log.Tasks__c);
+                
+                if(log.User__c != null)
+                    userIds.add(log.User__c);
             }
-            if (!setOfTasksId.isEmpty()) {
-                List<AggregateResult> aggregateTimeLogResults = [SELECT Tasks__c tId,SUM(Daily_Logs__c) totalLoggedHours 
-                                                                 FROM Time_Log__c WHERE Tasks__c IN :setOfTasksId 
-                                                                 GROUP BY Tasks__c];
+            
+            if(taskIds.isEmpty()) return;
+            
+            Map<Id, Tasks__c> taskMap = new Map<Id, Tasks__c>([SELECT Id, Associated_Project__c FROM Tasks__c WHERE Id IN :taskIds]);
+            
+            Set<Id> projectIds = new Set<Id>();
+            
+            for(Tasks__c t : taskMap.values()){
+                if(t.Associated_Project__c != null)
+                    projectIds.add(t.Associated_Project__c);
+            }
+            
+            if(projectIds.isEmpty()) return;
+            
+            List<Project_Team_Member__c> members = [SELECT Assigned_To__c, Rate_Per_Hour__c, Project__c 
+                                                    FROM Project_Team_Member__c WHERE Project__c IN :projectIds AND Assigned_To__c IN :userIds];
+            
+            Map<String, Decimal> rateMap = new Map<String, Decimal>();
+            
+            for(Project_Team_Member__c mem : members){
+                String key = mem.Project__c + '-' + mem.Assigned_To__c;
+                rateMap.put(key, mem.Rate_Per_Hour__c);
+            }
+            
+            for(Time_Log__c log : timeLogs){
                 
-                Map<Id, Decimal> tTotals = new Map<Id, Decimal>();
+                Tasks__c relatedTask = taskMap.get(log.Tasks__c);
+                if(relatedTask == null) continue;
                 
-                for (AggregateResult ar : aggregateTimeLogResults) {
-                    Id taskId = (Id) ar.get('tId');
-                    Decimal totalHours = (Decimal) ar.get('totalLoggedHours');
-                    tTotals.put(taskId, totalHours);
-                }
+                String key = relatedTask.Associated_Project__c + '-' + log.User__c;
                 
-                List<Tasks__c> tlUpdates = new List<Tasks__c>();
-                
-                for (Id taskId : tTotals.keySet()) {
-                    tlUpdates.add(new Tasks__c(
-                        Id = taskId,
-                        Actual_Hours__c = tTotals.get(taskId)
-                    ));
-                }
-                
-                if (!tlUpdates.isEmpty()) {
-                    update tlUpdates;
+                if(rateMap.containsKey(key)){
+                    Decimal rate = rateMap.get(key);
+                    
+                    log.Rate_Per_Member__c = rate;
+                    log.Cost_Amount__c = rate * log.Daily_Logs__c;
                 }
             }
             
-        }catch(exception e){
-            system.debug(' error message =====>' + e.getMessage() + ' at line number ====>'+ e.getLineNumber());
+        }catch(Exception e){
+            System.debug('Error => ' + e.getMessage() + ' Line => ' + e.getLineNumber());
         }
-    } 
+    }
     
-    public static void costRateOfUser(List<Time_Log__c> listOfTimeLog, Map<Id, Time_Log__c> oldMap) {
-        try {
-            Set<Id> setOfProjectId = new Set<Id>();
+    public static void updateMilestoneStartDate(List<Time_Log__c> newLogs){
+        try{
+            Set<Id> taskIds = new Set<Id>();
             
-            for (Time_Log__c timeRec : listOfTimeLog) {
-                if (timeRec.Projects__c != null) {
-                    if (oldMap == null) {
-                        setOfProjectId.add(timeRec.Projects__c);
-                    } else {
-                        Time_Log__c oldRec = oldMap.get(timeRec.Id);
-                        if (timeRec.Projects__c != oldRec.Projects__c || 
-                            timeRec.Daily_Logs__c != oldRec.Daily_Logs__c) {
-                                setOfProjectId.add(timeRec.Projects__c);
-                            }
-                    }
+            for(Time_Log__c log : newLogs){
+                if(log.Tasks__c != null){
+                    taskIds.add(log.Tasks__c);
                 }
             }
             
-            if (!setOfProjectId.isEmpty()) {
-                Map<Id, Project_Team_Member__c> mapOfProjectToTeamMember = new Map<Id, Project_Team_Member__c>();
-                for (Project_Team_Member__c prTeamRec : [SELECT Id, Assigned_To__c, Project__c, Employee_Cost_Based_On__c FROM Project_Team_Member__c WHERE Project__c IN :setOfProjectId AND Assigned_To__c = :UserInfo.getUserId()]) {
-                    mapOfProjectToTeamMember.put(prTeamRec.Project__c, prTeamRec);
-                }
-                
-                for (Time_Log__c timeRec : listOfTimeLog) {
-                    if (timeRec.Projects__c != null && timeRec.Daily_Logs__c != null && mapOfProjectToTeamMember.containsKey(timeRec.Projects__c)) {
-                        Decimal costRate = mapOfProjectToTeamMember.get(timeRec.Projects__c).Employee_Cost_Based_On__c;
-                        timeRec.Cost_Amount__c = timeRec.Daily_Logs__c * costRate;
-                    }
-                }
+            if(taskIds.isEmpty()) return;
+            
+            Map<Id, Integer> taskLogCount = new Map<Id, Integer>();
+            
+            for(AggregateResult ar : [SELECT Tasks__c taskId, COUNT(Id) totalCount FROM Time_Log__c WHERE Tasks__c IN :taskIds GROUP BY Tasks__c]){
+                taskLogCount.put((Id)ar.get('taskId'),(Integer)ar.get('totalCount'));
             }
             
-        } catch (Exception e) {
-            System.debug('Error ====> ' + e.getMessage() + ' Line ====> ' + e.getLineNumber());
+            Map<Id, Tasks__c> taskMap = new Map<Id, Tasks__c>([SELECT Id,Task_List__r.Milestone__c, Task_List__r.Milestone__r.Actual_Start_Date__c
+                                                               FROM Tasks__c WHERE Id IN :taskIds]);
+            
+            List<Milestone__c> milestonesToUpdate = new List<Milestone__c>();
+            
+            for(Id taskId : taskIds){
+                if(taskLogCount.containsKey(taskId) &&
+                   taskLogCount.get(taskId) == 1){
+                       
+                       Tasks__c taskRec = taskMap.get(taskId);
+                       if(taskRec != null && taskRec.Task_List__r != null && taskRec.Task_List__r.Milestone__c != null){
+                           Milestone__c ms = new Milestone__c();
+                           ms.Id = taskRec.Task_List__r.Milestone__c;
+                           
+                           if(taskRec.Task_List__r.Milestone__r.Actual_Start_Date__c == null){
+                               ms.Actual_Start_Date__c = Date.today();
+                               milestonesToUpdate.add(ms);
+                           }
+                       }
+                   }
+            }
+            
+            if(!milestonesToUpdate.isEmpty()){
+                update milestonesToUpdate;
+            }
+            
+        }catch(Exception e){
+            System.debug('Error => ' + e.getMessage() + ' Line => ' + e.getLineNumber());
         }
     }
     

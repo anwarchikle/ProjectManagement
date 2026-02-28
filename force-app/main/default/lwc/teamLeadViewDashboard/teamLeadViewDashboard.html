@@ -1,0 +1,157 @@
+<template>
+    <div class="dashboard-container slds-p-around_medium">
+        <!-- Top header with title, projects and filters -->
+        <div class="dashboard-header slds-grid slds-wrap slds-grid_vertical-align-center slds-p-around_small slds-m-bottom_small">
+            <div class="slds-col slds-size_1-of-1 slds-m-bottom_x-small header-title-row">
+                <div class="slds-grid slds-grid_vertical-align-center slds-grid_align-spread">
+                    <div class="slds-grid slds-grid_vertical-align-center">
+                        <div class="app-icon slds-m-right_small"></div>
+                        <div class="slds-text-heading_small">PMA Dashboard</div>
+                    </div>
+                    <div class="header-view-switch slds-grid slds-grid_vertical-align-center slds-hide_small">
+                        <span class="view-pill">Developer View</span>
+                        <span class="view-pill view-pill-active">Team Lead View</span>
+                        <span class="view-pill">Project Manager View</span>
+                        <span class="view-pill">QA View</span>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-large-size_2-of-3 header-left slds-grid slds-grid_vertical-align-center slds-grid_align-spread">
+                <div class="slds-grid slds-grid_vertical-align-center header-projects">
+                    <span class="slds-text-title_caps slds-m-right_small">Projects</span>
+                    <div class="pill-group">
+                        <span class="pill pill-active">Alpha</span>
+                        <span class="pill">Beta</span>
+                        <span class="pill">Gamma</span>
+                    </div>
+                </div>
+
+                <div class="slds-grid slds-grid_vertical-align-center header-range slds-m-left_medium">
+                    <span class="slds-text-title_caps slds-m-right_xx-small">Range</span>
+                    <lightning-combobox
+                        class="range-combobox"
+                        value={selectedRange}
+                        options={rangeOptions}
+                        variant="label-hidden">
+                    </lightning-combobox>
+                </div>
+            </div>
+
+            <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-3 header-right slds-grid slds-grid_align-end">
+                <div class="search-wrapper slds-input-has-icon slds-input-has-icon_left-right slds-size_1-of-1 slds-medium-size_2-of-3 slds-large-size_1-of-1">
+                    <lightning-input
+                        type="search"
+                        variant="label-hidden"
+                        placeholder="Search tasks / bugs..."
+                        value={searchKey}>
+                    </lightning-input>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="dashboard-tabs slds-m-bottom_small">
+            <lightning-tabset variant="scoped" active-tab-value={activeTab} onactive={handleTabChange}>
+                <lightning-tab label="TL Command Center" value="tlCommandCenter">
+                    <!-- Main TL Command Center layout -->
+                    <div class="tab-content">
+                        <!-- Main dashboard area -->
+                        <div class="main-panel">
+                            <!-- Summary tiles row -->
+                            <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_medium">
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                                    <div class="summary-card summary-card-today slds-card slds-p-around_medium">
+                                        <div class="summary-card-header slds-grid slds-grid_vertical-align-center slds-grid_align-spread slds-m-bottom_x-small">
+                                            <div class="slds-text-title_caps">Team Tasks Due Today</div>
+                                            <div class="summary-card-icon summary-card-icon-clock"></div>
+                                        </div>
+                                        <div class="summary-value">{teamTasksDueToday}</div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                                    <div class="summary-card summary-card-week slds-card slds-p-around_medium">
+                                        <div class="summary-card-header slds-grid slds-grid_vertical-align-center slds-grid_align-spread slds-m-bottom_x-small">
+                                            <div class="slds-text-title_caps">Due This Week</div>
+                                            <div class="summary-card-icon summary-card-icon-clock"></div>
+                                        </div>
+                                        <div class="summary-value">{dueThisWeek}</div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                                    <div class="summary-card summary-card-overdue slds-card slds-p-around_medium">
+                                        <div class="summary-card-header slds-grid slds-grid_vertical-align-center slds-grid_align-spread slds-m-bottom_x-small">
+                                            <div class="slds-text-title_caps">Overdue (Team)</div>
+                                            <div class="summary-card-icon summary-card-icon-warning"></div>
+                                        </div>
+                                        <div class="summary-value">{overdueTeam}</div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                                    <div class="summary-card summary-card-bugs slds-card slds-p-around_medium">
+                                        <div class="summary-card-header slds-grid slds-grid_vertical-align-center slds-grid_align-spread slds-m-bottom_x-small">
+                                            <div class="slds-text-title_caps">S1/S2 Bugs Open</div>
+                                            <div class="summary-card-icon summary-card-icon-settings"></div>
+                                        </div>
+                                        <div class="summary-value">{s1s2BugsOpen}</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Chart and blocked items row -->
+                            <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_medium">
+                                <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2">
+                                    <div class="slds-card slds-p-around_medium chart-card">
+                                        <div class="slds-text-title_caps slds-m-bottom_small">Overdue Tasks - Aging Buckets</div>
+                                        <!-- Placeholder where Chart.js canvas will go later -->
+                                        <div class="chart-placeholder">Chart placeholder</div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2">
+                                    <div class="slds-card slds-p-around_medium">
+                                        <div class="slds-text-title_caps slds-m-bottom_small">Blocked Items - Needs Escalation</div>
+                                        <!-- Blank table placeholder -->
+                                        <div class="table-placeholder">Blocked items table placeholder</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Stuck Work table -->
+                            <div class="slds-card slds-p-around_medium">
+                                <div class="slds-text-title_caps slds-m-bottom_small">'Stuck Work' (No movement &gt; 5 days)</div>
+                                <div class="table-placeholder">Stuck work table placeholder</div>
+                            </div>
+                        </div>
+                    </div>
+                </lightning-tab>
+
+                <lightning-tab label="Multi-Project Health" value="multiProjectHealth">
+                    <div class="tab-placeholder">Multi-Project Health - layout to be defined</div>
+                </lightning-tab>
+
+                <lightning-tab label="Team Workload &amp; Utilization" value="teamWorkload">
+                    <div class="tab-placeholder">Team Workload &amp; Utilization - layout to be defined</div>
+                </lightning-tab>
+
+                <lightning-tab label="Delivery Predictability" value="deliveryPredictability">
+                    <div class="tab-placeholder">Delivery Predictability - layout to be defined</div>
+                </lightning-tab>
+
+                <lightning-tab label="Quality Cockpit" value="qualityCockpit">
+                    <div class="tab-placeholder">Quality Cockpit - layout to be defined</div>
+                </lightning-tab>
+
+                <lightning-tab label="Developer Performance" value="developerPerformance">
+                    <div class="tab-placeholder">Developer Performance - layout to be defined</div>
+                </lightning-tab>
+
+                <lightning-tab label="Flow &amp; Bottlenecks" value="flowBottlenecks">
+                    <div class="tab-placeholder">Flow &amp; Bottlenecks - layout to be defined</div>
+                </lightning-tab>
+
+                <lightning-tab label="Release Readiness" value="releaseReadiness">
+                    <div class="tab-placeholder">Release Readiness - layout to be defined</div>
+                </lightning-tab>
+            </lightning-tabset>
+        </div>
+    </div>
+</template>

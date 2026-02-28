@@ -38,6 +38,8 @@ public class projectDashboardProvider {
         @AuraEnabled public TeamMemberData teamMembers { get; set; }
         @AuraEnabled public MilestonesData milestones { get; set; }
         @AuraEnabled public ProjectHoursData projectHours { get; set; }
+        @AuraEnabled public LoggedHoursPercentageData loggedHoursData { get; set; }
+        @AuraEnabled public BudgetData budget { get; set; }
     }
     public class ProjectHoursData {
         @AuraEnabled public Decimal estimatedHours { get; set; }
@@ -47,11 +49,22 @@ public class projectDashboardProvider {
         @AuraEnabled public Decimal nonBillableHours { get; set; }
     }
     
+        public class BudgetData {
+        @AuraEnabled public Decimal plannedCost { get; set; }
+        @AuraEnabled public Decimal actualCost { get; set; }
+        @AuraEnabled public Decimal budgetPercentage { get; set; }
+    }
+    
+    public class LoggedHoursPercentageData {
+    @AuraEnabled public Decimal actualHours { get; set; }
+    @AuraEnabled public Decimal plannedHours { get; set; }
+}
+    
     // Method to get ONLY Project Info data
     @AuraEnabled(cacheable=true)
     public static ProjectInfoData getProjectInfo(String projectId) {
         try {
-            System.debug('🔄 Getting Project Info for ID: ' + projectId);
+          
             
             // Query ONLY the fields we need for Project Info section
             List<Project__c> projects = [
@@ -61,8 +74,7 @@ public class projectDashboardProvider {
             ];
             
             if (projects.isEmpty()) {
-                System.debug('❌ No project found with ID: ' + projectId);
-                return new ProjectInfoData();
+    	     return new ProjectInfoData();
             }
             
             Project__c project = projects[0];
@@ -77,7 +89,7 @@ public class projectDashboardProvider {
             return data;
             
         } catch (Exception e) {
-            System.debug('🔥 Error in getProjectInfo: ' + e.getMessage() + ' at ' + e.getLineNumber());
+            
             throw new AuraHandledException('Error loading project info: ' + e.getMessage());
         }
     }
@@ -102,20 +114,68 @@ public class projectDashboardProvider {
             
             // 4. Get Milestones data
             data.milestones = getMilestonesData(projectId);
-            data.projectHours = getProjectHoursData(projectId);           
-                        
-            return data;
+            data.projectHours = getProjectHoursData(projectId);
+            LoggedHoursPercentageData loggedHoursData = new LoggedHoursPercentageData();
             
-        } catch (Exception e) {
-            System.debug('🔥 Error in getDashboardData: ' + e.getMessage() + ' at ' + e.getLineNumber());
-            throw new AuraHandledException('Error loading dashboard data: ' + e.getMessage());
+              List<Project__c> projects = [
+            SELECT Actual_Hours__c, Planned_Hours__c 
+            FROM Project__c 
+            WHERE Id = :projectId 
+            LIMIT 1
+        ];
+        
+        if (!projects.isEmpty()) {
+            Project__c project = projects[0];
+            loggedHoursData.actualHours = project.Actual_Hours__c != null ? project.Actual_Hours__c : 0;
+            loggedHoursData.plannedHours = project.Planned_Hours__c != null ? project.Planned_Hours__c : 0;
+        } else {
+            loggedHoursData.actualHours = 0;
+            loggedHoursData.plannedHours = 0;
         }
+        
+        // Add to DashboardData - you'll need to add this property to DashboardData class
+        data.loggedHoursData = loggedHoursData;
+                        
+           BudgetData budgetData = new BudgetData();
+        
+        // Query the Project__c record for cost fields
+        List<Project__c> projectWithCost = [
+            SELECT Planned_Cost__c, Actual_Cost__c 
+            FROM Project__c 
+            WHERE Id = :projectId 
+            LIMIT 1
+        ];
+        
+        if (!projectWithCost.isEmpty()) {
+            Project__c project = projectWithCost[0];
+            budgetData.plannedCost = project.Planned_Cost__c != null ? project.Planned_Cost__c : 0;
+            budgetData.actualCost = project.Actual_Cost__c != null ? project.Actual_Cost__c : 0;
+            
+            // Calculate budget percentage
+            if (budgetData.plannedCost > 0) {
+                budgetData.budgetPercentage = (budgetData.actualCost / budgetData.plannedCost) * 100;
+            } else {
+                budgetData.budgetPercentage = 0;
+            }
+        } else {
+            budgetData.plannedCost = 0;
+            budgetData.actualCost = 0;
+            budgetData.budgetPercentage = 0;
+        }
+        
+        data.budget = budgetData;
+        
+        return data;
+        
+    } catch (Exception e) {
+    
+        throw new AuraHandledException('Error loading dashboard data: ' + e.getMessage());
+    }
     }
     
     private static ProjectHoursData getProjectHoursData(String projectId) {
         try {
-            System.debug('⏰ Getting Project Hours for Project: ' + projectId);
-            
+                      
             ProjectHoursData hoursData = new ProjectHoursData();
             hoursData.estimatedHours = 0;
             hoursData.loggedHours = 0;
@@ -127,15 +187,7 @@ public class projectDashboardProvider {
                 // Query the Project__c record for hour-related fields
                 List<Project__c> projects = [
                     SELECT 
-                        Planned_Hours__c,
-                        Actual_Hours__c,
-                        Hours_Remaining__c,
-                        Billable_Hours__c,
-                        Non_Billable_Hours__c
-                    FROM Project__c 
-                    WHERE Id = :projectId 
-                    LIMIT 1
-                ];
+                        Planned_Hours__c,Actual_Hours__c, Hours_Remaining__c, Billable_Hours__c,Non_Billable_Hours__c FROM Project__c WHERE Id = :projectId  LIMIT 1 ];
                 
                 if (!projects.isEmpty()) {
                     Project__c project = projects[0];
@@ -148,8 +200,7 @@ public class projectDashboardProvider {
                 }
                 
             } catch (Exception queryEx) {
-                System.debug('⚠️ Project hours fields not found: ' + queryEx.getMessage());
-                System.debug('⚠️ Using default/calculated values');
+            
                 
                 // If fields don't exist, calculate or use defaults
                 hoursData.estimatedHours = 120;
@@ -159,18 +210,11 @@ public class projectDashboardProvider {
                 hoursData.nonBillableHours = 20;
             }
             
-            System.debug('⏰ Project Hours Data:');
-            System.debug('  Estimated: ' + hoursData.estimatedHours);
-            System.debug('  Logged: ' + hoursData.loggedHours);
-            System.debug('  Scheduled: ' + hoursData.scheduledHours);
-            System.debug('  Billable: ' + hoursData.billableHours);
-            System.debug('  Non-Billable: ' + hoursData.nonBillableHours);
-            
+                       
             return hoursData;
             
         } catch (Exception e) {
-            System.debug('⚠️ Error in getProjectHoursData: ' + e.getMessage());
-            // Return default data
+       
             ProjectHoursData defaultData = new ProjectHoursData();
             defaultData.estimatedHours = 120;
             defaultData.loggedHours = 85;
@@ -183,14 +227,13 @@ public class projectDashboardProvider {
     
     private static TasksData getTasksData(String projectId) {
     try {
-        System.debug('📋 Getting Tasks Data for Project: ' + projectId);
+     
         
         TasksData tasksData = new TasksData();
         tasksData.totalTasks = 0;
         tasksData.completedTasks = 0;
         tasksData.pendingTasks = 0;
         
-        // Query Tasks associated with this project
         List<Tasks__c> tasks = [
             SELECT Id, Status__c 
             FROM Tasks__c
@@ -208,30 +251,24 @@ public class projectDashboardProvider {
             }
             
             tasksData.pendingTasks = tasksData.totalTasks - tasksData.completedTasks;
-        }
-        
-        System.debug('📊 Tasks Data:');
-     
+        }  
         
         return tasksData;
         
     } catch (Exception e) {
-        System.debug('⚠️ Error fetching tasks: ' + e.getMessage());
-        // Return empty data but don't fail the whole request
+       
         return new TasksData();
     }
 }
 
-// NEW METHOD: Get Team Members data - FIXED with Assigned_To__c
+
 private static TeamMemberData getTeamMembersData(String projectId) {
     try {
-        System.debug('👥 Getting Team Members for Project: ' + projectId);
         
         TeamMemberData teamData = new TeamMemberData();
         teamData.members = new List<Member>();
         teamData.teamMembersCount = 0;
-        
-        // Query Project Team Members using Assigned_To__c field
+
         try {
             List<Project_Team_Member__c> teamMembers = [
                 SELECT Id, Assigned_To__c, 
@@ -272,9 +309,7 @@ private static TeamMemberData getTeamMembersData(String projectId) {
             }
             
         } catch (Exception queryEx) {
-            System.debug('⚠️ Project Team Member object error: ' + queryEx.getMessage());
-            System.debug('⚠️ Using default team members');
-            // If object doesn't exist or query fails, use default team members
+   
             teamData.teamMembersCount = 6;
             teamData.members = getDefaultTeamMembers();
         }
@@ -285,7 +320,7 @@ private static TeamMemberData getTeamMembersData(String projectId) {
         return teamData;
         
     } catch (Exception e) {
-        System.debug('⚠️ Error in getTeamMembersData: ' + e.getMessage());
+
         // Return default data
         TeamMemberData defaultData = new TeamMemberData();
         defaultData.teamMembersCount = 6;

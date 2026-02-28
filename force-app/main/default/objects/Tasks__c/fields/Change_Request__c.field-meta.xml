@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Change_Request__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <label>Change Request.</label>
+    <referenceTo>Change_Request__c</referenceTo>
+    <relationshipLabel>Tasks</relationshipLabel>
+    <relationshipName>Tasks</relationshipName>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

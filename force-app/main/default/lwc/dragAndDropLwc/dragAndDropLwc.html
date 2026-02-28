@@ -8,8 +8,8 @@
             </lightning-button-group>
         </div>
         <div class="toolbar">
-            <lightning-combobox name="listview" label="List View" value={selectedListView} placeholder="All"
-                options={listViewOptions} onchange={handleListViewChange}></lightning-combobox>
+            <lightning-combobox name="viewtype" label="View" value={viewType}
+                options={viewTypeOptions} onchange={handleViewTypeChange}></lightning-combobox>
             <lightning-input type="search"  label="Search" placeholder="Search tasks..."
                 value={searchKey} onchange={handleSearchChange}></lightning-input>
             <template if:true={canCreateTask}>

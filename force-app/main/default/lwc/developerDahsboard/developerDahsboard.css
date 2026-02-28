@@ -1,0 +1,100 @@
+:host {
+    --pill-bg: #eef2f7;
+    --pill-text: #0b2545;
+    --pill-hover: #dce3eb;
+    --tab-active-color: #0176d3;
+    --border-color: #dddbda;
+}
+
+.dashboard-container {
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+}
+
+/* Header Styles */
+.header-section {
+    background-color: #fff;
+}
+
+.label-text {
+    font-weight: 700;
+    color: #444;
+    font-size: 0.875rem;
+}
+
+/* Project Pills */
+.project-pills-container {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.project-pill {
+    background-color: var(--pill-bg);
+    color: var(--pill-text);
+    border: none;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.project-pill:hover {
+    background-color: var(--pill-hover);
+}
+
+/* Inputs */
+.range-dropdown {
+    width: 140px;
+}
+
+.search-input {
+    width: 200px;
+}
+
+/* Navigation Bar */
+.nav-bar {
+    display: flex;
+    padding: 0 16px;
+    gap: 24px;
+    background: #fff;
+    overflow-x: auto; /* Scrollable on small screens */
+}
+
+.nav-item {
+    background: transparent;
+    border: none;
+    padding: 12px 0;
+    font-size: 0.875rem;
+    color: #5c5c5c;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+}
+
+.nav-item:hover {
+    color: var(--tab-active-color);
+}
+
+.active-tab {
+    color: var(--tab-active-color);
+    border-bottom-color: var(--tab-active-color);
+    font-weight: 500;
+}
+
+/* Override Icon Color for active tab */
+.active-tab lightning-icon {
+    --sds-c-icon-color-foreground-default: #0176d3;
+}
+
+/* Content Body */
+.content-body {
+    min-height: 400px;
+    background-color: #f7f9fb; /* Light grey bg for body content */
+}

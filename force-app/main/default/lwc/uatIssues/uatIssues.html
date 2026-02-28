@@ -1,29 +1,43 @@
 <template>
     <lightning-card title="UAT Issues" icon-name="standard:record">
 
-        <div class="slds-p-around_small">
+        <div >
 
-            <div class="metrics-container">
-                <div class="metric-card">
-                    <div class="metric-label">Total Raised</div>
-                    <div class="metric-value">{totalRaised}</div>
-                </div>
+            <lightning-layout multiple-rows="true" >
 
-                <div class="metric-card highlight-orange">
-                    <div class="metric-label">Open</div>
-                    <div class="metric-value">{openCount}</div>
-                </div>
+                <lightning-layout-item size="12" small-device-size="6" medium-device-size="3" large-device-size="3" padding="around-small">
+                    <div class="status-card pending">
+                        <lightning-icon icon-name="standard:record" size="small"></lightning-icon>
+                        <span class="status-label">Total Raised</span>
+                        <div class="status-count">{totalRaised}</div>
+                    </div>
+                </lightning-layout-item>
 
-                <div class="metric-card highlight-red">
-                    <div class="metric-label">Critical/Blocker Open</div>
-                    <div class="metric-value">{criticalBlockerOpen}</div>
-                </div>
+                <lightning-layout-item size="12" small-device-size="6" medium-device-size="3" large-device-size="3" padding="around-small">
+                    <div class="status-card fixed">
+                        <lightning-icon icon-name="standard:task2" size="small"></lightning-icon>
+                        <span class="status-label">Open</span>
+                        <div class="status-count">{openCount}</div>
+                    </div>
+                </lightning-layout-item>
 
-                <div class="metric-card">
-                    <div class="metric-label">Avg Aging (Open)</div>
-                    <div class="metric-value">{avgAging}</div>
-                </div>
-            </div>
+                <lightning-layout-item size="12" small-device-size="6" medium-device-size="3" large-device-size="3" padding="around-small">
+                    <div class="status-card retest">
+                        <lightning-icon icon-name="standard:bug" size="small"></lightning-icon>
+                        <span class="status-label">Critical/Blocker Open</span>
+                        <div class="status-count">{criticalBlockerOpen}</div>
+                    </div>
+                </lightning-layout-item>
+
+                <lightning-layout-item size="12" small-device-size="6" medium-device-size="3" large-device-size="3" padding="around-small">
+                    <div class="status-card atrisk">
+                        <lightning-icon icon-name="standard:outage" size="small"></lightning-icon>
+                        <span class="status-label">Avg Aging (Open)</span>
+                        <div class="status-count">{avgAging}</div>
+                    </div>
+                </lightning-layout-item>
+
+            </lightning-layout>
 
             <lightning-layout multiple-rows="false" vertical-align="end">
 
@@ -51,7 +65,11 @@
                 </lightning-layout-item>
 
                 <lightning-layout-item size="2" padding="horizontal-small">
-                    <lightning-combobox label="Page Size" value={pageSize} options={pageSizeOptions}
+                    <lightning-combobox
+                        class="page-size-input"
+                        label="Page Size"
+                        value={pageSize}
+                        options={pageSizeOptions}
                         onchange={handlePageSizeChange}>
                     </lightning-combobox>
                 </lightning-layout-item>
@@ -65,7 +83,7 @@
             </lightning-layout>
         </div>
 
-        <div class="slds-p-around_small slds-scrollable_x">
+        <div class="slds-p-around_small slds-scrollable_x" style="max-height: 500px; overflow: visible; overflow-x: auto;">
             <template if:true={visibleRecords}>
                 <table class="slds-table slds-table_cell-buffer slds-table_bordered">
                     <thead>
@@ -139,7 +157,8 @@
                                             <template if:true={canEditDecision}>
                                                 <lightning-textarea value={cell.value} data-id={row.Id}
                                                     data-field={cell.fieldApiName}
-                                                    onchange={handleClassificationChange}>
+                                                    onchange={handleClassificationChange}
+                                                    class="single-row-textarea">
                                                 </lightning-textarea>
                                             </template>
                                             <template if:false={canEditDecision}>

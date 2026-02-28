@@ -1,0 +1,86 @@
+<template>
+    <div class="pm-wrapper">
+
+        <div class="panel panel-left">
+
+            <div class="panel-header">
+                <div class="panel-title">
+                    <span class="title-icon">⏱</span>
+                    <span>Milestone Timeline</span>
+                </div>
+                <div class="project-filter">
+                    <lightning-combobox
+                        variant="label-hidden"
+                        placeholder="Select Project"
+                        options={projectOptions}
+                        value={selectedProject}
+                        onchange={handleProjectChange}>
+                    </lightning-combobox>
+                </div>
+            </div>
+
+            <div class="timeline-body">
+                <div class="vline"></div>
+
+                <template for:each={milestones} for:item="ms">
+                    <div key={ms.Id} class="ms-row">
+                        <div class={ms.dotClass}></div>
+                        <div class="ms-info">
+                            <span class={ms.nameClass}>{ms.Name}</span>
+                            <span class="ms-date">{ms.End_Date__c}</span>
+                        </div>
+                    </div>
+                </template>
+
+                <template if:false={hasMilestones}>
+                    <div class="empty-state">Select a project to view milestones</div>
+                </template>
+            </div>
+
+        </div>
+
+        <div class="panel panel-right">
+
+            <div class="panel-header">
+                <div class="panel-title">
+                    <span class="title-icon lightning">⚡</span>
+                    <span>What&apos;s Coming Next (14 days)</span>
+                </div>
+                <div class="project-filter">
+                    <lightning-combobox
+                        variant="label-hidden"
+                        placeholder="Select Project"
+                        options={projectOptions}
+                        value={selectedCalendarProject}
+                        onchange={handleCalendarProjectChange}>
+                    </lightning-combobox>
+                </div>
+            </div>
+
+            <div class="upcoming-body">
+
+                <template for:each={upcomingItems} for:item="item">
+                    <div key={item.Id} class="upcoming-row">
+                        <span class="item-date">{item.displayDate}</span>
+                        <span class={item.badgeClass}>{item.Action__c}</span>
+                        <span class="item-name">{item.Name}</span>
+                    </div>
+                </template>
+
+                <template if:false={hasUpcoming}>
+                    <div class="empty-state">
+                        <template if:true={selectedCalendarProject}>
+                            No calendar items in the next 14 days
+                        </template>
+                        <template if:false={selectedCalendarProject}>
+                            Select a project to view upcoming items
+                        </template>
+                    </div>
+                </template>
+
+            </div>
+
+        </div>
+
+    </div>
+</template>

@@ -3,7 +3,7 @@
     <fullName>Status__c</fullName>
     <label>Status</label>
     <required>false</required>
-    <trackHistory>false</trackHistory>
+    <trackHistory>true</trackHistory>
     <trackTrending>false</trackTrending>
     <type>Picklist</type>
     <valueSet>
@@ -11,64 +11,44 @@
         <valueSetDefinition>
             <sorted>false</sorted>
             <value>
-                <fullName>Active</fullName>
-                <default>true</default>
-                <label>Active</label>
+                <fullName>Pre Kick off</fullName>
+                <default>false</default>
+                <label>Pre Kick off</label>
             </value>
             <value>
-                <fullName>In Progress</fullName>
+                <fullName>Kick off</fullName>
                 <default>false</default>
-                <label>In Progress</label>
+                <label>Kick off</label>
             </value>
             <value>
-                <fullName>On Track</fullName>
+                <fullName>BRG</fullName>
                 <default>false</default>
-                <label>On Track</label>
+                <label>BRG</label>
             </value>
             <value>
-                <fullName>Delayed</fullName>
+                <fullName>Sign-off</fullName>
                 <default>false</default>
-                <label>Delayed</label>
+                <label>Sign-off</label>
             </value>
             <value>
-                <fullName>In Testing</fullName>
+                <fullName>Development</fullName>
                 <default>false</default>
-                <label>In Testing</label>
+                <label>Development</label>
             </value>
             <value>
-                <fullName>On Hold</fullName>
+                <fullName>UAT</fullName>
                 <default>false</default>
-                <label>On Hold</label>
+                <label>UAT</label>
             </value>
             <value>
-                <fullName>Approved</fullName>
+                <fullName>Go-Live</fullName>
                 <default>false</default>
-                <label>Approved</label>
+                <label>Go-Live</label>
             </value>
             <value>
-                <fullName>Cancelled</fullName>
+                <fullName>Hypercare Support</fullName>
                 <default>false</default>
-                <label>Cancelled</label>
-            </value>
-            <value>
-                <fullName>Planning</fullName>
-                <default>false</default>
-                <label>Planning</label>
-            </value>
-            <value>
-                <fullName>Completed</fullName>
-                <default>false</default>
-                <label>Completed</label>
-            </value>
-            <value>
-                <fullName>Invoiced</fullName>
-                <default>false</default>
-                <label>Invoiced</label>
-            </value>
-            <value>
-                <fullName>Support</fullName>
-                <default>false</default>
-                <label>Support</label>
+                <label>Hypercare Support</label>
             </value>
         </valueSetDefinition>
     </valueSet>

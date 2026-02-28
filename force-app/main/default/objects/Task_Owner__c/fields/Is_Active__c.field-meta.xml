@@ -3,6 +3,7 @@
     <fullName>Is_Active__c</fullName>
     <defaultValue>true</defaultValue>
     <label>Is Active</label>
+    <trackFeedHistory>false</trackFeedHistory>
     <trackTrending>false</trackTrending>
     <type>Checkbox</type>
 </CustomField>

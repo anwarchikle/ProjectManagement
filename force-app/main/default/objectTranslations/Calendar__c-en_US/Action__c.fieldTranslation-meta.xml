@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label><!-- Action --></label>
+    <name>Action__c</name>
+    <picklistValues>
+        <masterLabel>Client Visit</masterLabel>
+        <translation><!-- Client Visit --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Decision</masterLabel>
+        <translation><!-- Decision --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Dependency</masterLabel>
+        <translation><!-- Dependency --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Meeting</masterLabel>
+        <translation><!-- Meeting --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Risk</masterLabel>
+        <translation><!-- Risk --></translation>
+    </picklistValues>
+</CustomFieldTranslation>

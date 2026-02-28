@@ -1,0 +1,263 @@
+/* .slds-modal__container {
+    width: 80%;
+    max-width: 80%;
+}  */
+
+
+
+.cr-card {
+    position: relative;
+    background: #ffffff;
+    border-radius: 12px;
+    border: 1px solid #f1f5f9;
+    padding: 20px 20px 20px 24px;
+    margin-bottom: 18px;
+    transition: all 0.25s ease;
+    overflow: hidden;
+}
+
+.cr-card::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 6px;
+    background: linear-gradient(180deg, #ffb020, #ff7a00);
+    border-radius: 12px 0 0 12px;
+}
+
+.cr-card:hover {
+    box-shadow: 0 10px 28px rgba(255, 122, 0, 0.15);
+    transform: translateY(-3px);
+}
+
+
+.cr-header-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.cr-number {
+    font-weight: 700;
+    font-size: 13px;
+    color: #f97316;
+    transition: 0.2s ease;
+}
+
+.cr-card:hover .cr-number {
+    color: #ea580c;
+}
+
+
+
+.cr-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-top: 4px;
+}
+
+.cr-card:hover .cr-title {
+    color: #ea580c;
+}
+
+.cr-description {
+    font-size: 13px;
+    color: #64748b;
+}
+
+
+.cr-pill {
+    background: #fff7ed;
+    color: #ea580c;
+    padding: 4px 12px;
+    font-size: 11px;
+    border-radius: 20px;
+    font-weight: 600;
+    border: 1px solid #fed7aa;
+}
+
+.cr-pill-status {
+    background: #fff1e6;
+    color: #c2410c;
+}
+
+
+.cr-meta-strip {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 60px;
+    background: #f8fafc;
+    padding: 18px 24px;
+    margin-top: 18px;
+    border-radius: 8px;
+}
+
+.meta-item {
+    flex: 1;
+}
+
+.cr-meta-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+}
+
+.cr-meta-value {
+    font-size: 16px;
+    font-weight: 700;
+    margin-top: 4px;
+    color: #f97316;
+}
+
+.cr-card:hover .cr-meta-value {
+    color: #ea580c;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+.clickable:hover {
+    text-decoration: underline;
+    color: #ea580c;
+}
+
+
+
+
+.custom-modal-container {
+    width: 70%;
+    max-width: 900px;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+
+
+
+.custom-modal-header {
+    background: #ffffff;
+    border-bottom: 1px solid #f1f5f9;
+    padding: 20px 24px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+
+.custom-close-btn {
+    position: absolute;
+    right: 20px;
+    top: 18px;
+    background: #f1f5f9;
+    border: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.custom-close-btn:hover {
+    background: #ffe8d6;
+    color: #ea580c;
+}
+
+
+.slds-modal__content {
+    background: #ffffff;
+    padding: 24px !important;
+}
+
+/* Add Row Button */
+.slds-modal__content lightning-button {
+    --slds-c-button-brand-color-background: #f97316;
+}
+
+
+
+.slds-table {
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #f1f5f9;
+}
+
+.slds-table thead {
+    background: #f8fafc;
+}
+
+.slds-table th {
+    font-size: 13px;
+    font-weight: 600;
+    color: #64748b;
+}
+
+
+.slds-modal__footer {
+    background: #ffffff;
+    border-top: 1px solid #f1f5f9;
+    padding: 18px 24px;
+}
+
+.slds-modal__footer lightning-button:first-child {
+    --slds-c-button-neutral-color-border: #e2e8f0;
+}
+
+.slds-modal__footer lightning-button:last-child {
+    --slds-c-button-brand-color-background: #f97316;
+    --slds-c-button-brand-color-background-hover: #ea580c;
+}
+
+.hidden-file-input {
+    display: none;
+}
+
+.upload-icon {
+    --slds-c-button-icon-color-foreground-default: #f97316;
+    --slds-c-button-icon-color-background: #fff7ed;
+    border-radius: 8px;
+}
+
+.upload-icon:hover {
+    --slds-c-button-icon-color-background: #ffe8d6;
+    transform: scale(1.05);
+}
+
+.cr-header-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.cr-edit-btn {
+    margin-left: auto;
+    background: none;
+    border: 1px solid #e07b00;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    color: #e07b00;
+    padding: 2px 8px;
+    line-height: 1;
+    transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.cr-edit-btn:hover {
+    color: #c46800;
+    border-color: #c46800;
+}

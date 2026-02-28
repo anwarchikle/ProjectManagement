@@ -7,6 +7,8 @@
     <relationshipLabel>Issues/Bugs</relationshipLabel>
     <relationshipName>Issues_Bugs</relationshipName>
     <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>true</trackHistory>
     <trackTrending>false</trackTrending>
     <type>Lookup</type>
 </CustomField>

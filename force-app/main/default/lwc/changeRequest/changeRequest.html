@@ -1,0 +1,205 @@
+<template>
+    <lightning-card icon-name="standard:account" variant="base">
+        <div slot="title">
+            Change Request
+        </div>
+        <div slot="actions">
+            <lightning-button label="New Change Request" onclick={handleNewChangeRequest} variant="brand">
+            </lightning-button>
+        </div>
+
+        <div class="cr-list-container slds-p-around_medium">
+            <template if:true={changeRequests}>
+                <template if:true={changeRequests.length}>
+                    <template for:each={changeRequests} for:item="cr">
+                        <article key={cr.Id} class="cr-card slds-box slds-m-bottom_medium">
+
+                            <div class="cr-content">
+
+                                <div class="cr-header-row">
+                                    <span class="cr-number clickable"
+                                        data-id={cr.Id}
+                                        onclick={handleNavigate}>
+                                        {cr.Name}
+                                    </span>
+
+                                    <template if:true={cr.CR_Decision__c}>
+                                        <span class="cr-pill cr-pill-status">
+                                            {cr.CR_Decision__c}
+                                        </span>
+                                    </template>
+
+                                    <template if:true={cr.Type__c}>
+                                        <span class="cr-pill">
+                                            {cr.Type__c}
+                                        </span>
+                                    </template>
+
+                                    <template if:true={isPMTProjectManager}>
+                                        <button
+                                            class="cr-edit-btn"
+                                            title="Edit Change Request"
+                                            data-id={cr.Id}
+                                            onclick={handleEdit}>
+                                            ✎
+                                        </button>
+                                    </template>
+                                </div>
+
+                                <div class="cr-title slds-m-top_x-small">
+                                    {cr.Title__c}
+                                </div>
+
+                                <div class="cr-description slds-m-top_x-small">
+                                    <lightning-formatted-rich-text value={cr.Description__c}>
+                                    </lightning-formatted-rich-text>
+                                </div>
+
+                            </div>
+
+                            <div class="cr-meta-strip">
+
+                                <div class="meta-item">
+                                    <div class="cr-meta-label">Est. Hours</div>
+                                    <div class="cr-meta-value">{cr.Estimated_Hours__c}</div>
+                                </div>
+
+                                <div class="meta-item">
+                                    <div class="cr-meta-label">Timeline Impact</div>
+                                    <div class="cr-meta-value">{cr.Impact__c}</div>
+                                </div>
+
+                                <div class="meta-item">
+                                    <div class="cr-meta-label">Impact</div>
+                                    <div class="cr-meta-value">{cr.Impact__c}</div>
+                                </div>
+
+                                <div class="meta-item">
+                                    <div class="cr-meta-label">Decision By</div>
+                                    <div class="cr-meta-value">{cr.Decision_By__r.Name}</div>
+                                </div>
+
+                            </div>
+
+                        </article>
+                    </template>
+                </template>
+                <template if:false={changeRequests.length}>
+                    <p>No Change Requests found for this project.</p>
+                </template>
+            </template>
+        </div>
+
+        <div>
+            <template if:true={isShowModal}>
+                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                    aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container custom-modal-container">
+                        <header class="slds-modal__header custom-modal-header">
+
+                            <h2 class="modal-title">
+                                New Change Requests
+                            </h2>
+
+                            <button class="custom-close-btn"
+                                    title="Close"
+                                    onclick={hideModalBox}>
+                                ✕
+                            </button>
+
+                        </header>
+
+                        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                            <div class="slds-m-bottom_small">
+                                <lightning-button label="Add Row" onclick={handleAddRow}></lightning-button>
+                            </div>
+                            <div class="slds-table_edit_container slds-is-relative">
+                                <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                                    <thead>
+                                        <tr class="slds-line-height_reset">
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Title">Title</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Description">Description</div>
+                                            </th>
+                                            <template if:true={isPMTProjectManager}>
+                                                <th scope="col">
+                                                    <div class="slds-truncate" title="Select Project">
+                                                        Select Project
+                                                        <abbr title="required" class="slds-required">*</abbr>
+                                                    </div>
+                                                </th>
+                                            </template>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="File">File</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Actions">Actions</div>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template for:each={rows} for:item="row">
+                                            <tr key={row.id} class="slds-hint-parent">
+                                                <td>
+                                                    <lightning-input type="text" value={row.title} data-id={row.id}
+                                                        data-field="title" onchange={handleFieldChange} label="Title"
+                                                        variant="label-hidden">
+                                                    </lightning-input>
+                                                </td>
+                                                <td>
+                                                    <lightning-textarea value={row.description} data-id={row.id}
+                                                        data-field="description" onchange={handleFieldChange}
+                                                        label="Description" variant="label-hidden">
+                                                    </lightning-textarea>
+                                                </td>
+
+                                                <template if:true={isPMTProjectManager}>
+                                                    <td>
+                                                        <lightning-combobox name="project" label="Select Project"
+                                                            variant="label-hidden" placeholder="-- Select Project --"
+                                                            options={projectOptions} value={row.projectId} required
+                                                            data-id={row.id} onchange={handleProjectChange}>
+                                                        </lightning-combobox>
+                                                    </td>
+                                                </template>
+
+                                                <td class="upload-cell">
+                                                    <input type="file"
+                                                        class="hidden-file-input"
+                                                        data-id={row.id}
+                                                        onchange={handleFileChange} />
+
+                                                    <lightning-button-icon icon-name="utility:upload"
+                                                        alternative-text="Upload" title="Upload File"
+                                                        class="upload-icon" data-id={row.id}
+                                                        onclick={handleUploadClick}>
+                                                    </lightning-button-icon>
+                                                </td>
+
+                                                <td>
+                                                    <lightning-button-icon icon-name="utility:delete"
+                                                        alternative-text="Delete Row" onclick={handleDeleteRow}
+                                                        data-id={row.id}>
+                                                    </lightning-button-icon>
+                                                </td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <footer class="slds-modal__footer">
+                            <lightning-button class="slds-m-right_small" label="Cancel" onclick={hideModalBox}>
+                            </lightning-button>
+                            <lightning-button variant="brand" label="Save" onclick={handleSave} disabled={isSaving}>
+                            </lightning-button>
+                        </footer>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </template>
+        </div>
+    </lightning-card>
+</template>

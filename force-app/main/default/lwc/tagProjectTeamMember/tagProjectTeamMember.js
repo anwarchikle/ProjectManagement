@@ -139,7 +139,9 @@ export default class TagProjectTeamMembers extends LightningElement {
                     allocationPercent: 0,
                     ratePerHour: u.ratePerHour,
                     role: u.role,
-                    isActive: true
+                    isActive: true,
+                    startDate: u.startDate || null,
+                    endDate: u.endDate || null
                 }));
 
                 this.userDetails = [...this.userDetails, ...newRows];
@@ -243,6 +245,28 @@ export default class TagProjectTeamMembers extends LightningElement {
         );
     }
 
+    handleStartDateChange(event) {
+        const userId = event.target.dataset.id;
+        const value = event.target.value;
+
+        this.userDetails = this.userDetails.map(u =>
+            u.userId === userId
+                ? { ...u, startDate: value }
+                : u
+        );
+    }
+
+    handleEndDateChange(event) {
+        const userId = event.target.dataset.id;
+        const value = event.target.value;
+
+        this.userDetails = this.userDetails.map(u =>
+            u.userId === userId
+                ? { ...u, endDate: value }
+                : u
+        );
+    }
+
     handleSaveAllocations() {
         if (!this.recordId) {
             this.dispatchEvent(
@@ -259,7 +283,9 @@ export default class TagProjectTeamMembers extends LightningElement {
             allocationPercent: u.allocationPercent || 0,
             ratePerHour: u.ratePerHour,
             role: u.role,
-            isActive: u.isActive
+            isActive: u.isActive,
+            startDate: u.startDate || null,
+            endDate: u.endDate || null
         }));
 
         assignProjectMembersWithDetails({

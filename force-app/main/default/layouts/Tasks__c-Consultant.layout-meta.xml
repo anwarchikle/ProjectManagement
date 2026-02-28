@@ -49,10 +49,6 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Readonly</behavior>
-                <field>Tasks_Cost__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Readonly</behavior>
                 <field>Remaining_Hours__c</field>
             </layoutItems>
             <layoutItems>
@@ -62,6 +58,18 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Issue_Bug__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Change_Request__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Overdue_Days__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Cost__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>

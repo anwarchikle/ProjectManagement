@@ -31,17 +31,37 @@
 
                 <div class="box">
                     <h3>Task KPIs</h3>
-                    <p>Total Tasks <span class="kpi-value">{totalTasks}</span></p>
-                    <p>Overdue Tasks <span class="kpi-value">{overdueTasks}</span></p>
-                    <p>Today's Tasks <span class="kpi-value">{todaysTasks}</span></p>
-                    <p>Upcoming Tasks <span class="kpi-value">{upcomingTasks}</span></p>
+                    <a class="kpi-row kpi-row-link" href={totalTaskViewUrl} target="_blank">
+                        <p>Total Tasks 
+                            <span class="kpi-value">{totalTasks}</span>
+                            <span class="kpi-value-orange"></span>
+                    </p>
+                    </a>
+                    <a class="kpi-row kpi-row-link" href={overDueTaskListViewUrl} target="_blank">
+                        <p>Overdue Tasks 
+                            <span class="kpi-value">{overdueTasks}</span>
+                            <span class="kpi-value-orange"></span>
+                        </p>
+                    </a>    
+                    <a class="kpi-row kpi-row-link" href={todayTaskListViewUrl} target="_blank">
+                        <p>Today's Tasks  
+                            <span class="kpi-value">{todaysTasks}</span>
+                            <span class="kpi-value-orange"></span>
+                        </p> 
+                    </a>
+                    <a class="kpi-row kpi-row-link" href={upcommingTaskListViewUrl} target="_blank">
+                        <p>Upcoming Tasks 
+                            <span class="kpi-value">{upcomingTasks}</span>
+                            <span class="kpi-value-orange"></span>
+                        </p>
+                    </a>
                 </div>
 
                 <div class="box">
                     <h3>Bug KPIs</h3>
                     <a class="kpi-row kpi-row-link" href={bugListViewUrl} target="_blank">
                         <span class="kpi-label">Total Bugs</span>
-                        <span class="kpi-value-orange">{bugs.length}</span>
+                        <span class="kpi-value-orange" style="margin-right: -30px;">{bugs.length}</span>
                     </a>
                     <a class="kpi-row kpi-row-link" href={bugRetestListViewUrl} target="_blank">
                         <span class="kpi-label">Bugs in Retest</span>

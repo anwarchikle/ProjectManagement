@@ -140,4 +140,8 @@
         <name>standard__Integration</name>
         <type>CustomApplication</type>
     </appMenuItems>
+    <appMenuItems>
+        <name>Utilitarian&apos;s PMS</name>
+        <type>Network</type>
+    </appMenuItems>
 </AppMenu>

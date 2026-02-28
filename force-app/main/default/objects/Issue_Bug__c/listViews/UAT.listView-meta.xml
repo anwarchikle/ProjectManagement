@@ -9,6 +9,7 @@
     <columns>Retest_Result__c</columns>
     <columns>Classification__c</columns>
     <columns>Decision__c</columns>
+    <columns>Estimated_no_of_hours__c</columns>
     <filterScope>Everything</filterScope>
     <filters>
         <field>Environment__c</field>

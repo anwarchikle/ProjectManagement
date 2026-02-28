@@ -1,0 +1,108 @@
+<template>
+    <lightning-card title="Calendar">
+        <div class="slds-p-horizontal_small slds-p-vertical_x-small filters">
+            <div class="slds-grid slds-wrap slds-gutters_small">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                    <lightning-button-group>
+                        <lightning-button variant={dayButtonVariant} label="Day" value="day" onclick={handleViewChange}>
+                        </lightning-button>
+                        <lightning-button variant={weekButtonVariant} label="Week" value="week"
+                            onclick={handleViewChange}>
+                        </lightning-button>
+                        <lightning-button variant={monthButtonVariant} label="Month" value="month"
+                            onclick={handleViewChange}>
+                        </lightning-button>
+                        <lightning-button variant={yearButtonVariant} label="Year" value="year"
+                            onclick={handleViewChange}>
+                        </lightning-button>
+                    </lightning-button-group>
+                </div>
+
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 navigation">
+                    <lightning-button-group>
+                        <lightning-button-icon icon-name="utility:chevronleft" alternative-text="Previous"
+                            onclick={handlePrevious}></lightning-button-icon>
+                        <lightning-button label="Today" onclick={handleToday}></lightning-button>
+                        <lightning-button-icon icon-name="utility:chevronright" alternative-text="Next"
+                            onclick={handleNext}></lightning-button-icon>
+                    </lightning-button-group>
+                    <div class="slds-m-top_x-small current-label">
+                        <span>{currentRangeLabel}</span>
+                    </div>
+                </div>
+
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                    <lightning-combobox name="projectFilter" label="Project" value={selectedProjectId}
+                        placeholder="Select Project" options={projectOptions} onchange={handleProjectChange}>
+                    </lightning-combobox>
+                </div>
+            </div>
+        </div>
+
+        <div class="slds-p-around_small calendar-container">
+            <template if:true={isWeekView}>
+                <div class="calendar-grid">
+                    <div class="calendar-header-row">
+                        <div class="time-column-header"></div>
+                        <template for:each={weekDays} for:item="day">
+                            <div key={day.dateKey} class="day-header">{day.label}</div>
+                        </template>
+                    </div>
+
+                    <div class="calendar-body">
+                        <template for:each={timeSlots} for:item="row">
+                            <div key={row.key} class="time-row">
+                                <div class="time-label">{row.label}</div>
+                                <template for:each={row.cells} for:item="cell">
+                                    <div key={cell.key} class="slot-cell" data-datetime={cell.start}
+                                        onclick={handleSlotClick}>
+                                        <template if:true={cell.hasEvent}>
+                                            <div class="event-chip">{cell.eventTitle}</div>
+                                        </template>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </template>
+
+            <!-- Simple placeholders for other views for now -->
+            <template if:true={isDayView}>
+                <div>Day view is under construction.</div>
+            </template>
+            <template if:true={isMonthView}>
+                <div>Month view is under construction.</div>
+            </template>
+            <template if:true={isYearView}>
+                <div>Year view is under construction.</div>
+            </template>
+        </div>
+
+        <template if:true={isBookingModalOpen}>
+            <section role="dialog" tabindex="-1" aria-modal="true" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <h2 class="slds-text-heading_medium">Book Slot</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <lightning-input type="text" label="Title" value={draftTitle} onchange={handleTitleChange}>
+                        </lightning-input>
+                        <lightning-textarea label="Note" value={draftNote} onchange={handleNoteChange}>
+                        </lightning-textarea>
+                        <lightning-input type="datetime" label="Start" value={draftStart} onchange={handleStartChange}>
+                        </lightning-input>
+                        <lightning-input type="datetime" label="End" value={draftEnd} onchange={handleEndChange}>
+                        </lightning-input>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning-button label="Cancel" variant="neutral"
+                            onclick={closeBookingModal}></lightning-button>
+                        <lightning-button label="Save" variant="brand" onclick={saveBooking}></lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+    </lightning-card>
+</template>

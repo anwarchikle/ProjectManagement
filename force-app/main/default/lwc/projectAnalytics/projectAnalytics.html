@@ -1,84 +1,99 @@
-<!-- projectDashboard.html -->
 <template>
-    <div class="dashboard-container">
-        <!-- Theme Toggle (if needed) -->
-        <div class="theme-toggle" onclick={toggleTheme}>
-            <!-- <lightning-icon 
-                icon-name={themeIcon} 
-                alternative-text="Toggle theme"
-                size="small">
-            </lightning-icon> -->
-        </div>
+    <!-- <div class="dashboard-container"> -->
 
         <!-- Header -->
-        <header class="dashboard-header">
-    <div class="header-title-container">
-        <h1 class="dashboard-title">Project Dashboard</h1>
-        <div class="info-icon-container" onmouseenter={showTooltip} onmouseleave={hideTooltip}>
-            <lightning-icon 
-                icon-name="utility:info" 
-                size="x-small" 
-                alternative-text="Info"
-                class="info-icon">
-            </lightning-icon>
-            <div class="tooltip" if:true={showTooltipFlag}>
-                Track your project progress and metrics
+        <!-- <header class="dashboard-header">
+            <div class="header-title-container">
+                <h1 class="dashboard-title">Project Dashboard</h1>
+
+                <div class="info-icon-container" onmouseenter={showTooltip} onmouseleave={hideTooltip}>
+
+                    <lightning-icon icon-name="utility:info" size="x-small" alternative-text="Info" class="info-icon">
+                    </lightning-icon>
+
+                    <div class="tooltip" if:true={showTooltipFlag}>
+                        Track your project progress and metrics
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-</header>
+        </header> -->
 
         <!-- Main Dashboard Grid -->
         <div class="dashboard-main card">
             <div class="dashboard-grid">
-                <!-- % Complete -->
+
+                <!-- Complete % -->
                 <div class="dashboard-item card">
                     <h3 class="item-title">Complete (%)</h3>
+
                     <div class="progress-container">
                         <div class="progress-ring-wrapper">
+
                             <svg class="progress-ring-svg" width="90" height="90">
                                 <circle class="progress-ring-bg" cx="45" cy="45" r="40"></circle>
-                                <circle class="progress-ring-circle" cx="45" cy="45" r="40" style={completeRingStyle}></circle>
+
+                                <circle class="progress-ring-circle" cx="45" cy="45" r="40" style={completeRingStyle}>
+                                </circle>
                             </svg>
+
                             <div class="progress-text">
-                                <span class="progress-value">{completionPercent}%</span>
-                                <span class="progress-label">Complete</span>
+                                <span class="progress-value">
+                                    {completionPercent}%
+                                </span>
+                                <span class="progress-label">
+                                    Complete
+                                </span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Project Info -->
-                                        <div class="dashboard-item card">
-                            <h3 class="item-title">Project Info</h3>
-                            <div class="info-grid">
-                                <div class="info-row">
-                                    <span class="info-label">Status:</span>
-                                    <span class="info-value status-badge">{projectStatus}</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">Project Group:</span>
-                                    <span class="info-value">{projectType}</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">Billing Type:</span>
-                                    <span class="info-value">{billingType}</span>
-                                </div>
+                <!-- Actual To Planned Hour (%) -->
+                <div class="dashboard-item card">
+                    <h3 class="item-title">
+                        Actual Hours (%)
+                    </h3>
+
+                    <div class="progress-container">
+                        <div class="progress-ring-wrapper">
+
+                            <svg class="progress-ring-svg" width="90" height="90">
+                                <circle class="progress-ring-bg" cx="45" cy="45" r="40"></circle>
+
+                                <circle class="progress-ring-circle" cx="45" cy="45" r="40" style={loggedRingStyle}>
+                                </circle>
+                            </svg>
+
+                            <div class="progress-text">
+                                <span class="progress-value">
+                                    {loggedPercent}%
+                                </span>
+                                <span class="progress-label">
+                                    Logged
+                                </span>
                             </div>
                         </div>
-
-                <!-- % Logged -->
+                    </div>
+                </div>
+                <!-- Budget -->
                 <div class="dashboard-item card">
-                    <h3 class="item-title">Actual To Planned Hour (%)</h3>
+                    <h3 class="item-title">Budget (Actual Budget)</h3>
+
                     <div class="progress-container">
                         <div class="progress-ring-wrapper">
                             <svg class="progress-ring-svg" width="90" height="90">
                                 <circle class="progress-ring-bg" cx="45" cy="45" r="40"></circle>
-                                <circle class="progress-ring-circle" cx="45" cy="45" r="40" style={loggedRingStyle}></circle>
+                                <circle class="progress-ring-circle" cx="45" cy="45" r="40" style={budgetRingStyle}>
+                                </circle>
                             </svg>
+
                             <div class="progress-text">
-                                <span class="progress-value">{loggedPercent}%</span>
-                                <span class="progress-label">Logged</span>
+                                <span class="progress-value">
+                                {budgetPercent}%
+                            </span>
+                                <span class="progress-label">
+                                Used
+                            </span>
                             </div>
                         </div>
                     </div>
@@ -87,23 +102,28 @@
                 <!-- Project Hours -->
                 <div class="dashboard-item card">
                     <h3 class="item-title">Project Hours</h3>
+
                     <div class="hours-grid">
                         <div class="hour-item">
                             <span class="hour-label">Planned:</span>
                             <span class="hour-value">{estimatedHours}</span>
                         </div>
+
                         <div class="hour-item">
                             <span class="hour-label">Logged:</span>
                             <span class="hour-value">{loggedHours}</span>
                         </div>
+
                         <div class="hour-item">
                             <span class="hour-label">Remaining:</span>
                             <span class="hour-value">{scheduledHours}</span>
                         </div>
+
                         <div class="hour-item">
                             <span class="hour-label">Billable:</span>
                             <span class="hour-value">{billableHours}</span>
                         </div>
+
                         <div class="hour-item">
                             <span class="hour-label">Non-Billable:</span>
                             <span class="hour-value">{nonBillableHours}</span>
@@ -111,80 +131,7 @@
                     </div>
                 </div>
 
-                <!-- Budget -->
-                <div class="dashboard-item card">
-                    <h3 class="item-title">Budget</h3>
-                    <div class="budget-container">
-                        <div class="budget-row">
-                            <span class="budget-label">Actual:</span>
-                            <span class="budget-value actual">${actualAmountFormatted}</span>
-                        </div>
-                        <div class="budget-row">
-                            <span class="budget-label">Budgeted:</span>
-                            <span class="budget-value budgeted">${budgetedAmountFormatted}</span>
-                        </div>
-                        <div class="budget-bar">
-                            <div class="budget-progress" style={budgetProgressStyle}></div>
-                        </div>
-                    </div>
-                </div>
-
-                          
             </div>
         </div>
-
-        <!-- Additional Stats -->
-        <div class="stats-grid">
-    <!-- Total Tasks -->
-    <div class="stat-card card">
-        <h4 class="stat-title">Total Tasks</h4>
-        <div class="stat-content">
-            <span class="stat-value">{totalTasks}</span>
-            <span class="stat-unit">tasks</span>
-        </div>
-        <div class="stat-details">
-            <span class="completed">{completedTasks} completed</span>
-            <span class="pending">{pendingTasks} pending</span>
-        </div>
-    </div>
-
-            <!-- Team Members -->
-                   <div class="stat-card card">
-    <h4 class="stat-title">Team Members</h4>
-    <div class="stat-content">
-        <span class="stat-value">{teamMembersCount}</span>
-        <span class="stat-unit">members</span>
-    </div>
-    <div class="avatar-group">
-        <template for:each={teamMembers} for:item="member">
-    <div key={member.userId} class="avatar" title={member.name}>
-        {member.avatarInitial}
-    </div>
-</template>
-    </div>
-</div>
-
-                    <!-- Milestones -->
-                <div class="stat-card card">
-            <h4 class="stat-title">Milestones</h4>
-            <div class="stat-content">
-                <span class="stat-value">{completedMilestones}</span>
-                <span class="stat-unit">of {totalMilestones}</span>
-            </div>
-            <div class="progress-bar">
-                <div class="progress-fill" style={milestonesProgressStyle}></div>
-            </div>
-        </div>
-
-            <!-- Time Remaining -->
-                        <div class="stat-card card">
-                <h4 class="stat-title">Time Remaining</h4>
-                <div class="stat-content">
-                    <span class="stat-value">{daysRemaining}</span>
-                    <span class="stat-unit">days</span>
-                </div>
-                <p class="due-date">{formattedDueDate}</p>
-            </div>
-        </div>
-    </div>
+  
 </template>

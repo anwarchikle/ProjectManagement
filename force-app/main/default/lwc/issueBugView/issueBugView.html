@@ -29,6 +29,10 @@
                     onclick={handleButtonClick}>
                 </lightning-button>
 
+                <lightning-button label="CR List" value="CR_List" icon-name="utility:atrisk"
+                    onclick={handleButtonClick}>
+                </lightning-button>
+
             </lightning-button-group>
         </div>
 
@@ -45,6 +49,10 @@
                 <c-retest-and-verification-compo selected-list-view={selectedListView}></c-retest-and-verification-compo>
                 
             </template>
+            <template if:true={showCRLists}>
+                <c-change-request-component selected-list-view={selectedListView}></c-change-request-component>
+            </template>
+ 
         </div>
 
     </lightning-card>

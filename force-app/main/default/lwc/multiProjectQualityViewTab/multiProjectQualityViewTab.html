@@ -1,0 +1,128 @@
+<template>
+    <div class="mpq-container">
+
+        <!-- Loading Spinner -->
+        <template if:true={isLoading}>
+            <div class="spinner-wrapper">
+                <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+            </div>
+        </template>
+
+        <!-- Error State -->
+        <template if:true={hasError}>
+            <div class="error-banner">
+                <lightning-icon icon-name="utility:error" size="small" variant="error"></lightning-icon>
+                <span>{errorMessage}</span>
+            </div>
+        </template>
+
+        <!-- Main Content -->
+        <template if:true={isDataLoaded}>
+
+            <!-- ── SECTION 1: Stacked Bar Chart ── -->
+            <div class="section-card chart-card">
+                <h3 class="section-title">Open Bugs by Project &times; Severity</h3>
+                <div class="chart-wrapper">
+                    <canvas class="chart-canvas"></canvas>
+                </div>
+            </div>
+
+            <!-- ── SECTION 2: Backlog Table + Weighted Score ── -->
+            <div class="section-row">
+
+                <!-- Defect Backlog Size -->
+                <div class="section-card backlog-card">
+                    <h3 class="section-title">Defect Backlog Size (per project)</h3>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Project</th>
+                                <th class="col-num">Open</th>
+                                <th class="col-num">In Progress</th>
+                                <th class="col-num">Total Backlog</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template if:true={hasBacklogRows}>
+                                <template for:each={backlogRows} for:item="row">
+                                    <tr key={row.projectName}>
+                                        <td>{row.projectName}</td>
+                                        <td class="col-num">{row.openCount}</td>
+                                        <td class="col-num">{row.inProgressCount}</td>
+                                        <td class="col-num">{row.totalBacklog}</td>
+                                    </tr>
+                                </template>
+                            </template>
+                            <template if:false={hasBacklogRows}>
+                                <tr>
+                                    <td colspan="4" class="empty-row">No data found</td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Severity Weighted Score -->
+                <div class="section-card score-card">
+                    <p class="score-label">SEVERITY WEIGHTED DEFECT SCORE (ALL)</p>
+                    <p class="score-value">{overallScore}</p>
+                    <p class="score-formula">S1&times;10 + S2&times;5 + &#8230;</p>
+                    <div class="score-settings">
+                        <lightning-icon icon-name="utility:settings" size="x-small" class="settings-icon"></lightning-icon>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ── SECTION 3: Escaped Defects Table ── -->
+            <div class="section-card">
+                <div class="table-card__header">
+                    <h3 class="section-title" style="margin-bottom:0">Escaped Defects (Found in UAT/Prod)</h3>
+                    <span class="view-all-link">View all ({escapedTotalCount}) &#8599;</span>
+                </div>
+                <table class="data-table escaped-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th class="col-title">Title</th>
+                            <th>Sev</th>
+                            <th>Status</th>
+                            <th>Assignee</th>
+                            <th>Project</th>
+                            <th class="col-num">Age</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template if:true={hasEscapedRecords}>
+                            <template for:each={escapedRecords} for:item="rec">
+                                <tr key={rec.id}>
+                                    <td class="col-id">{rec.issueId}</td>
+                                    <td class="col-title">{rec.title}</td>
+                                    <td>
+                                        <template if:true={rec.hasSeverity}>
+                                            <span class={rec.severityClass}>{rec.severity}</span>
+                                        </template>
+                                    </td>
+                                    <td>
+                                        <template if:true={rec.hasStatus}>
+                                            <span class={rec.statusClass}>{rec.status}</span>
+                                        </template>
+                                    </td>
+                                    <td>{rec.assignee}</td>
+                                    <td>{rec.projectName}</td>
+                                    <td class="col-num">{rec.ageDays}d</td>
+                                </tr>
+                            </template>
+                        </template>
+                        <template if:false={hasEscapedRecords}>
+                            <tr>
+                                <td colspan="7" class="empty-row">No escaped defects found</td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+
+        </template>
+    </div>
+</template>

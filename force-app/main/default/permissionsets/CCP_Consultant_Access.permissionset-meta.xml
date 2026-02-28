@@ -412,11 +412,6 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>Milestone__c.Flag__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
         <field>Milestone__c.Is_Active__c</field>
         <readable>true</readable>
     </fieldPermissions>

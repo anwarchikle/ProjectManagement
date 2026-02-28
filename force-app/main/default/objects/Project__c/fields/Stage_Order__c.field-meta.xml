@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Stage_Order__c</fullName>
+    <externalId>false</externalId>
+    <formula>CASE(Status__c,
+&quot;Pre Kick off&quot;, 1,
+&quot;Kick off&quot;, 2,
+&quot;BRG&quot;, 3,
+&quot;Sign-off&quot;, 4,
+&quot;Development&quot;, 5,
+&quot;UAT&quot;, 6,
+&quot;Go-Live&quot;, 7,
+&quot;Hypercare Support&quot;, 8,
+0
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Stage Order</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

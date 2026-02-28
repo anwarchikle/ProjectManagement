@@ -20,8 +20,17 @@
     <tabs>Resource_Allocation__c</tabs>
     <tabs>Holiday__c</tabs>
     <tabs>Time_Log__c</tabs>
+    <tabs>POC__c</tabs>
+    <tabs>Calendar__c</tabs>
+    <tabs>Change_Request__c</tabs>
     <uiType>Lightning</uiType>
     <workspaceConfig>
+        <mappings>
+            <tab>Calendar__c</tab>
+        </mappings>
+        <mappings>
+            <tab>Change_Request__c</tab>
+        </mappings>
         <mappings>
             <tab>Holiday__c</tab>
         </mappings>
@@ -30,6 +39,9 @@
         </mappings>
         <mappings>
             <tab>Milestone__c</tab>
+        </mappings>
+        <mappings>
+            <tab>POC__c</tab>
         </mappings>
         <mappings>
             <tab>Project_Team_Member__c</tab>

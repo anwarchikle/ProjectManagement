@@ -58,7 +58,9 @@ export default class NewTask extends NavigationMixin(LightningElement) {
     defaultContext = {
         projectId: null,
         milestoneId: null,
-        taskListId: null
+        taskListId: null,
+        issueBugId: null,
+        changeRequestId: null
     };
 
     connectedCallback() {
@@ -87,7 +89,9 @@ export default class NewTask extends NavigationMixin(LightningElement) {
                 this.defaultContext = {
                     projectId: ctx?.projectId || null,
                     milestoneId: ctx?.milestoneId || null,
-                    taskListId: ctx?.taskListId || null
+                    taskListId: ctx?.taskListId || null,
+                    issueBugId: ctx?.issueBugId || null,
+                    changeRequestId: ctx?.changeRequestId || null
                 };
                 this.tasks = [];
                 this.addRow();
@@ -95,7 +99,13 @@ export default class NewTask extends NavigationMixin(LightningElement) {
             .catch((error) => {
                 // eslint-disable-next-line no-console
                 console.error('resolveContext error', error);
-                this.defaultContext = { projectId: null, milestoneId: null, taskListId: null };
+                this.defaultContext = {
+                    projectId: null,
+                    milestoneId: null,
+                    taskListId: null,
+                    issueBugId: null,
+                    changeRequestId: null
+                };
                 this.tasks = [];
                 this.addRow();
             });
@@ -877,6 +887,38 @@ getFileIcon(fileType) {
         });
     }
 
+    handleChangeRequestLookupSelection(event) {
+        const index = parseInt(event.currentTarget.dataset.index, 10);
+        const { name, selectedRecord } = event.detail || {};
+
+        if (name !== 'ChangeRequest') {
+            return;
+        }
+
+        this.tasks = this.tasks.map((task, idx) => {
+            if (idx === index) {
+                return { ...task, changeRequest: selectedRecord };
+            }
+            return task;
+        });
+    }
+
+    handleChangeRequestLookupUpdate(event) {
+        const index = parseInt(event.currentTarget.dataset.index, 10);
+        const { name } = event.detail || {};
+
+        if (name !== 'ChangeRequest') {
+            return;
+        }
+
+        this.tasks = this.tasks.map((task, idx) => {
+            if (idx === index) {
+                return { ...task, changeRequest: null };
+            }
+            return task;
+        });
+    }
+
     handleSave() {
         debugger;
         const isValid = this.validateTasks();
@@ -895,6 +937,7 @@ getFileIcon(fileType) {
                 workHours: task.workHours,
                 comments: task.comments,
                 issueBug: task.issueBug,
+                changeRequest: task.changeRequest,
                 files: (task.files || []).map(file => ({
                     fileName: file.name,
                     docId: file.documentId,        // This maps to FileWrapper.docId

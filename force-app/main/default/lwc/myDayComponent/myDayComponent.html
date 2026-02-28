@@ -1,0 +1,177 @@
+<template>
+    <div class="my-day-wrapper">
+        
+        <div class="slds-grid slds-gutters slds-m-bottom_medium">
+            <div class="slds-col slds-size_1-of-3">
+                <div class="metric-card border-blue slds-box slds-theme_default">
+                    <div class="slds-grid slds-grid_align-spread">
+                        <div class="metric-title">MY WIP</div>
+                        <lightning-icon icon-name="utility:lightning_solid" size="x-small" class="icon-gray"></lightning-icon>
+                    </div>
+                    <div class="metric-value color-blue">{wipCount}</div>
+                </div>
+            </div>
+
+            <div class="slds-col slds-size_1-of-3">
+                <div class="metric-card border-orange slds-box slds-theme_default">
+                    <div class="slds-grid slds-grid_align-spread">
+                        <div class="metric-title">DUE TODAY</div>
+                        <lightning-icon icon-name="utility:clock" size="x-small" class="icon-gray"></lightning-icon>
+                    </div>
+                    <div class="metric-value color-orange">{dueTodayCount}</div>
+                </div>
+            </div>
+
+            <div class="slds-col slds-size_1-of-3">
+                <div class="metric-card border-red slds-box slds-theme_default">
+                    <div class="slds-grid slds-grid_align-spread">
+                        <div class="metric-title">OVERDUE</div>
+                        <lightning-icon icon-name="utility:warning" size="x-small" class="icon-gray"></lightning-icon>
+                    </div>
+                    <div class="metric-value color-red">{overdueCount}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slds-grid slds-wrap slds-gutters">
+            
+            <div class="slds-col slds-size_1-of-2 slds-m-bottom_medium">
+                <div class="list-card slds-box slds-theme_default slds-p-around_none">
+                    <h2 class="list-header">Tasks Assigned Today</h2>
+                    <template if:true={hasAssignedToday}>
+                        <div class="table-container">
+                            <table class="slds-table slds-table_cell-buffer slds-table_bordered custom-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th><th>Start Date</th><th>End Date</th><th>Project</th><th>Hrs</th><th>Priority</th><th>Billing Type</th><th>Overdue</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template for:each={dashboardData.tasksAssignedToday} for:item="tsk">
+                                        <tr key={tsk.Id}>
+                                            <td class="font-semibold">{tsk.Name}</td>
+                                            <td>{tsk.Start_Date__c}</td>
+                                            <td>{tsk.End_Date__c}</td>
+                                            <td>{tsk.Associated_Project__r.Name}</td>
+                                            <td>{tsk.Work_Hours__c}</td>
+                                            <td><span class="pill-priority">{tsk.Priority__c}</span></td>
+                                            <td>{tsk.Billing_Type__c}</td>
+                                            <td class="overdue-text">{tsk.Overdue_Days__c}</td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
+                    </template>
+                    <template if:false={hasAssignedToday}>
+                        <div class="empty-state">No items</div>
+                    </template>
+                </div>
+            </div>
+
+            <div class="slds-col slds-size_1-of-2 slds-m-bottom_medium">
+                <div class="list-card slds-box slds-theme_default slds-p-around_none">
+                    <h2 class="list-header">High Priority Queue (P0/P1)</h2>
+                    <template if:true={hasHighPriority}>
+                        <div class="table-container">
+                            <table class="slds-table slds-table_cell-buffer slds-table_bordered custom-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th><th>Start Date</th><th>End Date</th><th>Project</th><th>Hrs</th><th>Priority</th><th>Billing Type</th><th>Overdue</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template for:each={dashboardData.highPriorityQueue} for:item="tsk">
+                                        <tr key={tsk.Id}>
+                                            <td class="font-semibold">{tsk.Name}</td>
+                                            <td>{tsk.Start_Date__c}</td>
+                                            <td>{tsk.End_Date__c}</td>
+                                            <td>{tsk.Associated_Project__r.Name}</td>
+                                            <td>{tsk.Work_Hours__c}</td>
+                                            <td><span class="pill-priority red-bg">{tsk.Priority__c}</span></td>
+                                            <td>{tsk.Billing_Type__c}</td>
+                                            <td class="overdue-text">{tsk.Overdue_Days__c}</td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
+                    </template>
+                    <template if:false={hasHighPriority}>
+                        <div class="empty-state">No items</div>
+                    </template>
+                </div>
+            </div>
+
+            <div class="slds-col slds-size_1-of-2 slds-m-bottom_medium">
+                <div class="list-card slds-box slds-theme_default slds-p-around_none">
+                    <h2 class="list-header">Due in Next 7 Days</h2>
+                    <template if:true={hasDueNext7}>
+                        <div class="table-container">
+                            <table class="slds-table slds-table_cell-buffer slds-table_bordered custom-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th><th>Start Date</th><th>End Date</th><th>Project</th><th>Hrs</th><th>Priority</th><th>Billing Type</th><th>Overdue</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template for:each={dashboardData.dueNext7Days} for:item="tsk">
+                                        <tr key={tsk.Id}>
+                                            <td class="font-semibold">{tsk.Name}</td>
+                                            <td>{tsk.Start_Date__c}</td>
+                                            <td>{tsk.End_Date__c}</td>
+                                            <td>{tsk.Associated_Project__r.Name}</td>
+                                            <td>{tsk.Work_Hours__c}</td>
+                                            <td><span class="pill-priority">{tsk.Priority__c}</span></td>
+                                            <td>{tsk.Billing_Type__c}</td>
+                                            <td class="overdue-text">{tsk.Overdue_Days__c}</td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
+                    </template>
+                    <template if:false={hasDueNext7}>
+                        <div class="empty-state">No items</div>
+                    </template>
+                </div>
+            </div>
+
+            <div class="slds-col slds-size_1-of-2 slds-m-bottom_medium">
+                <div class="list-card slds-box slds-theme_default slds-p-around_none">
+                    <h2 class="list-header">Blocked Items – Needs Follow-up</h2>
+                    <template if:true={hasBlocked}>
+                        <div class="table-container">
+                            <table class="slds-table slds-table_cell-buffer slds-table_bordered custom-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th><th>Start Date</th><th>End Date</th><th>Project</th><th>Status</th><th>Hrs</th><th>Priority</th><th>Billing Type</th><th>Overdue</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template for:each={dashboardData.blockedItems} for:item="tsk">
+                                        <tr key={tsk.Id}>
+                                            <td class="font-semibold">{tsk.Name}</td>
+                                            <td>{tsk.Start_Date__c}</td>
+                                            <td>{tsk.End_Date__c}</td>
+                                            <td>{tsk.Associated_Project__r.Name}</td>
+                                            <td><span class="pill-priority red-bg">Blocked</span></td>
+                                            <td>{tsk.Work_Hours__c}</td>
+                                            <td><span class="pill-priority red-bg">{tsk.Priority__c}</span></td>
+                                            <td>{tsk.Billing_Type__c}</td>
+                                            <td class="overdue-text">{tsk.Overdue_Days__c}</td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
+                    </template>
+                    <template if:false={hasBlocked}>
+                        <div class="empty-state">No items</div>
+                    </template>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</template>

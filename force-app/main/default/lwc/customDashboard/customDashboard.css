@@ -32,7 +32,7 @@
 }
 
 .dashboard-container {
-    min-height: 100vh;
+    min-height: fit-content;
     background: var(--bg-base);
     background-image:
         radial-gradient(ellipse 80% 50% at 50% -10%, rgba(99, 179, 237, 0.07) 0%, transparent 70%),

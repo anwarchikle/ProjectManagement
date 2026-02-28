@@ -1,0 +1,328 @@
+:host {
+    display: block;
+    font-family: 'Salesforce Sans', Arial, sans-serif;
+}
+
+/* =====================
+   Spinner
+   ===================== */
+.spinner-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+}
+
+/* =====================
+   Error Banner
+   ===================== */
+.error-banner {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #fef0ef;
+    border: 1px solid #f97b6b;
+    border-radius: 4px;
+    padding: 12px 16px;
+    color: #ba0517;
+    font-size: 13px;
+    margin-bottom: 16px;
+}
+
+/* =====================
+   KPI Cards Row
+   ===================== */
+.kpi-row {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.kpi-card {
+    flex: 1;
+    min-width: 180px;
+    background: #ffffff;
+    border-radius: 6px;
+    border: 1px solid #e0e0e0;
+    padding: 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Left border accent */
+.kpi-card--blue::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background-color: #0176d3;
+    border-radius: 6px 0 0 6px;
+}
+
+.kpi-card--orange::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background-color: #e07b1f;
+    border-radius: 6px 0 0 6px;
+}
+
+.kpi-card--red::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background-color: #ba0517;
+    border-radius: 6px 0 0 6px;
+}
+
+.kpi-card--blue-dark::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background-color: #032d60;
+    border-radius: 6px 0 0 6px;
+}
+
+.kpi-card__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+
+.kpi-card__title {
+    font-size: 10px;
+    font-weight: 600;
+    color: #706e6b;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    line-height: 1.4;
+    padding-right: 6px;
+}
+
+.kpi-card__icon {
+    flex-shrink: 0;
+    opacity: 0.4;
+}
+
+.kpi-card__count {
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.kpi-count--blue      { color: #0176d3; }
+.kpi-count--orange    { color: #e07b1f; }
+.kpi-count--red       { color: #ba0517; }
+.kpi-count--blue-dark { color: #032d60; }
+
+/* =====================
+   Tables Row
+   ===================== */
+.tables-row {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+.table-card {
+    flex: 1;
+    min-width: 340px;
+    background: #ffffff;
+    border-radius: 6px;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+}
+
+.table-card__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 16px 10px;
+    border-bottom: 1px solid #f3f3f3;
+}
+
+.table-card__title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #181818;
+    margin: 0;
+}
+
+.view-all-link {
+    font-size: 12px;
+    color: #0176d3;
+    cursor: pointer;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.view-all-link:hover {
+    text-decoration: underline;
+}
+
+/* =====================
+   Data Table
+   ===================== */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.data-table thead tr {
+    background-color: #f8f8f8;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.data-table th {
+    padding: 8px 12px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    color: #706e6b;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+}
+
+.data-table tbody tr {
+    border-bottom: 1px solid #f3f3f3;
+    transition: background-color 0.1s ease;
+}
+
+.data-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.data-table tbody tr:hover {
+    background-color: #f5f9ff;
+}
+
+.data-table td {
+    padding: 10px 12px;
+    color: #181818;
+    vertical-align: middle;
+}
+
+.col-id {
+    font-size: 12px;
+    color: #706e6b;
+    white-space: nowrap;
+}
+
+.col-title {
+    max-width: 240px;
+}
+
+.empty-row {
+    text-align: center;
+    color: #aaaaaa;
+    font-style: italic;
+    padding: 24px 12px !important;
+}
+
+/* =====================
+   Status Badge
+   ===================== */
+.status-badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.badge--qa,
+.status-badge--qa {
+    background-color: #e8f4fe;
+    color: #0176d3;
+    border: 1px solid #b0d4f5;
+}
+
+.status-badge--reopened {
+    background-color: #fff3e0;
+    color: #e07b1f;
+    border: 1px solid #f5d5a0;
+}
+
+.status-badge--open {
+    background-color: #e8f4fe;
+    color: #0176d3;
+    border: 1px solid #b0d4f5;
+}
+
+.status-badge--inprogress {
+    background-color: #eaf5ea;
+    color: #2e7d32;
+    border: 1px solid #a5d6a7;
+}
+
+.status-badge--closed {
+    background-color: #f3f3f3;
+    color: #706e6b;
+    border: 1px solid #dddbda;
+}
+
+/* =====================
+   Severity Badge
+   ===================== */
+.sev-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 20px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.sev-badge--s1 {
+    background-color: #fef0ef;
+    color: #ba0517;
+    border: 1px solid #f9b8b4;
+}
+
+.sev-badge--s2 {
+    background-color: #fff3e0;
+    color: #e07b1f;
+    border: 1px solid #f5d5a0;
+}
+
+.sev-badge--s3 {
+    background-color: #e8f4fe;
+    color: #0176d3;
+    border: 1px solid #b0d4f5;
+}
+
+/* =====================
+   Clickable record link
+   ===================== */
+.record-link {
+    color: #0176d3;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.record-link:hover {
+    text-decoration: underline;
+}

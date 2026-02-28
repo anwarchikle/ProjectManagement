@@ -95,7 +95,7 @@
 .dashboard-container {
     background-color: var(--background-color);
     color: var(--text-color);
-    min-height: 50vh;
+    min-height: 5vh;
     padding: 1rem;
     transition: background-color 0.3s, color 0.3s;
 }
@@ -130,6 +130,55 @@
     color: var(--secondary-color);
 }
 
+
+.info-icon-container:hover {
+    background-color: #f3f2f2;
+}
+
+.info-icon {
+    cursor: pointer;
+    color: var(--secondary-color);
+    transition: color 0.2s;
+}
+
+.info-icon:hover {
+    color: var(--primary-color);
+}
+
+/* Tooltip Styling */
+.tooltip {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 0.5rem;
+    padding: 0.75rem;
+    background-color: #2e2e2e;
+    color: white;
+    border-radius: 0.25rem;
+    font-size: 0.8125rem;
+    white-space: nowrap;
+    z-index: 1000;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    animation: fadeIn 0.2s ease-out;
+}
+
+.tooltip:before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 0 5px 5px 5px;
+    border-style: solid;
+    border-color: transparent transparent #2e2e2e transparent;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+    to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
 /* Main Dashboard */
 .dashboard-main {
     background-color: var(--card-background);
@@ -142,28 +191,109 @@
 
 .dashboard-grid {
     display: grid;
-     grid-template-columns: repeat(1, 1fr);
+    grid-template-columns: repeat(1, 1fr);
     gap: 1rem;
 }
 
+/* Tablet and up */
 @media (min-width: 768px) {
     .dashboard-grid {
         grid-template-columns: repeat(3, 1fr);
     }
 }
 
+/* Desktop and up - MODIFIED: First row 5 columns, then bottom cards in a separate row */
 @media (min-width: 1024px) {
     .dashboard-grid {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    /* Make the 5th item (Budget) in first row smaller height */
+    .dashboard-item:nth-child(5) {
+        min-height: auto;
+        padding: 0.75rem;
+    }
+    
+    /* Adjust the budget content to be more compact */
+    .dashboard-item:nth-child(5) .budget-container {
+        gap: 0.5rem;
+    }
+    
+    .dashboard-item:nth-child(5) .budget-value {
+        font-size: 0.875rem;
+    }
+    
+    .dashboard-item:nth-child(5) .budget-bar {
+        height: 6px;
+        margin-top: 0.25rem;
+    }
+    
+    /* Force the stat cards to be in a second row and fit better */
+    .stat-card {
+        /* This will make stat cards appear in a new row automatically */
+        margin-top: 0;
+    }
+    
+    /* Make stat cards more compact to fit 4 in a row */
+    .stat-card .stat-value {
+        font-size: 1.5rem;
+    }
+    
+    .stat-card {
+        padding: 1rem;
+    }
+    
+    .stat-title {
+        font-size: 0.8rem;
+        margin-bottom: 0.5rem;
     }
 }
 
+/* Large desktop - additional adjustments */
 @media (min-width: 1200px) {
     .dashboard-grid {
-        grid-template-columns: repeat(5, 1fr);
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+   
+    
+    /* Make stat cards even more compact and ensure they fit 4 in a row */
+    .stat-card {
+        padding: 0.875rem;
+    }
+    
+    .stat-card .stat-value {
+        font-size: 1.25rem;
+    }
+    
+    .stat-card .stat-unit {
+        font-size: 0.75rem;
+    }
+    
+    .stat-details {
+        font-size: 0.7rem;
+        gap: 0.5rem;
+    }
+    
+    .avatar {
+        width: 28px;
+        height: 28px;
+        font-size: 0.875rem;
+        min-width: 28px;
+    }
+    
+    .progress-bar {
+        height: 4px;
+        margin-top: 0.5rem;
+    }
+    
+    .due-date {
+        font-size: 0.7rem;
+        margin-top: 0.25rem;
     }
 }
 
+/* Dashboard Items */
 .dashboard-item {
     background-color: var(--card-background);
     border-radius: 0.375rem;
@@ -232,38 +362,6 @@
     display: block;
 }
 
-/* Info Grid */
-.info-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-}
-
-.info-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.info-label {
-    font-size: 0.875rem;
-    color: var(--secondary-color);
-}
-
-.info-value {
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: var(--text-color);
-}
-
-.status-badge {
-    background-color: rgba(223, 158, 77, 0.1);
-    color: var(--warning-color);
-    padding: 0.25rem 0.75rem;
-    border-radius: 9999px;
-    font-size: 0.75rem;
-    font-weight: 500;
-}
 
 /* Hours Grid */
 .hours-grid {
@@ -271,6 +369,7 @@
     grid-template-columns: repeat(2, 1fr);
     gap: 0.5rem;
 }
+
 
 .hour-item {
     display: flex;
@@ -336,140 +435,4 @@
     background-color: var(--primary-color);
     border-radius: 4px;
     transition: width 0.5s ease;
-}
-
-/* Margin Rate */
-.margin-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    gap: 1rem;
-}
-
-.margin-value {
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--text-color);
-}
-
-.refresh-btn {
-    width: 100%;
-}
-
-/* Stats Grid */
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1rem;
-}
-
-.stat-card {
-    background-color: var(--card-background);
-    border-radius: 0.5rem;
-    border: 1px solid var(--border-color);
-    padding: 1.25rem;
-    box-shadow: 0 2px 4px var(--shadow-color);
-}
-
-.stat-title {
-    font-weight: 600;
-    color: var(--primary-color);
-    margin-bottom: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-.stat-content {
-    display: flex;
-    align-items: baseline;
-    gap: 0.25rem;
-    margin-bottom: 0.5rem;
-}
-
-.stat-value {
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--text-color);
-}
-
-.stat-unit {
-    font-size: 0.875rem;
-    color: var(--secondary-color);
-}
-
-.stat-details {
-    display: flex;
-    gap: 1rem;
-    font-size: 0.75rem;
-}
-
-.completed {
-    color: var(--success-color);
-}
-
-.pending {
-    color: var(--secondary-color);
-}
-
-/* Avatar Group */
-.avatar-group {
-    display: flex;
-    margin-top: 0.75rem;
-}
-
-.avatar {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background-color: var(--primary-color);
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1rem;
-    font-weight: 600;
-    min-width: 40px;
-    margin-left: -0.5rem;
-    border: 2px solid var(--card-background);
-}
-
-.avatar:first-child {
-    margin-left: 0;
-}
-
-/* Progress Bar */
-.progress-bar {
-    height: 6px;
-    background-color: var(--border-color);
-    border-radius: 3px;
-    overflow: hidden;
-    margin-top: 0.75rem;
-}
-
-.progress-fill {
-    height: 100%;
-    background-color: var(--primary-color);
-    border-radius: 3px;
-    transition: width 0.5s ease;
-}
-
-/* Due Date */
-.due-date {
-    font-size: 0.75rem;
-    color: var(--secondary-color);
-    margin-top: 0.5rem;
-}
-
-/* Card utility class */
-.card {
-    background-color: var(--card-background);
-    border-radius: 0.375rem;
-    border: 1px solid var(--border-color);
-    transition: box-shadow 0.3s;
-}
-
-.card:hover {
-    box-shadow: 0 4px 8px var(--shadow-color);
 }

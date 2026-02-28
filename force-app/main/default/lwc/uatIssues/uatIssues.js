@@ -28,14 +28,13 @@ export default class UatIssues extends LightningElement {
     @track openCount;
     @track criticalBlockerOpen;
 
-    searchKey = '';
+    @track searchKey = '';
     selectedStatus = '';
     selectedSeverity = '';
 
-    @track pageSize = 20;
-    pageToken = null;
-    nextPageToken = null;
-    previousPageToken = null;
+    // Client-side pagination (similar to myBugs)
+    @track pageSize = 10; // default rows per page
+    @track currentPage = 1;
     currentUserRole;
     canEditClassification = false;
     canEditDecision = false;
@@ -145,8 +144,7 @@ export default class UatIssues extends LightningElement {
     @wire(getListUi, {
         objectApiName: ISSUES_OBJECT,
         listViewApiName: '$selectedListView',
-        pageSize: '$pageSize',
-        pageToken: '$pageToken'
+        pageSize: 2000
     })
     wiredListView(result) {
 
@@ -180,12 +178,6 @@ export default class UatIssues extends LightningElement {
                     }
                 ];
             }
-
-            this.nextPageToken =
-                data.records?.nextPageToken || null;
-
-            this.previousPageToken =
-                data.records?.previousPageToken || null;
 
             if (data.records) {
 
@@ -299,23 +291,21 @@ export default class UatIssues extends LightningElement {
             });
     }
 
-    get visibleRecords() {
+    // ── Filtering: works over the full dataset ───────────────────────────────
+    get filteredRecords() {
         let filtered = [...this.records];
 
         if (this.searchKey) {
             const key = this.searchKey.toLowerCase();
             filtered = filtered.filter(row =>
-                row.cells.some(cell =>
-                    String(cell.value).toLowerCase().includes(key)
-                )
+                row.cells.some(cell => String(cell.value).toLowerCase().includes(key))
             );
         }
 
         if (this.selectedStatus) {
             filtered = filtered.filter(row =>
                 row.cells.some(cell =>
-                    cell.fieldApiName === 'Status__c' &&
-                    cell.value === this.selectedStatus
+                    cell.fieldApiName === 'Status__c' && cell.value === this.selectedStatus
                 )
             );
         }
@@ -323,8 +313,7 @@ export default class UatIssues extends LightningElement {
         if (this.selectedSeverity) {
             filtered = filtered.filter(row =>
                 row.cells.some(cell =>
-                    cell.fieldApiName === 'Severity__c' &&
-                    cell.value === this.selectedSeverity
+                    cell.fieldApiName === 'Severity__c' && cell.value === this.selectedSeverity
                 )
             );
         }
@@ -344,6 +333,13 @@ export default class UatIssues extends LightningElement {
         }
 
         return filtered;
+    }
+
+    // ── Visible slice for current page ───────────────────────────────────────
+    get visibleRecords() {
+        const start = (this.currentPage - 1) * this.pageSize;
+        const end = start + this.pageSize;
+        return this.filteredRecords.slice(start, end);
     }
 
     get hasDraftValues() {
@@ -375,44 +371,29 @@ export default class UatIssues extends LightningElement {
         return [{ label: 'All', value: '' }, ...options];
     }
 
+    // ── Helpers for paging reset ─────────────────────────────────────────────
+    _resetPage() {
+        this.currentPage = 1;
+    }
+
     handleSearchChange(event) {
-        debugger;
         this.searchKey = event.target.value;
-        if (this.searchKey != '') {
-            this.pageSize = Number('200');
-        } else {
-            this.pageSize = Number('20');
-        }
+        this._resetPage();
     }
 
     handleProjectFilter(event) {
-        debugger;
         this.selectedProject = event.detail.value;
-        if (this.selectedProject != '') {
-            this.pageSize = Number('200');
-        } else {
-            this.pageSize = Number('20');
-        }
+        this._resetPage();
     }
 
     handleStatusFilter(event) {
-        debugger;
         this.selectedStatus = event.detail.value;
-        if (this.selectedStatus != '') {
-            this.pageSize = Number('200');
-        } else {
-            this.pageSize = Number('20');
-        }
+        this._resetPage();
     }
 
     handleSeverityFilter(event) {
-        debugger;
         this.selectedSeverity = event.detail.value;
-        if (this.selectedSeverity != '') {
-            this.pageSize = Number('200');
-        } else {
-            this.pageSize = Number('20');
-        }
+        this._resetPage();
     }
 
 
@@ -450,13 +431,20 @@ export default class UatIssues extends LightningElement {
     }
 
     handleCreateTaskClick(event) {
-        debugger;
         const issueId = event.currentTarget.dataset.id;
         if (!issueId) {
             return;
         }
-        this.selectedIssueId = issueId;
-        this.showTaskModal = true;
+
+        const baseUrl = 'https://orgfarm-9291e137a3-dev-ed.develop.my.site.com/UtilPM/s/new-task';
+        const url = `${baseUrl}?recordId=${issueId}`;
+        try {
+            window.open(url, '_blank');
+        } catch (e) {
+            // Fallback to previous modal behavior if window.open is blocked
+            this.selectedIssueId = issueId;
+            this.showTaskModal = true;
+        }
     }
 
     handleTaskModalClose() {
@@ -589,18 +577,18 @@ export default class UatIssues extends LightningElement {
 
     handlePageSizeChange(event) {
         this.pageSize = Number(event.detail.value);
-        this.pageToken = null;
+        this._resetPage();
     }
 
     handleNextPage() {
-        if (this.nextPageToken) {
-            this.pageToken = this.nextPageToken;
+        if (this.currentPage < this.totalPages) {
+            this.currentPage += 1;
         }
     }
 
     handlePreviousPage() {
-        if (this.previousPageToken) {
-            this.pageToken = this.previousPageToken;
+        if (this.currentPage > 1) {
+            this.currentPage -= 1;
         }
     }
 
@@ -610,16 +598,20 @@ export default class UatIssues extends LightningElement {
         this.selectedStatus = '';
         this.selectedSeverity = '';
         this.selectedProject = '';
-        this.pageSize = 20;
-        this.pageToken = null;
+        this.pageSize = 10;
+        this._resetPage();
     }
 
     get isNextDisabled() {
-        return !this.nextPageToken;
+        return this.currentPage >= this.totalPages;
     }
 
     get isPreviousDisabled() {
-        return !this.previousPageToken;
+        return this.currentPage <= 1;
+    }
+
+    get totalPages() {
+        return Math.max(1, Math.ceil(this.filteredRecords.length / this.pageSize));
     }
 
     get pageSizeOptions() {

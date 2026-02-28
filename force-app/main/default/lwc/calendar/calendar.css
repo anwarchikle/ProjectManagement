@@ -1,0 +1,89 @@
+.calendar-container {
+    background: #ffffff;
+    border-radius: 0.25rem;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    border: 1px solid #dddbda;
+    border-radius: 0.25rem;
+    overflow: hidden;
+}
+
+.calendar-header-row {
+    display: grid;
+    grid-template-columns: 60px repeat(7, 1fr);
+    background: #f3f2f2;
+    border-bottom: 1px solid #dddbda;
+}
+
+.time-column-header {
+    border-right: 1px solid #dddbda;
+}
+
+.day-header {
+    padding: 0.5rem;
+    text-align: center;
+    font-weight: 600;
+    border-right: 1px solid #dddbda;
+}
+
+.calendar-body {
+    max-height: 640px;
+    overflow-y: auto;
+}
+
+.time-row {
+    display: grid;
+    grid-template-columns: 60px repeat(7, 1fr);
+    min-height: 32px;
+}
+
+.time-label {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    color: #706e6b;
+    border-right: 1px solid #dddbda;
+    border-bottom: 1px solid #dddbda;
+}
+
+.slot-cell {
+    border-right: 1px solid #f3f2f2;
+    border-bottom: 1px solid #f3f2f2;
+    position: relative;
+    cursor: pointer;
+}
+
+.slot-cell:hover {
+    background: #f3f2f2;
+}
+
+.event-chip {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    right: 2px;
+    padding: 0.1rem 0.25rem;
+    font-size: 0.7rem;
+    background: #0176d3;
+    color: #ffffff;
+    border-radius: 0.15rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.filters {
+    border-bottom: 1px solid #dddbda;
+}
+
+.navigation {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.current-label {
+    font-weight: 600;
+}

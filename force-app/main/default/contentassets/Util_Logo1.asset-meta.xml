@@ -9,6 +9,10 @@
             <access>VIEWER</access>
             <name>UTIL Project Management Tool</name>
         </network>
+        <network>
+            <access>VIEWER</access>
+            <name>Utilitarian&apos;s PMS</name>
+        </network>
         <workspace>
             <access>INFERRED</access>
             <isManagingWorkspace>true</isManagingWorkspace>

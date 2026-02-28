@@ -3,6 +3,7 @@
     <fullName>Is_Current__c</fullName>
     <defaultValue>false</defaultValue>
     <label>Is Current</label>
+    <trackFeedHistory>false</trackFeedHistory>
     <trackTrending>false</trackTrending>
     <type>Checkbox</type>
 </CustomField>

@@ -152,3 +152,46 @@
     background: #bdbfc5;
     cursor: not-allowed;
 }
+
+/* Table field styling */
+.allocation-input {
+    width: 100px;
+}
+
+.date-input {
+    width: 140px;
+}
+
+.slds-table .slds-input {
+    font-size: 0.875rem;
+}
+
+.slds-table lightning-input {
+    font-size: 0.875rem;
+}
+
+.slds-table lightning-combobox {
+    font-size: 0.875rem;
+}
+
+/* Fix date field alignment */
+.slds-table td[data-label="Start Date"],
+.slds-table td[data-label="End Date"] {
+    vertical-align: middle;
+    padding: 0.5rem;
+}
+
+.slds-table .date-input {
+    width: 100% !important;
+    max-width: 140px;
+}
+
+.slds-table lightning-input[type="date"] {
+    display: block;
+    width: 100%;
+}
+
+/* Ensure proper alignment for all table cells */
+.slds-table td {
+    vertical-align: middle;
+}

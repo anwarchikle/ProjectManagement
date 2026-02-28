@@ -75,11 +75,6 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Flag__c</field>
-            <table>Milestone__c</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>Comments__c</field>
             <table>Milestone__c</table>
         </columns>
@@ -111,6 +106,11 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>Actual_Work_Hours__c</field>
+            <table>Milestone__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Tentative_End_Date__c</field>
             <table>Milestone__c</table>
         </columns>
         <masterLabel>Milestones</masterLabel>
@@ -326,11 +326,6 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Tasks_Cost__c</field>
-            <table>Milestone__c.Task_Lists__r.Tasks__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>Remaining_Hours__c</field>
             <table>Milestone__c.Task_Lists__r.Tasks__r</table>
         </columns>
@@ -342,6 +337,26 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>Issue_Bug__c</field>
+            <table>Milestone__c.Task_Lists__r.Tasks__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Change_Request__c</field>
+            <table>Milestone__c.Task_Lists__r.Tasks__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Task_Id__c</field>
+            <table>Milestone__c.Task_Lists__r.Tasks__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Overdue_Days__c</field>
+            <table>Milestone__c.Task_Lists__r.Tasks__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Cost__c</field>
             <table>Milestone__c.Task_Lists__r.Tasks__r</table>
         </columns>
         <masterLabel>Tasks</masterLabel>
@@ -465,6 +480,11 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>Rejection_Reason__c</field>
+            <table>Milestone__c.Task_Lists__r.Tasks__r.Time_Logs__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Rate_Per_Member__c</field>
             <table>Milestone__c.Task_Lists__r.Tasks__r.Time_Logs__r</table>
         </columns>
         <masterLabel>Time Logs</masterLabel>

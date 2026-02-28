@@ -26,6 +26,10 @@
                 <behavior>Edit</behavior>
                 <field>Cost_Amount__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Rate_Per_Member__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>

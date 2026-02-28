@@ -27,6 +27,19 @@ export default class ProjectDashboard extends LightningElement {
         return '/lightning/o/Issue_Bug__c/list?filterName=Retesting';
     }
 
+    get totalTaskViewUrl() {
+        return '/lightning/o/Tasks__c/list?filterName=My_Assigned';
+    }
+    get overDueTaskListViewUrl() {
+        return '/lightning/o/Tasks__c/list?filterName=My_Overdue_Open'; 
+    }
+    get todayTaskListViewUrl() {
+        return '/lightning/o/Tasks__c/list?filterName=Todays_Task';
+    }
+    get upcommingTaskListViewUrl() {
+        return '/lightning/o/Tasks__c/list?filterName=Upcoming_Task';
+    }
+
     connectedCallback() {
         debugger;
         if (this.recordId) {

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label><!-- Type --></label>
+    <name>Type__c</name>
+    <picklistValues>
+        <masterLabel>Enhancement</masterLabel>
+        <translation><!-- Enhancement --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Out of Scope</masterLabel>
+        <translation><!-- Out of Scope --></translation>
+    </picklistValues>
+</CustomFieldTranslation>

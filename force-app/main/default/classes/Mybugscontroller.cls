@@ -16,7 +16,7 @@ public with sharing class Mybugscontroller {
                 FROM Issue_Bug__c
                 WHERE CreatedById = :userId
                 ORDER BY CreatedDate DESC
-                LIMIT 1000
+                LIMIT 100
             ];
         } catch (Exception e) {
             throw new AuraHandledException('Error fetching bugs: ' + e.getMessage());
@@ -31,64 +31,50 @@ public with sharing class Mybugscontroller {
                                                   String statusFilter, String severityFilter) {
         try {
             Map<String, Object> metrics = new Map<String, Object>();
-            
-            // Build dynamic query
-            String query = 'SELECT Id, Status__c, Severity__c, CreatedDate ' +
-                          'FROM Issue_Bug__c ' +
-                          'WHERE CreatedById = :userId';
-            
-            // Add filters
-            if (String.isNotBlank(projectFilter)) {
-                query += ' AND Project__r.Name = :projectFilter';
-            }
-            if (String.isNotBlank(statusFilter)) {
-                query += ' AND Status__c = :statusFilter';
-            }
-            if (String.isNotBlank(severityFilter)) {
-                query += ' AND Severity__c = :severityFilter';
-            }
-            
-            List<Issue_Bug__c> bugs = Database.query(query);
-            
+
+            // Always calculate metrics for all bugs raised by the user
+            List<Issue_Bug__c> bugs = [
+                SELECT Id, Status__c, Severity__c, Due_Date__c
+                FROM Issue_Bug__c
+            ];
+
             // Calculate metrics
             Integer totalRaised = bugs.size();
             Integer openCount = 0;
             Integer criticalBlockerOpen = 0;
-            Integer slaBreached = 0;
             Decimal totalAging = 0;
             Integer agingCount = 0;
-            
-            Set<String> openStatuses = new Set<String>{'New', 'In Progress', 'Assigned', 'Reopened'};
+
+            Set<String> openStatuses = new Set<String>{'New', 'In Progress', 'Assigned', 'Reopened', 'Open'};
             Set<String> criticalSeverities = new Set<String>{'Critical', 'Blocker'};
-            
+
             for (Issue_Bug__c bug : bugs) {
                 // Open count
                 if (openStatuses.contains(bug.Status__c)) {
                     openCount++;
-                    
+
                     // Critical/Blocker open
                     if (criticalSeverities.contains(bug.Severity__c)) {
                         criticalBlockerOpen++;
                     }
-                    
-                    // Average aging calculation
-                    if (bug.CreatedDate != null) {
-                        Decimal aging = (Decimal)Date.today().daysBetween(bug.CreatedDate.date());
-                        totalAging += Math.abs(aging);
-                        agingCount++;
-                    }
+                }
+
+                // Average aging calculation based on Due Date
+                if (bug.Due_Date__c != null) {
+                    Decimal aging = (Decimal)Date.today().daysBetween(bug.Due_Date__c);
+                    totalAging += Math.abs(aging);
+                    agingCount++;
                 }
             }
-            
+
             // Calculate average aging
             Decimal avgAging = agingCount > 0 ? totalAging / agingCount : 0;
-            
+
             metrics.put('totalRaised', totalRaised);
             metrics.put('openCount', openCount);
             metrics.put('criticalBlockerOpen', criticalBlockerOpen);
-            metrics.put('slaBreached', slaBreached);
             metrics.put('avgAging', avgAging);
-            
+
             return metrics;
             
         } catch (Exception e) {
@@ -166,6 +152,100 @@ public with sharing class Mybugscontroller {
         } catch (Exception e) {
             System.debug('Error: ' + e.getMessage());
             return null;
+        }
+    }
+
+    @AuraEnabled
+    public static Map<String, Object> getCRMetrics(Id userId, String projectFilter, String decisionFilter) {
+        try {
+            Map<String, Object> metrics = new Map<String, Object>();
+
+            Boolean hasProject = String.isNotBlank(projectFilter);
+            Boolean hasDecision = String.isNotBlank(decisionFilter);
+
+            List<Change_Request__c> crs;
+
+            if (!hasProject && !hasDecision) {
+                crs = [
+                    SELECT Id, CR_Decision__c, CreatedDate, Project__r.Name
+                    FROM Change_Request__c
+                ];
+            } else if (hasProject && !hasDecision) {
+                crs = [
+                    SELECT Id, CR_Decision__c, CreatedDate, Project__r.Name
+                    FROM Change_Request__c
+                    WHERE Project__r.Name = :projectFilter
+                ];
+            } else if (!hasProject && hasDecision) {
+                crs = [
+                    SELECT Id, CR_Decision__c, CreatedDate, Project__r.Name
+                    FROM Change_Request__c
+                    WHERE CR_Decision__c = :decisionFilter
+                ];
+            } else {
+                crs = [
+                    SELECT Id, CR_Decision__c, CreatedDate, Project__r.Name
+                    FROM Change_Request__c
+                    WHERE Project__r.Name = :projectFilter
+                    AND   CR_Decision__c = :decisionFilter
+                ];
+            }
+
+            Integer totalRaised = crs.size();
+            Integer onHoldCount = 0;
+            Integer acceptedCount = 0;
+            Decimal totalAging = 0;
+            Integer agingCount = 0;
+
+            for (Change_Request__c cr : crs) {
+                if (cr.CR_Decision__c == 'On Hold') {
+                    onHoldCount++;
+                }
+                if (cr.CR_Decision__c == 'Accepted') {
+                    acceptedCount++;
+                }
+
+                if (cr.CreatedDate != null) {
+                    Decimal aging = (Decimal)Date.today().daysBetween(cr.CreatedDate.date());
+                    totalAging += Math.abs(aging);
+                    agingCount++;
+                }
+            }
+
+            Decimal avgAging = agingCount > 0 ? totalAging / agingCount : 0;
+
+            metrics.put('totalRaised', totalRaised);
+            metrics.put('onHoldCount', onHoldCount);
+            metrics.put('acceptedCount', acceptedCount);
+            metrics.put('avgAging', avgAging);
+
+            return metrics;
+        } catch (Exception e) {
+            throw new AuraHandledException('Error calculating Change Request metrics: ' + e.getMessage());
+        }
+    }
+
+    @AuraEnabled(cacheable=true)
+    public static Map<String, List<String>> getCRFilterOptions() {
+        try {
+            Map<String, List<String>> options = new Map<String, List<String>>();
+
+            Set<String> projectSet = new Set<String>();
+            for (Change_Request__c cr : [SELECT Project__r.Name FROM Change_Request__c WHERE Project__r.Name != null]) {
+                if (cr.Project__r.Name != null) {
+                    projectSet.add(cr.Project__r.Name);
+                }
+            }
+            List<String> projects = new List<String>(projectSet);
+            projects.sort();
+            options.put('projects', projects);
+
+            List<String> decisions = getPicklistValues('Change_Request__c', 'CR_Decision__c');
+            options.put('decisions', decisions);
+
+            return options;
+        } catch (Exception e) {
+            throw new AuraHandledException('Error fetching Change Request filter options: ' + e.getMessage());
         }
     }
 

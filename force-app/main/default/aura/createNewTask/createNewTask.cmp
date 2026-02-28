@@ -3,9 +3,9 @@
     <aura:attribute name="parentRecordId" type="String" />
     <aura:attribute name="parentObjectApiName" type="String" />
     <aura:attribute name="isCommunity" type="Boolean" default="false" />
-
+    
     <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
-
+    
     <!-- For internal users we still render the LWC inline.
          For Experience Site users, controller opens a new tab and this body is never used. -->
     <aura:if isTrue="{!not(v.isCommunity)}">

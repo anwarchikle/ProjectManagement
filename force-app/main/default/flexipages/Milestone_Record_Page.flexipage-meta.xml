@@ -95,6 +95,12 @@
                 <identifier>RecordPlanned_Hours__cField</identifier>
             </fieldInstance>
         </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.Tentative_End_Date__c</fieldItem>
+                <identifier>RecordTentative_End_Date__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
         <name>Facet-92d86a19-ac4f-4883-8b23-9078ac268773</name>
         <type>Facet</type>
     </flexiPageRegions>
@@ -107,16 +113,6 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.Project__c</fieldItem>
                 <identifier>RecordProject_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Flag__c</fieldItem>
-                <identifier>RecordFlag_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -579,6 +575,14 @@
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
+                    <name>parentFieldApiName</name>
+                    <value>Milestone__c.Id</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relatedListApiName</name>
+                    <value>Histories</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
                     <name>relatedListComponentOverride</name>
                     <value>ADVGRID</value>
                 </componentInstanceProperties>
@@ -590,11 +594,11 @@
                     <name>showActionBar</name>
                     <value>true</value>
                 </componentInstanceProperties>
-                <componentName>force:relatedListContainer</componentName>
-                <identifier>force_relatedListContainer</identifier>
+                <componentName>force:relatedListSingleContainer</componentName>
+                <identifier>force_relatedListSingleContainer2</identifier>
             </componentInstance>
         </itemInstances>
-        <name>Facet-baf3dfcf-aa32-47d0-918e-76cb463e9505</name>
+        <name>Facet-efdc5aeb-9194-44c7-9a80-ae06b59d0d12</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -662,14 +666,14 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>body</name>
-                    <value>Facet-baf3dfcf-aa32-47d0-918e-76cb463e9505</value>
+                    <value>Facet-efdc5aeb-9194-44c7-9a80-ae06b59d0d12</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>title</name>
-                    <value>Related</value>
+                    <value>Milestone Change History</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:tab</componentName>
-                <identifier>flexipage_tab2</identifier>
+                <identifier>flexipage_tab6</identifier>
             </componentInstance>
         </itemInstances>
         <name>Facet-4bf37679-bd52-4182-b85d-87648c5811f6</name>
@@ -694,6 +698,22 @@
         <type>Region</type>
     </flexiPageRegions>
     <flexiPageRegions>
+        <itemInstances>
+            <componentInstance>
+                <componentName>forceChatter:recordFeedContainer</componentName>
+                <identifier>forceChatter_recordFeedContainer</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>showLegacyActivityComposer</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentName>runtime_sales_activities:activityPanel</componentName>
+                <identifier>runtime_sales_activities_activityPanel</identifier>
+            </componentInstance>
+        </itemInstances>
         <name>sidebar</name>
         <type>Region</type>
     </flexiPageRegions>

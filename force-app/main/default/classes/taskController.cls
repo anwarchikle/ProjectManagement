@@ -22,6 +22,19 @@ public with sharing class taskController {
         ];
     }
 
+    @AuraEnabled(cacheable=true)
+    public static List<Tasks__c> getKanbanTasks(String viewType) {
+        // Minimal implementation: just return recent Tasks for Kanban.
+        // viewType (My_Tasks, My_Today_Tasks, All_Tasks) is currently ignored
+        // to keep logic simple as per request "just fetch the data".
+        return [
+            SELECT Id, Name, Status__c, Priority__c, Start_Date__c, End_Date__c
+            FROM Tasks__c
+            ORDER BY LastModifiedDate DESC
+            LIMIT 200
+        ];
+    }
+
     @AuraEnabled
     public static void updateTaskStatus(Id taskId, String newStatus) {
         if (taskId == null || String.isBlank(newStatus)) {
@@ -30,6 +43,46 @@ public with sharing class taskController {
 
         Tasks__c t = [SELECT Id, Status__c FROM Tasks__c WHERE Id = :taskId LIMIT 1];
         t.Status__c = newStatus.trim();
+        update t;
+    }
+
+    @AuraEnabled
+    public static void updateTaskStatusWithChecks(Id taskId, String newStatus) {
+        if (taskId == null || String.isBlank(newStatus)) {
+            throw new AuraHandledException('Task Id or Status is missing');
+        }
+
+        String trimmedStatus = newStatus.trim();
+
+        String currentProfileName = [
+            SELECT Profile.Name
+            FROM User
+            WHERE Id = :UserInfo.getUserId()
+            LIMIT 1
+        ].Profile.Name;
+
+        Boolean isLeadUser = (currentProfileName == 'PMT Senior Developer');
+
+        Boolean hasDeveloperOwner = false;
+        for (Task_Owner__c ownerRec : [
+            SELECT Id, Is_Active__c, User__r.Profile.Name
+            FROM Task_Owner__c
+            WHERE Tasks__c = :taskId
+        ]) {
+            if (ownerRec.Is_Active__c == true && ownerRec.User__r != null &&
+                ownerRec.User__r.Profile != null &&
+                ownerRec.User__r.Profile.Name == 'PMT Developer') {
+                hasDeveloperOwner = true;
+                break;
+            }
+        }
+
+        if (trimmedStatus == 'Completed' && hasDeveloperOwner && !isLeadUser) {
+            throw new AuraHandledException('Only PMT Senior Developer can complete developer tasks.');
+        }
+
+        Tasks__c t = [SELECT Id, Status__c FROM Tasks__c WHERE Id = :taskId LIMIT 1];
+        t.Status__c = trimmedStatus;
         update t;
     }
 
@@ -153,7 +206,7 @@ public with sharing class taskController {
 
         for (Project_Team_Member__c ptm : [
             SELECT Id, Project__c, Assigned_To__c, Assigned_To__r.Name,
-                   Role__c, Rate_Per_Hour__c, Allocation__c, Is_Active__c
+                   Role__c, Rate_Per_Hour__c, Allocation__c, Is_Active__c, Start_Date__c, End_Date__c
             FROM Project_Team_Member__c
             WHERE Project__c = :projectId
         ]) {
@@ -196,7 +249,7 @@ public with sharing class taskController {
         // Existing project team members so we can UPDATE them instead of skipping
         Map<Id, Project_Team_Member__c> existingByUser = new Map<Id, Project_Team_Member__c>();
         for (Project_Team_Member__c rec : [
-            SELECT Id, Assigned_To__c, Rate_Per_Hour__c, Role__c, Allocation__c, Is_Active__c
+            SELECT Id, Assigned_To__c, Rate_Per_Hour__c, Role__c, Allocation__c, Is_Active__c, Start_Date__c, End_Date__c
             FROM Project_Team_Member__c
             WHERE Project__c = :projectId
         ]) {
@@ -314,18 +367,21 @@ public with sharing class taskController {
     public static Map<String, String> resolveContext(Id recordId) {
         Map<String, String> result = new Map<String, String>{
             'projectId' => null,
-                'milestoneId' => null,
-                'taskListId' => null
-                };
-                    
-                    if (recordId == null) {
-                        return result;
-                    }
-        
+            'milestoneId' => null,
+            'taskListId' => null,
+            'issueBugId' => null,
+            'changeRequestId' => null
+        };
+
+        if (recordId == null) {
+            return result;
+        }
+
         String objectName = recordId.getSObjectType().getDescribe().getName();
-        
+
         if (objectName == 'Project__c') {
-            result.put('projectId', recordId);
+            result.put('projectId', (String)recordId);
+
         } else if (objectName == 'Milestone__c') {
             Milestone__c milestone = [
                 SELECT Id, Project__c 
@@ -333,8 +389,9 @@ public with sharing class taskController {
                 WHERE Id = :recordId 
                 LIMIT 1
             ];
-            result.put('projectId', milestone.Project__c);
-            result.put('milestoneId', milestone.Id);
+            result.put('projectId', (String)milestone.Project__c);
+            result.put('milestoneId', (String)milestone.Id);
+
         } else if (objectName == 'Task_List__c') {
             Task_List__c taskList = [
                 SELECT Id, Milestone__c, Milestone__r.Project__c 
@@ -342,11 +399,31 @@ public with sharing class taskController {
                 WHERE Id = :recordId
                 LIMIT 1
             ];
-            result.put('projectId', taskList.Milestone__r.Project__c);
-            result.put('milestoneId', taskList.Milestone__c);
-            result.put('taskListId', taskList.Id);
+            result.put('projectId', (String)taskList.Milestone__r.Project__c);
+            result.put('milestoneId', (String)taskList.Milestone__c);
+            result.put('taskListId', (String)taskList.Id);
+
+        } else if (objectName == 'Issue_Bug__c') {
+            Issue_Bug__c bug = [
+                SELECT Id, Project__c
+                FROM Issue_Bug__c
+                WHERE Id = :recordId
+                LIMIT 1
+            ];
+            result.put('projectId', (String)bug.Project__c);
+            result.put('issueBugId', (String)bug.Id);
+
+        } else if (objectName == 'Change_Request__c') {
+            Change_Request__c cr = [
+                SELECT Id, Project__c
+                FROM Change_Request__c
+                WHERE Id = :recordId
+                LIMIT 1
+            ];
+            result.put('projectId', (String)cr.Project__c);
+            result.put('changeRequestId', (String)cr.Id);
         }
-        
+
         return result;
     }
     
@@ -417,6 +494,7 @@ public with sharing class taskController {
                 Work_Hours__c = wrapper.workHours,
                 Comment__c = wrapper.comments,
                 Issue_Bug__c = wrapper.issueBug,
+                Change_Request__c = wrapper.changeRequest,
                 Status__c = 'Assigned'
             ));
         }
@@ -526,17 +604,18 @@ public with sharing class taskController {
     }
 
     // Added From WorkSpaceController
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled
     public static Boolean isInternalUser() {
         try {
             // Check if user is in a Community/Experience Site
             // Network.getNetworkId() returns null for internal users
             // Returns a NetworkId for Experience Site/Community users
             Id networkId = Network.getNetworkId();
-            
-            // If networkId is null, user is an internal Salesforce user
-            return networkId == null;
-            
+            if(networkId == null){
+                return true;
+            }else{
+                return false;
+            }
         } catch (Exception e) {
             System.debug('Error checking user type: ' + e.getMessage());
             // Default to false (treat as site user) if error occurs
@@ -566,6 +645,7 @@ public with sharing class taskController {
         @AuraEnabled public Decimal workHours { get; set; }
         @AuraEnabled public String comments { get; set; }
         @AuraEnabled public Id issueBug { get; set; }
+        @AuraEnabled public Id changeRequest { get; set; }
         @AuraEnabled public List<Id> teamMemberIds { get; set; }
         @AuraEnabled public List<AllocationWrapper> allocationData { get; set; }
         @AuraEnabled public List<FileWrapper> files { get; set; }  // ← CHANGED TO FileWrapper

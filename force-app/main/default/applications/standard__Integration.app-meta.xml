@@ -8,9 +8,21 @@
     <label>Integration App</label>
     <navType>Console</navType>
     <tabs>standard-IntegrationIntelligence</tabs>
+    <tabs>POC__c</tabs>
+    <tabs>Calendar__c</tabs>
+    <tabs>Change_Request__c</tabs>
     <uiType>Lightning</uiType>
     <utilityBar>Integration_UtilityBar</utilityBar>
     <workspaceConfig>
+        <mappings>
+            <tab>Calendar__c</tab>
+        </mappings>
+        <mappings>
+            <tab>Change_Request__c</tab>
+        </mappings>
+        <mappings>
+            <tab>POC__c</tab>
+        </mappings>
         <mappings>
             <tab>standard-IntegrationIntelligence</tab>
         </mappings>

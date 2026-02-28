@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Prevent_Back_AND_Skip</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+NOT(ISNEW()),
+ISCHANGED(Status__c),
+Stage_Order__c &lt;&gt; PRIORVALUE(Stage_Order__c) + 1
+)</errorConditionFormula>
+    <errorMessage>You cannot move the Project back to a previous status and Skip also.</errorMessage>
+</ValidationRule>

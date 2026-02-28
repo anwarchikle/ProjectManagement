@@ -14,7 +14,7 @@ public static TaskDetailsWrapper getTaskDetails(Id taskId) {
         wrapper.taskRecord = [
             SELECT Id, Name, Priority__c, Associated_Project__c, Milestone__c, 
                    Task_List__c, Billing_Type__c, Start_Date__c, End_Date__c, 
-                   Work_Hours__c, Comment__c
+                   Work_Hours__c, Comment__c, Issue_Bug__c, Change_Request__c
             FROM Tasks__c 
             WHERE Id = :taskId 
             LIMIT 1
@@ -101,7 +101,9 @@ public static String updateTaskWithOwners(String taskDataJson) {
             Start_Date__c = taskData.startDate,
             End_Date__c = taskData.endDate,
             Work_Hours__c = taskData.workHours,
-            Comment__c = taskData.comments
+            Comment__c = taskData.comments,
+            Issue_Bug__c = taskData.issueBug,
+            Change_Request__c = taskData.changeRequest
         );
         update taskToUpdate;
         
@@ -429,6 +431,8 @@ public class TaskUpdateWrapper {
     @AuraEnabled public Date endDate { get; set; }
     @AuraEnabled public Decimal workHours { get; set; }
     @AuraEnabled public String comments { get; set; }
+    @AuraEnabled public Id issueBug { get; set; }
+    @AuraEnabled public Id changeRequest { get; set; }
     @AuraEnabled public List<Id> teamMemberIds { get; set; }
     @AuraEnabled public List<AllocationWrapper> allocationData { get; set; }
     @AuraEnabled public List<FileWrapper> files { get; set; } // ADD THIS

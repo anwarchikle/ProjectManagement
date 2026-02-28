@@ -1,0 +1,39 @@
+<template>
+    <div class="qa-command-center">
+        <!-- Tab Navigation -->
+        <div class="tab-nav-wrapper">
+            <nav class="tab-nav" role="tablist">
+                <template for:each={tabs} for:item="tab">
+                    <button
+                        key={tab.id}
+                        role="tab"
+                        data-tab-id={tab.id}
+                        class={tab.cssClass}
+                        aria-selected={tab.isActive}
+                        onclick={handleTabClick}
+                    >
+                        <span class="tab-icon">
+                            <lightning-icon
+                                icon-name={tab.icon}
+                                size="x-small"
+                                class="tab-lightning-icon"
+                            ></lightning-icon>
+                        </span>
+                        <span class="tab-label">{tab.label}</span>
+                    </button>
+                </template>
+            </nav>
+        </div>
+
+        <!-- Tab Content Area -->
+        <div class="tab-content">
+            <template if:true={isCommandCenter}>
+                <c-command-center-tab></c-command-center-tab>
+            </template>
+
+            <template if:true={isMultiProjectQuality}>
+                <c-multi-project-quality-view-tab></c-multi-project-quality-view-tab>
+            </template>
+        </div>
+    </div>
+</template>

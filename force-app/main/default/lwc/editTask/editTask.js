@@ -79,6 +79,15 @@ export default class EditTask extends NavigationMixin(LightningElement) {
                     endDate: result.taskRecord.End_Date__c || '',
                     workHours: result.taskRecord.Work_Hours__c || '',
                     comments: result.taskRecord.Comment__c || '',
+                    isBillable: (result.taskRecord.Billing_Type__c === 'Billable'),
+                    issueBug: result.taskRecord.Issue_Bug__c || null,
+                    changeRequest: result.taskRecord.Change_Request__c || null,
+                    issueBugCondition: result.taskRecord.Associated_Project__c != null
+                        ? `Project__c = '${result.taskRecord.Associated_Project__c}'`
+                        : null,
+                    changeRequestCondition: result.taskRecord.Associated_Project__c != null
+                        ? `Project__c = '${result.taskRecord.Associated_Project__c}'`
+                        : null,
                     
                     // Team Members
                     teamMembers: result.teamMembers || [],
@@ -488,6 +497,13 @@ getFileExtension(fileName) {
         this.task = { ...this.task };
     }
 
+    handleBillableToggle(event) {
+        const isChecked = event.target.checked;
+        this.task.isBillable = isChecked;
+        this.task.billingType = isChecked ? 'Billable' : 'Non Billable';
+        this.task = { ...this.task };
+    }
+
     handleProjectChange(event) {
         const projectId = event.detail?.recordId || null;
 
@@ -499,6 +515,10 @@ getFileExtension(fileName) {
             this.task.taskListOptions = [];
             this.task.milestoneDisabled = true;
             this.task.taskListDisabled = true;
+            this.task.issueBug = null;
+            this.task.issueBugCondition = null;
+            this.task.changeRequest = null;
+            this.task.changeRequestCondition = null;
             this.task = { ...this.task };
             return;
         }
@@ -510,6 +530,10 @@ getFileExtension(fileName) {
         this.task.taskListOptions = [];
         this.task.milestoneDisabled = false;
         this.task.taskListDisabled = true;
+        this.task.issueBug = null;
+        this.task.issueBugCondition = projectId ? `Project__c = '${projectId}'` : null;
+        this.task.changeRequest = null;
+        this.task.changeRequestCondition = projectId ? `Project__c = '${projectId}'` : null;
         this.task = { ...this.task };
 
         this.fetchMilestones(projectId);
@@ -532,6 +556,50 @@ getFileExtension(fileName) {
     handleTaskListChange(event) {
         const taskListId = event.detail.value;
         this.task.taskList = taskListId;
+        this.task = { ...this.task };
+    }
+
+    handleIssueLookupSelection(event) {
+        const { name, selectedRecord } = event.detail || {};
+
+        if (name !== 'IssueBug') {
+            return;
+        }
+
+        this.task.issueBug = selectedRecord;
+        this.task = { ...this.task };
+    }
+
+    handleIssueLookupUpdate(event) {
+        const { name } = event.detail || {};
+
+        if (name !== 'IssueBug') {
+            return;
+        }
+
+        this.task.issueBug = null;
+        this.task = { ...this.task };
+    }
+
+    handleChangeRequestLookupSelection(event) {
+        const { name, selectedRecord } = event.detail || {};
+
+        if (name !== 'ChangeRequest') {
+            return;
+        }
+
+        this.task.changeRequest = selectedRecord;
+        this.task = { ...this.task };
+    }
+
+    handleChangeRequestLookupUpdate(event) {
+        const { name } = event.detail || {};
+
+        if (name !== 'ChangeRequest') {
+            return;
+        }
+
+        this.task.changeRequest = null;
         this.task = { ...this.task };
     }
 
@@ -1094,6 +1162,8 @@ getFileExtension(fileName) {
         endDate: this.task.endDate,
         workHours: this.task.workHours,
         comments: this.task.comments,
+        issueBug: this.task.issueBug,
+        changeRequest: this.task.changeRequest,
         teamMemberIds: this.task.teamMembers.map(member => member.Id)
         // NO NEED TO SEND FILES - they're already uploaded to Salesforce
     };
@@ -1106,8 +1176,7 @@ getFileExtension(fileName) {
     updateTaskWithOwners({ taskDataJson: JSON.stringify(taskData) })
         .then(result => {
             this.showToast('Success', 'Task updated successfully', 'success');
-            this.navigateToTaskRecord();
-            this.closeModal();
+            this.handleCloseAfterAction();
         })
         .catch(error => {
             console.error('Error updating task:', error);
@@ -1147,8 +1216,7 @@ getFileExtension(fileName) {
     }
 
     handleCancel() {
-        this.navigateToTaskRecord();
-        this.closeModal();
+        this.handleCloseAfterAction();
     }
 
     navigateToTaskRecord() {
@@ -1182,6 +1250,24 @@ getFileExtension(fileName) {
 
     showToast(title, message, variant) {
         this.dispatchEvent(new ShowToastEvent({ title, message, variant }));
+    }
+
+    handleCloseAfterAction() {
+        this.closeModal();
+
+        try {
+            const href = window && window.location && window.location.href ? window.location.href : '';
+
+            const isExperienceSite = href.includes('.site.com') || href.includes('/s/');
+
+            if (isExperienceSite) {
+                window.location.assign('https://orgfarm-9291e137a3-dev-ed.develop.my.site.com/UtilPM/s/task-list/Task_List__c/Default');
+            } else {
+                this.navigateToTaskRecord();
+            }
+        } catch (e) {
+            this.navigateToTaskRecord();
+        }
     }
 
     closeModal() {

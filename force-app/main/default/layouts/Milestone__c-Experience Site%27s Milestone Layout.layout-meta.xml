@@ -38,15 +38,15 @@
                 <behavior>Readonly</behavior>
                 <field>Actual_Work_Hours__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Tentative_End_Date__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
                 <behavior>Required</behavior>
                 <field>Project__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Flag__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>

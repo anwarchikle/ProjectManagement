@@ -36,12 +36,6 @@
             <targetValue>Default_Theme_Navigation_Menu_1_Component_Properties</targetValue>
         </target>
         <target>
-            <groupName>3ac65204-25bb-44db-bd74-3aa13bd40ecc$#$69c60068-5d2c-4d4a-9c65-e4c67debef85</groupName>
-            <priority>1</priority>
-            <targetType>ExperienceVariation</targetType>
-            <targetValue>Project_Detail_Tag_Project_Team_1_Component</targetValue>
-        </target>
-        <target>
             <groupName>b91def35-0bf9-4c36-9aa7-aaa633e82165$#$2e94e682-34d0-4e81-9232-45ad6aa0d17b</groupName>
             <priority>1</priority>
             <targetType>ExperienceVariation</targetType>

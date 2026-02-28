@@ -6,7 +6,8 @@
     <referenceTo>User</referenceTo>
     <relationshipName>Project_Teams</relationshipName>
     <required>false</required>
-    <trackHistory>false</trackHistory>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>true</trackHistory>
     <trackTrending>false</trackTrending>
     <type>Lookup</type>
 </CustomField>

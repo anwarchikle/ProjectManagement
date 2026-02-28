@@ -6,8 +6,8 @@ import { getListUi } from 'lightning/uiListApi';
 import ISSUE_BUG_OBJECT from '@salesforce/schema/Issue_Bug__c';
 import getRetestQueue from '@salesforce/apex/RetestController.getRetestQueue';
 import updateRetestStatus from '@salesforce/apex/RetestController.updateRetestStatus';
-import getRetestFixedCountForCurrentUserOrAdmin
-    from '@salesforce/apex/RetestController.getRetestFixedCountForCurrentUserOrAdmin';
+// import getRetestFixedCountForCurrentUserOrAdmin
+//     from '@salesforce/apex/RetestController.getRetestFixedCountForCurrentUserOrAdmin';
 
 export default class RetestAndVerificationCompo extends NavigationMixin(LightningElement) {
     
@@ -263,15 +263,15 @@ export default class RetestAndVerificationCompo extends NavigationMixin(Lightnin
         }
     }
 
-        @wire(getRetestFixedCountForCurrentUserOrAdmin)
-    wiredRetestFixedCount({ data, error }) {
-        if (data !== undefined) {
-            // This will drive the "Retesting Fixed" card
-            this.fixedCount = data;
-        } else if (error) {
-            console.error('Error loading Retest Fixed count', error);
-        }
-    }
+    //     @wire(getRetestFixedCountForCurrentUserOrAdmin)
+    // wiredRetestFixedCount({ data, error }) {
+    //     if (data !== undefined) {
+    //         // This will drive the "Retesting Fixed" card
+    //         this.fixedCount = data;
+    //     } else if (error) {
+    //         console.error('Error loading Retest Fixed count', error);
+    //     }
+    // }
 
     // ================= PASS / FAIL QUICK ACTIONS =================
 
@@ -348,6 +348,21 @@ export default class RetestAndVerificationCompo extends NavigationMixin(Lightnin
         this.closeModal();
         this.showToast('Success', 'Retest result updated successfully', 'success');
         return refreshApex(this.wiredResult);
+    }
+
+    handleCreateTaskClick(event) {
+        const issueId = event.currentTarget.dataset.id;
+        if (!issueId) {
+            return;
+        }
+
+        const baseUrl = 'https://orgfarm-9291e137a3-dev-ed.develop.my.site.com/UtilPM/s/new-task';
+        const url = `${baseUrl}?recordId=${issueId}`;
+        try {
+            window.open(url, '_blank');
+        } catch (e) {
+            this.showToast('Error', 'Unable to open task creation page', 'error');
+        }
     }
 
     cancelRetest(recordId) {

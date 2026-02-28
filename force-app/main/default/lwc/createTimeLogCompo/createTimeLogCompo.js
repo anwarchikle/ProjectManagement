@@ -4,8 +4,6 @@ import { NavigationMixin, CurrentPageReference } from 'lightning/navigation';
 import { refreshApex } from '@salesforce/apex';
 import USER_ID from '@salesforce/user/Id';
 
-
-// Apex imports
 import getTaskWithProject from '@salesforce/apex/TimeLogHelper.getTaskWithProject';
 import getProjects from '@salesforce/apex/TimeLogHelper.getProjects';
 import getTasksByProject from '@salesforce/apex/TimeLogHelper.getTasksByProject';

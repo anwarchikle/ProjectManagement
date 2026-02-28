@@ -1,68 +1,97 @@
 <template>
     <div class="full-screen">
-        <br/>
-        <lightning-layout multiple-rows>
-            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="3"
-                padding="horizontal-small">
-                <div>
-                    <lightning-button variant="Brand" label="New Project" title="titleName" onclick={createNewProject}>
-                    </lightning-button>
-                </div>
-            </lightning-layout-item>
-
-            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="2"
-                padding="horizontal-small">
-                <div>
-                    <lightning-combobox name="projectFilter" label="Project" value={selectedProjectId}
-                        options={projectOptions} onchange={handleProjectFilterChange}>
+        <!-- Header Section with Filters and Actions -->
+         <br></br>
+        <div class="header-container">
+            <!-- Left Side: Filters -->
+            <div class="header-left">
+                <div class="filter-group">
+                    <lightning-combobox 
+                        name="projectFilter" 
+                        label="Project" 
+                        value={selectedProjectId}
+                        options={projectOptions} 
+                        onchange={handleProjectFilterChange}
+                        class="filter-combo">
                     </lightning-combobox>
                 </div>
-            </lightning-layout-item>
-
-            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="2"
-                padding="horizontal-small">
-                <div>
-                    <lightning-combobox name="milestoneFilter" label="Milestone" value={selectedMilestoneId}
-                        options={milestoneOptions} onchange={handleMilestoneFilterChange} disabled={isProjectNotSelected}>
+                
+                <div class="filter-group">
+                    <lightning-combobox 
+                        name="milestoneFilter" 
+                        label="Milestone" 
+                        value={selectedMilestoneId}
+                        options={milestoneOptions} 
+                        onchange={handleMilestoneFilterChange} 
+                        disabled={isProjectNotSelected}
+                        class="filter-combo">
                     </lightning-combobox>
                 </div>
-            </lightning-layout-item>
-
-            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="2"
-                padding="horizontal-small">
-                <div>
-                    <lightning-combobox name="taskListFilter" label="Task List" value={selectedTaskListId}
-                        options={taskListOptions} onchange={handleTaskListFilterChange} disabled={isProjectNotSelected}>
+                
+                <div class="filter-group">
+                    <lightning-combobox 
+                        name="taskListFilter" 
+                        label="Task List" 
+                        value={selectedTaskListId}
+                        options={taskListOptions} 
+                        onchange={handleTaskListFilterChange} 
+                        disabled={isProjectNotSelected}
+                        class="filter-combo">
                     </lightning-combobox>
                 </div>
-            </lightning-layout-item>
+            </div>
 
-            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="2"
-                padding="horizontal-small">
-                <div>
-                    <lightning-combobox name="dateFilter" label="View" value={selectedDateFilter}
-                        options={dateFilterOptions} onchange={handleDateFilterChange} variant="label-hidden">
+            <!-- Right Side: Actions -->
+            <div class="header-right">
+                <lightning-button-icon 
+                    icon-name="utility:refresh" 
+                    variant="bare" 
+                    alternative-text="Reset filters"
+                    title="Reset filters" 
+                    onclick={handleResetFilters} 
+                    class="action-btn refresh-btn">
+                </lightning-button-icon>
+                
+                <div class="filter-group view-filter">
+                    <lightning-combobox 
+                        name="dateFilter" 
+                        label="View" 
+                        value={selectedDateFilter}
+                        options={dateFilterOptions} 
+                        onchange={handleDateFilterChange}
+                        class="filter-combo">
                     </lightning-combobox>
-                    <lightning-button-icon icon-name="utility:refresh" variant="bare" alternative-text="Reset filters"
-                        title="Reset filters" onclick={handleResetFilters} class="slds-m-left_x-small">
-                    </lightning-button-icon>
                 </div>
-            </lightning-layout-item>
+                
+                <!-- <lightning-button 
+                    variant="Brand" 
+                    label="New Project" 
+                    title="Create New Project" 
+                    onclick={createNewProject}
+                    class="new-project-btn">
+                </lightning-button> -->
+                <button 
+                    class="custom-new-project-btn" 
+                    onclick={createNewProject}
+                    title="Create New Project">
+                    <span class="btn-icon">+</span>
+                    <span class="btn-text">New Project</span>
+                </button>
+            </div>
+        </div>
 
-        </lightning-layout>
-
-        <br/>
-
+        <!-- Main Table Container -->
         <div class="table-container">
+            <!-- Fixed Columns (Left Side) -->
             <div class="fixed-columns">
                 <table class="tree-table">
                     <colgroup>
                         <col style="width: 100px;">  <!-- Actions -->
                         <col style="width: 60px;">   <!-- Sequence -->
                         <col style="width: 40px;">   <!-- Icon -->
-                        <col style="width: 280px;">  <!-- Name (increased for better spacing) -->
-                        <col style="width: 120px;">  <!-- Status -->
-                        <col style="width: 120px;">  <!-- Completion -->
+                        <col style="width: 16rem;">  <!-- Name -->
+                        <col style="width: 7rem; min-width: 110px;">  <!-- Status -->
+                        <col style="width: 6rem;">  <!-- Completion -->
                         <col style="width: 140px;">  <!-- Estimated Hours -->
                         <col style="width: 120px;">  <!-- Logged Hours -->
                     </colgroup>
@@ -83,16 +112,16 @@
                             <tr key={row.Id}>
                                 <td class="actions">
                                     <lightning-button-icon icon-name="utility:edit" variant="bare" data-id={row.Id}
-                                        onclick={handleEdit}>
+                                        onclick={handleEdit} title="Edit">
                                     </lightning-button-icon>
                                     &nbsp;
                                     <lightning-button-icon icon-name="utility:add" variant="bare" data-id={row.Id}
                                         onclick={handleAdd} disabled={row.disableAdd} title={row.addTooltip}>
                                     </lightning-button-icon>
                                     &nbsp;
-                                    <lightning-button-icon icon-name="utility:adduser" variant="bare" data-id={row.Id}
-                                        onclick={handleUser}>
-                                    </lightning-button-icon>
+                                    <!-- <lightning-button-icon icon-name="utility:adduser" variant="bare" data-id={row.Id}
+                                        onclick={handleUser} title="Assign User">
+                                    </lightning-button-icon> -->
                                 </td>
 
                                 <td class="sequence">{row.sequence}</td>
@@ -112,15 +141,16 @@
                                 </td>
 
                                 <td><span class={row.statusClass}>{row.Status}</span></td>
-                                <td>{row.completion}</td>
-                                <td>{row.EstimatedHours}</td>
-                                <td>{row.LoggedHours}</td>
+                                <td class="completion-cell">{row.completion}</td>
+                                <td class="hours-cell">{row.EstimatedHours}</td>
+                                <td class="hours-cell">{row.LoggedHours}</td>
                             </tr>
                         </template>
                     </tbody>
                 </table>
             </div>
 
+            <!-- Gantt Chart (Right Side) -->
             <div class="gantt-container">
                 <div class="gantt-scroll-wrapper">
                     <table class="gantt-table">
@@ -135,10 +165,10 @@
                                                 </div>
                                             </template>
                                         </div>
-                                        <div class="timeline-today-marker" if:true={todayPosition}>
+                                        <!-- <div class="timeline-today-marker" if:true={todayPosition}>
                                             <div class="today-line" style="left: {todayPosition}%;"></div>
                                             <div class="today-label" style="left: {todayPosition}%;">Today</div>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </th>
                             </tr>

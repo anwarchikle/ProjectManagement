@@ -78,6 +78,12 @@
                                     <div class="slds-truncate">Allocation %</div>
                                 </th>
                                 <th scope="col">
+                                    <div class="slds-truncate">Start Date</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate">End Date</div>
+                                </th>
+                                <th scope="col">
                                     <div class="slds-truncate">Active</div>
                                 </th>
                             </tr>
@@ -88,9 +94,9 @@
                                     <td data-label="User">
                                         <div class="slds-truncate">{detail.name}</div>
                                     </td>
-                                    <td data-label="Role" style="margin-top: -20px;">
+                                    <td data-label="Role" >
                                         <lightning-combobox name="role" data-id={detail.userId} value={detail.role}
-                                            options={roleOptions} onchange={handleRoleChange}>
+                                            options={roleOptions} onchange={handleRoleChange} style="margin-top: -20px;">
                                         </lightning-combobox>
                                     </td>
                                     <td data-label="Rate / Hour">
@@ -98,9 +104,17 @@
                                             value={detail.ratePerHour} onchange={handleRateChange} />
                                     </td>
                                     <td data-label="Allocation %">
-                                        <input type="number" class="slds-input" min="0" max="100"
+                                        <input type="number" class="slds-input allocation-input" min="0" max="100"
                                             data-id={detail.userId} value={detail.allocationPercent}
                                             onchange={handleAllocationChange} />
+                                    </td>
+                                    <td data-label="Start Date">
+                                        <lightning-input type="date" class="date-input" data-id={detail.userId}
+                                            value={detail.startDate} onchange={handleStartDateChange} style="margin-top: -20px;"></lightning-input>
+                                    </td>
+                                    <td data-label="End Date">
+                                        <lightning-input type="date" class="date-input" data-id={detail.userId}
+                                            value={detail.endDate} onchange={handleEndDateChange} style="margin-top: -20px;"></lightning-input>
                                     </td>
                                     <td data-label="Active">
                                         <lightning-input type="checkbox" variant="label-hidden"

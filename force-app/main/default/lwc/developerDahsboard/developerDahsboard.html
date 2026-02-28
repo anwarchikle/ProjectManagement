@@ -1,0 +1,84 @@
+<template>
+    <div class="dashboard-container">
+
+        <div class="header-section slds-grid slds-wrap slds-grid_vertical-align-center slds-p-around_medium">
+            <div class="slds-col slds-grow slds-grid slds-grid_vertical-align-center">
+
+                <span class="label-text slds-m-right_small">Project:</span>
+
+                <div class="project-pills-container slds-m-right_large">
+                    <template if:true={projects.data}>
+                        <template for:each={projects.data} for:item="proj">
+                            <button
+                                key={proj.Id}
+                                class="project-pill"
+                                data-id={proj.Id}>
+                                {proj.Name}
+                            </button>
+                        </template>
+                        <template if:true={isProjectsEmpty}>
+                            <span class="slds-text-body_small slds-text-color_weak">No projects active in this range</span>
+                        </template>
+                    </template>
+                </div>
+
+                <span class="label-text slds-m-right_small">Range:</span>
+
+                <div class="range-wrapper">
+                    <lightning-combobox name="range" value={selectedRange} options={rangeOptions}
+                        onchange={handleRangeChange} variant="label-hidden" class="range-dropdown">
+                    </lightning-combobox>
+                </div>
+            </div>
+        </div>
+
+        <div class="nav-bar slds-border_bottom">
+            <template for:each={tabs} for:item="tab">
+                <button
+                    key={tab.label}
+                    class={tab.class}
+                    onclick={handleTabClick}
+                    data-name={tab.label}>
+
+                    <lightning-icon 
+                        icon-name={tab.icon} 
+                        size="x-small" 
+                        class="slds-m-right_x-small icon-style">
+                    </lightning-icon>
+                    {tab.label}
+                </button>
+            </template>
+        </div>
+
+        <div class="content-body slds-p-around_medium">
+            <template if:true={isMyDayTab}>
+                <c-my-day-component project-id={selectedProjectId} selected-range={selectedRange}></c-my-day-component>
+            </template>
+
+            <template if:true={isWorkloadSnapshotTab}>
+                <!-- <c-workload-snapshot-component project-id={selectedProjectId} selected-range={selectedRange}></c-workload-snapshot-component> -->
+            </template>
+
+            <template if:true={isDelaysAgingTab}>
+                <!-- <c-delays-aging-component project-id={selectedProjectId} selected-range={selectedRange}></c-delays-aging-component> -->
+            </template>
+
+            <template if:true={isBugsFixQueueTab}>
+                <!-- <c-bugs-fix-queue-component project-id={selectedProjectId} selected-range={selectedRange}></c-bugs-fix-queue-component> -->
+            </template>
+
+            <template if:true={isQualityOwnershipTab}>
+                <!-- <c-quality-ownership-component project-id={selectedProjectId} selected-range={selectedRange}></c-quality-ownership-component> -->
+            </template>
+
+            <template if:true={isProductivityPredictabilityTab}>
+                <!-- <c-productivity-predictability-component project-id={selectedProjectId} selected-range={selectedRange}></c-productivity-predictability-component> -->
+            </template>
+
+            <template if:true={isReleaseHandoverTab}>
+                <!-- <c-release-handover-component project-id={selectedProjectId} selected-range={selectedRange}></c-release-handover-component> -->
+            </template>
+        </div>
+
+    </div>
+</template>

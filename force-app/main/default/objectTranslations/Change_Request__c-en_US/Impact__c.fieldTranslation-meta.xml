@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label><!-- Impact --></label>
+    <name>Impact__c</name>
+    <picklistValues>
+        <masterLabel>1 Sprint Delay</masterLabel>
+        <translation><!-- 1 Sprint Delay --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>1 Week Delay</masterLabel>
+        <translation><!-- 1 Week Delay --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2 Sprint Delay</masterLabel>
+        <translation><!-- 2 Sprint Delay --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2 Week Delay</masterLabel>
+        <translation><!-- 2 Week Delay --></translation>
+    </picklistValues>
+</CustomFieldTranslation>

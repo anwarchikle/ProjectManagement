@@ -1,0 +1,308 @@
+:host {
+    display: block;
+    font-family: 'Salesforce Sans', Arial, sans-serif;
+}
+
+/* =====================
+   Spinner
+   ===================== */
+.spinner-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+}
+
+/* =====================
+   Error Banner
+   ===================== */
+.error-banner {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #fef0ef;
+    border: 1px solid #f97b6b;
+    border-radius: 4px;
+    padding: 12px 16px;
+    color: #ba0517;
+    font-size: 13px;
+    margin-bottom: 16px;
+}
+
+/* =====================
+   Layout
+   ===================== */
+.mpq-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.section-card {
+    background: #ffffff;
+    border-radius: 6px;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    padding: 16px;
+}
+
+.section-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #181818;
+    margin: 0 0 14px 0;
+}
+
+/* Row: backlog table + score card side by side */
+.section-row {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    align-items: stretch;
+}
+
+.backlog-card {
+    flex: 2;
+    min-width: 0;
+}
+
+.score-card {
+    flex: 1;
+    min-width: 200px;
+    border-left: 4px solid #ba0517;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* =====================
+   Chart
+   ===================== */
+.chart-card {
+    padding-bottom: 20px;
+}
+
+.chart-wrapper {
+    position: relative;
+    height: 220px;
+    width: 100%;
+}
+
+.chart-canvas {
+    display: block;
+}
+
+/* =====================
+   Severity Weighted Score
+   ===================== */
+.score-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: #706e6b;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin: 0 0 6px 0;
+}
+
+.score-value {
+    font-size: 40px;
+    font-weight: 700;
+    color: #ba0517;
+    line-height: 1;
+    margin: 0 0 6px 0;
+}
+
+.score-formula {
+    font-size: 12px;
+    color: #706e6b;
+    margin: 0;
+}
+
+.settings-icon {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    opacity: 0.4;
+}
+
+/* =====================
+   Data Table
+   ===================== */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.data-table thead tr {
+    border-bottom: 1px solid #e0e0e0;
+    background-color: #f8f8f8;
+}
+
+.data-table th {
+    padding: 8px 12px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    color: #706e6b;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+}
+
+.data-table tbody tr {
+    border-bottom: 1px solid #f3f3f3;
+    transition: background-color 0.1s ease;
+}
+
+.data-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.data-table tbody tr:hover {
+    background-color: #f5f9ff;
+}
+
+.data-table td {
+    padding: 10px 12px;
+    color: #181818;
+    vertical-align: middle;
+}
+
+.col-id {
+    font-size: 12px;
+    color: #706e6b;
+    white-space: nowrap;
+}
+
+.col-title {
+    max-width: 320px;
+}
+
+.col-num {
+    text-align: left;
+}
+
+.empty-row {
+    text-align: center;
+    color: #aaaaaa;
+    font-style: italic;
+    padding: 24px 12px !important;
+}
+
+/* =====================
+   Status Badge
+   ===================== */
+.status-badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.status-badge--reopened {
+    background-color: #fff3e0;
+    color: #e07b1f;
+    border: 1px solid #f5d5a0;
+}
+
+.status-badge--open {
+    background-color: #e8f4fe;
+    color: #0176d3;
+    border: 1px solid #b0d4f5;
+}
+
+.status-badge--inprogress {
+    background-color: #eaf5ea;
+    color: #2e7d32;
+    border: 1px solid #a5d6a7;
+}
+
+.status-badge--qa {
+    background-color: #e8f4fe;
+    color: #0176d3;
+    border: 1px solid #b0d4f5;
+}
+
+.status-badge--closed {
+    background-color: #f3f3f3;
+    color: #706e6b;
+    border: 1px solid #dddbda;
+}
+
+/* =====================
+   Severity Badge
+   ===================== */
+.sev-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 28px;
+    width: auto;
+    padding: 2px 8px;
+    height: 20px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.sev-badge--default {
+    background-color: #f3f3f3;
+    color: #444;
+    border: 1px solid #dddbda;
+}
+
+.sev-badge--s1 {
+    background-color: #fef0ef;
+    color: #ba0517;
+    border: 1px solid #f9b8b4;
+}
+
+.sev-badge--s2 {
+    background-color: #fff3e0;
+    color: #e07b1f;
+    border: 1px solid #f5d5a0;
+}
+
+.sev-badge--s3 {
+    background-color: #e8f4fe;
+    color: #0176d3;
+    border: 1px solid #b0d4f5;
+}
+
+.sev-badge--s4 {
+    background-color: #f3f3f3;
+    color: #706e6b;
+    border: 1px solid #dddbda;
+}
+
+.sev-badge--s5 {
+    background-color: #f3f3f3;
+    color: #aaaaaa;
+    border: 1px solid #e0e0e0;
+}
+
+/* =====================
+   Table card header (title + view all)
+   ===================== */
+.table-card__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.view-all-link {
+    font-size: 12px;
+    color: #0176d3;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.view-all-link:hover {
+    text-decoration: underline;
+}

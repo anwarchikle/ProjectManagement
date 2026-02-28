@@ -3,6 +3,7 @@
     <fullName>Rejection_Reason__c</fullName>
     <label>Rejection Reason</label>
     <length>20000</length>
+    <trackFeedHistory>false</trackFeedHistory>
     <trackHistory>false</trackHistory>
     <trackTrending>false</trackTrending>
     <type>LongTextArea</type>

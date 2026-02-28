@@ -12,5 +12,8 @@
     <tabs>standard-FieldAuditTrail</tabs>
     <tabs>standard-EventMonitoring</tabs>
     <tabs>standard-PlatformEncryption</tabs>
+    <tabs>POC__c</tabs>
+    <tabs>Calendar__c</tabs>
+    <tabs>Change_Request__c</tabs>
     <uiType>Lightning</uiType>
 </CustomApplication>

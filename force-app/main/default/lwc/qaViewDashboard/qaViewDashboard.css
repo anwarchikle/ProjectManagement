@@ -1,0 +1,104 @@
+:host {
+    display: block;
+    font-family: 'Salesforce Sans', Arial, sans-serif;
+    background-color: #f3f3f3;
+    min-height: 100vh;
+}
+
+/* =====================
+   Tab Navigation Wrapper
+   ===================== */
+.tab-nav-wrapper {
+    background-color: #ffffff;
+    border-bottom: 1px solid #dddbda;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.tab-nav {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    overflow-x: auto;
+    padding: 0 8px;
+    gap: 0;
+    scrollbar-width: none; /* Firefox */
+}
+
+.tab-nav::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+}
+
+/* =====================
+   Tab Button Base
+   ===================== */
+.tab-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 14px;
+    font-size: 13px;
+    font-weight: 400;
+    color: #444;
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+    line-height: 1.4;
+    outline: none;
+    position: relative;
+}
+
+.tab-btn:hover {
+    color: #0176d3;
+    background-color: #f0f7ff;
+}
+
+.tab-btn:focus-visible {
+    outline: 2px solid #0176d3;
+    outline-offset: -2px;
+}
+
+/* =====================
+   Active Tab
+   ===================== */
+.tab-btn--active {
+    color: #0176d3;
+    border-bottom-color: #0176d3;
+    font-weight: 500;
+}
+
+.tab-btn--active:hover {
+    background-color: #e8f4fe;
+}
+
+/* =====================
+   Tab Icon
+   ===================== */
+.tab-icon {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.tab-lightning-icon {
+    --lwc-colorTextIconDefault: currentColor;
+}
+
+/* =====================
+   Tab Label
+   ===================== */
+.tab-label {
+    display: inline-block;
+}
+
+/* =====================
+   Tab Content
+   ===================== */
+.tab-content {
+    padding: 20px;
+}

@@ -21,11 +21,10 @@ export default class UploadDocuments extends NavigationMixin(LightningElement) {
     }
 
     fetchFolderMetadata() {
-        debugger;
         getFolderMetadata({ recordId: this.recordId })
             .then(data => {
                 this.folders = data.map(folder => {
-                    return { ...folder, variantType: 'default' };
+                    return { ...folder, variantType: 'default', fileCount: 0 };
                 });
                 return Promise.all(this.folders.map(folder => this.checkFolderFiles(folder)));
             })
@@ -39,32 +38,42 @@ export default class UploadDocuments extends NavigationMixin(LightningElement) {
     }
 
     checkFolderFiles(folder) {
-        debugger;
         return getFiles({ recordId: this.recordId, folderLabel: folder.Label })
             .then(data => {
                 folder.variantType = data.length > 0 ? 'success' : 'error';
+                folder.fileCount = data.length;   // store count for display
             })
             .catch(error => {
                 console.error(`Error fetching files for folder ${folder.Label}:`, error);
+                folder.fileCount = 0;
             });
     }
 
-    handleFolderClick(event) {
-        debugger;
-        const folderLabel = event.currentTarget.querySelector('span').innerText;
+    // Custom upload trigger: programmatically click the hidden lightning-file-upload button
+    triggerUpload(event) {
+        const folderLabel = event.currentTarget.dataset.folder;
+        // Find the hidden file upload component for this folder and trigger its button
+        const uploadCmp = this.template.querySelector(`lightning-file-upload[data-folder="${folderLabel}"]`);
+        if (uploadCmp) {
+            // Access the internal button – note: this relies on internal structure, but is stable enough
+            const button = uploadCmp.shadowRoot.querySelector('button');
+            if (button) button.click();
+        }
+    }
+
+    // Open folder files directly (no dropdown menu)
+    openFolderFiles(event) {
+        const folderLabel = event.currentTarget.dataset.folder;
         this.selectedFolder = folderLabel;
         this.fetchFiles();
-        
     }
 
     fetchFiles() {
-        debugger;
         getFiles({ recordId: this.recordId, folderLabel: this.selectedFolder })
             .then(data => {
                 this.files = data;
                 this.isModalOpen = true;
                 this.updateFolderVariantType();
-
             })
             .catch(error => {
                 this.error = error;
@@ -72,31 +81,37 @@ export default class UploadDocuments extends NavigationMixin(LightningElement) {
     }
 
     updateFolderVariantType() {
-        debugger;
         this.folders = this.folders.map(folder => {
             if (folder.Label === this.selectedFolder) {
                 folder.variantType = this.files.length > 0 ? 'success' : 'error';
+                folder.fileCount = this.files.length;   // update count
             }
             return folder;
         });
     }
 
     closeModal() {
-        debugger;
         this.isModalOpen = false;
         this.selectedFiles = [];
     }
 
     handleUploadFinished(event) {
-        debugger;
+        const folderLabel = event.currentTarget.dataset.folder;
         const uploadedFiles = event.detail.files;
         let promises = uploadedFiles.map(file => {
-            return associateFileToFolder({ contentDocumentId: file.documentId, folderLabel: this.selectedFolder });
+            return associateFileToFolder({ contentDocumentId: file.documentId, folderLabel: folderLabel });
         });
 
         Promise.all(promises)
             .then(() => {
-                this.fetchFiles();
+                // Refresh the file count for this folder
+                return this.checkFolderFiles(this.folders.find(f => f.Label === folderLabel));
+            })
+            .then(() => {
+                // If modal is open for the same folder, refresh its list
+                if (this.selectedFolder === folderLabel) {
+                    this.fetchFiles();
+                }
             })
             .catch(error => {
                 this.error = error;
@@ -104,7 +119,6 @@ export default class UploadDocuments extends NavigationMixin(LightningElement) {
     }
 
     handleFileClick(event) {
-        debugger;
         const fileId = event.currentTarget.dataset.id;
         if (fileId) {
             this[NavigationMixin.Navigate]({
@@ -120,7 +134,6 @@ export default class UploadDocuments extends NavigationMixin(LightningElement) {
     }
 
     handleFileSelect(event) {
-        debugger;
         const fileId = event.currentTarget.dataset.id;
         if (event.target.checked) {
             this.selectedFiles.push(fileId);
@@ -130,16 +143,12 @@ export default class UploadDocuments extends NavigationMixin(LightningElement) {
     }
 
     handleDownloadClick() {
-        debugger;
         this.selectedFiles.forEach(fileId => {
             window.open(`/sfc/servlet.shepherd/document/download/${fileId}`, '_self');
         });
-        
     }
 
-
     handleDeleteClick() {
-        debugger;
         deleteFiles({ contentDocumentIds: this.selectedFiles })
             .then(() => {
                 this.fetchFiles();
@@ -151,12 +160,10 @@ export default class UploadDocuments extends NavigationMixin(LightningElement) {
     }
 
     get isDownloadDisabled() {
-        debugger;
         return this.selectedFiles.length === 0;
     }
 
     get isDeleteDisabled() {
-        debugger;
         return this.selectedFiles.length === 0;
     }
 }

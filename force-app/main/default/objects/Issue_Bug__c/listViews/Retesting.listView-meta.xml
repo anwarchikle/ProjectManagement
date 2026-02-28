@@ -13,5 +13,10 @@
         <operation>equals</operation>
         <value>In Retest</value>
     </filters>
+    <filters>
+        <field>Environment__c</field>
+        <operation>equals</operation>
+        <value>UAT</value>
+    </filters>
     <label>Retesting</label>
 </ListView>
